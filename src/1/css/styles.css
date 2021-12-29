@@ -1,0 +1,59 @@
+@charset "utf-8";
+/* PC 13〜21インチ 1025px〜 */
+:root {
+    --line-of-chars:40;
+    --min-line-of-chars:20;
+    --max-line-of-chars:50;
+    --line-of-wide-chars:40;
+    --min-line-of-wide-chars:20;
+    --max-line-of-wide-chars:50;
+    --line-of-half-chars:80;
+    --min-line-of-half-chars:40;
+    --max-line-of-half-chars:140;
+}
+/* タブレット 7〜13インチ 600〜1024px */
+@media screen and (max-width: 1024px) {
+:root {
+    --line-of-chars:30;
+    --min-line-of-chars:15;
+    --max-line-of-chars:40;
+    --line-of-wide-chars:30;
+    --min-line-of-wide-chars:15;
+    --max-line-of-wide-chars:40;
+    --line-of-half-chars:40;
+    --min-line-of-half-chars:30;
+    --max-line-of-half-chars:80;
+}
+}
+/* スマホ 4〜7インチ 1〜599px  */
+@media screen and (max-width: 599px) {
+:root {
+    --line-of-chars:20;
+    --min-line-of-chars:10;
+    --max-line-of-chars:40;
+    --line-of-wide-chars:20;
+    --min-line-of-wide-chars:10;
+    --max-line-of-wide-chars:40;
+    --line-of-half-chars:30;
+    --min-line-of-half-chars:30;
+    --max-line-of-half-chars:60;
+}
+}
+* {
+    padding: 0;
+    margin: 0;
+}
+body {
+    font-size: calc(100vw / (var(--line-of-chars)));
+}
+.wide-chars {
+    font-size: calc(100vw / (var(--line-of-wide-chars)));
+}
+.half-chars {
+    font-size: calc(100vw / (var(--line-of-half-chars)));
+}
+img.icon {
+    width: 1em;
+    height: 1em;
+}
+
