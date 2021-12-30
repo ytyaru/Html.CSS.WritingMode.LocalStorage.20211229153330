@@ -3,21 +3,6 @@ function saveWritingMode() {
     localStorage.setItem('WritingMode', getComputedStyle(document.querySelector(':root')).getPropertyValue('--writing-mode'));
 }
 function initWritingMode() { // UI操作でフォントサイズを変更する
-    /*
-    function getWritingModeFromCss() { // CSSの変数を取得する
-        const root = document.querySelector(':root');
-        const font_size_base = getComputedStyle(root).getPropertyValue('--font-size-base')
-        const line_of_chars = ('WritingMode' in localStorage) ? localStorage.getItem('WritingMode') : getComputedStyle(root).getPropertyValue('--line-of-chars');
-        const min = getComputedStyle(root).getPropertyValue('--min-line-of-chars');
-        const max = getComputedStyle(root).getPropertyValue('--max-line-of-chars');
-        return [root, line_of_chars, min, max];
-    }
-    const writingMode = document.querySelector('#WritingMode');
-    const [root, line_of_chars, min, max] = getWritingModeFromCss();
-    writingMode.min = min;
-    writingMode.max = max;
-    writingMode.value = line_of_chars;
-    */
     const root = document.querySelector(':root');
     const writingMode = document.querySelector('#WritingMode');
     function getButtonValue(value) { return ('vertical-rl' == value) ? '縦' : '横'; }

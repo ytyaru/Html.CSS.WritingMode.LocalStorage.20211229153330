@@ -24,6 +24,14 @@
     --max-line-of-chars:40;
 }
 }
+@font-face
+{
+    font-family: IPAex明朝;
+    src: local('IPAex明朝'), 
+         local('ipaexm.ttf') format('opentype'),
+         local('fonts-japanese-mincho.ttf') format('truetype'),
+         url('https://cdn.leafscape.be/IPAexfont/ipaexm_web.woff2') format("woff2");
+}
 * {
     padding: 0;
     margin: 0;
