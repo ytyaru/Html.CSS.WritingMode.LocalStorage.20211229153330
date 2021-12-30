@@ -50,7 +50,4 @@ img.icon {
     width: 1em;
     height: 1em;
 }
-button, input, select, textarea {
-  font-family : inherit;
-  font-size   : 100%;
-}
+
