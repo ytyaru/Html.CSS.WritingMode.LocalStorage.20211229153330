@@ -14,6 +14,7 @@
 `0.7`△|JSで全画面ON/OFFしたい
 `0.8`|行間、字間の最適値をCSS定義したい
 `0.9`|行間、字間を考慮した字／行を算出したい
+`0.10`|行間、字間を調整するUIが欲しい
 ``|「縦中横」はHTML要素で囲う必要がある
 ``|字／行は「縦書き」と「横書き」でそれぞれ個別に持ちたい
 ``|縦書きにするとマウスホイールによるスクロールができない
@@ -338,6 +339,19 @@ function calcLineOfCharsFromFontSizePixel(px) { // フォントのピクセル�
 ```
 
 　字間を考慮していなかった従来の計算値から、字間の分だけ差し引いた。
+
+## 行間、字間を調整するUIが欲しい
+
+* https://ytyaru.github.io/Html.CSS.WritingMode.LocalStorage.20211229153330/0.9/index.html
+
+```html
+```
+
+```javascript
+```
+
+```javascript
+```
 
 ## 「縦中横」はHTML要素で囲う必要がある
 

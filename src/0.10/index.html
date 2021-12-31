@@ -1,0 +1,54 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title></title>
+<meta name="description" content="">
+<meta name="author" content="ytyaru">
+<link rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/deed.ja">
+<link rel="icon" href="assets/image/avator.png">
+<link rel="stylesheet" href="css/styles.css">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=0">
+<script src="js/FullScreen.js"></script>
+<script src="js/WritingMode.js"></script>
+<script src="js/CalcFontSize.js"></script>
+<script src="js/MinFontSize.js"></script>
+<script src="js/FontSize.js"></script>
+<script src="js/LineHeight.js"></script>
+<script src="js/main.js"></script>
+</head>
+<body>
+    <header>
+    <form id="ViewerSetting">
+        <button type="button" id="FullScreen" name="FullScreen" value="0" title="フルスクリーンON/OFF">全</button>
+        <button type="button" id="WritingMode" name="WritingMode" value="vertical-rl" title="縦書き／横書き">縦</button>
+        <input type="range" id="FontSize" name="FontSize" min="10" max="50">
+        <label for="volume"><span id="FontSize_"></span>字／行</label>
+        <input type="range" id="line-height" name="line-height" min="1.5" max="2.0" step="0.05">
+        <label for="volume"><span id="line-height_"></span>em行間</label>
+        <input type="range" id="letter-spacing" name="letter-spacing" min="0.05" max="0.1" step="0.005">
+        <label for="volume"><span id="letter-spacing_"></span>em字間</label>
+    </form>
+    </header>
+
+    <main>
+    <p>１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０</p>
+    <p>令和<span class="num">3</span>年<span class="num">12</span>月<span class="num">31</span>日。</p>
+    <p>令和<span class="num">３</span>年<span class="num">１２</span>月<span class="num">３１</span>日。</p>
+    <p>「記号の、表示を！　確認します。どうですか？」</p>
+    </main>
+
+    <footer>
+        <span>© 2021 ytyaru</span>
+        <a title="CC-BY-SA 4.0" \
+           href="https://creativecommons.org/licenses/by-sa/4.0/deed.ja"
+           style="text-decoration: none;">
+            <img class="icon" src="https://upload.wikimedia.org/wikipedia/commons/a/a3/Cc.logo.circle.svg"></img>
+            <img class="icon" src="https://upload.wikimedia.org/wikipedia/commons/3/3c/Cc-by_new.svg"></img>
+            <img class="icon" src="https://upload.wikimedia.org/wikipedia/commons/2/29/Cc-sa.svg"></img>
+            <!--<img src="https://upload.wikimedia.org/wikipedia/commons/d/d0/CC-BY-SA_icon.svg"></img>-->
+    </a></footer>
+</body>
+</html>
+<!-- https://coliss.com/articles/build-websites/operation/work/html-template-for-web-apps-or-sites.html -->
+<!-- https://coliss.com/articles/build-websites/operation/work/html5-template-for-2018.html -->
