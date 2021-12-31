@@ -6,6 +6,7 @@
 * スライダーUIが縦書きにあわせて縦になってくれない
 * ブラウザが表示できる最小フォントより小さい「字／行」を入力できないようにしたい（max値を最小フォント値より大きくなるよう計算したい）
 * 縦だろうが横だろうが同じフォントサイズでいてほしい。けれど字／行の値は縦・横それぞれにふさわしい値になってほしい
+* リサイズしてもフォントサイズは不変でいてほしい
 * 「縦中横」はHTML要素で囲う必要がある
 * 字／行は「縦書き」と「横書き」でそれぞれ個別に持ちたい
 * 縦書きにするとマウスホイールによるスクロールができない
@@ -18,6 +19,7 @@
 `0.2`|スライダーUIが縦書きにあわせて縦になってくれない
 `0.3`|ブラウザが表示できる最小フォントより小さい「字／行」を入力できないようにしたい（max値を最小フォント値より大きくなるよう計算したい）
 `0.4`△|縦だろうが横だろうが同じフォントサイズでいてほしい。けれど字／行の値は縦・横それぞれにふさわしい値になってほしい
+`0.4`|リサイズしてもフォントサイズは不変でいてほしい
 ``|「縦中横」はHTML要素で囲う必要がある
 ``|字／行は「縦書き」と「横書き」でそれぞれ個別に持ちたい
 ``|縦書きにするとマウスホイールによるスクロールができない
@@ -116,7 +118,62 @@ input[type="range"] {
 
 　フォントサイズ算出。画面の向き、WritingModeごとに字／行単位でのサイズを算出し、それをピクセル単位に変換してCSSのfont-sizeにセットする。デベロッパツールのGalaxy S5 再現モードなら正しい数値になるが、デフォルト状態だと不正値になる。解決したとは到底いえない。
 
-* https://ytyaru.github.io/Html.CSS.WritingMode.LocalStorage.20211229153330/0.3/index.html
+* https://ytyaru.github.io/Html.CSS.WritingMode.LocalStorage.20211229153330/0.4/index.html
+
+　どうやら字数／行で表示したいなら、`vw`,`vh`を使うしかなさそう。すべてCSSピクセル換算されるはずなので計算できるはずなのだが。一体なにがダメなのか。以下のように`devicePixelRatio`にしたら今度はデベロッパツールで再現したスマホ側が小さくなりすぎてしまう。どゆこと？
+
+```javascript
+function calcFontSizePixelFromLineOfChars(lineOfChars) { // 字数／行からその値をピクセル単位に変換する
+    const writingMode = document.querySelector('#WritingMode');
+    const SIZE = ('vertical-rl' === writingMode.value) ? window.screen.availHeight : window.screen.availWidth;
+    console.log(`${SIZE / lineOfChars}px = ${SIZE}px / ${lineOfChars}字／行`);
+    return SIZE / (lineOfChars * window.devicePixelRatio);
+//    return SIZE / lineOfChars;
+}
+```
+
+　と思ったら、ブラウザの拡大縮小率が150%になっていた。こいつのせいだ。でもおかしいな？　たしか以下HTMLの`user-scalable=0`でユーザの拡大縮小ができないように指定したはずなのに。
+
+```html
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=0">
+```
+
+* [iOS11以降でピンチインアウトで拡大縮小禁止](https://webinlet.com/2020/ios11%E4%BB%A5%E9%99%8D%E3%81%A7%E3%83%94%E3%83%B3%E3%83%81%E3%82%A4%E3%83%B3%E3%82%A2%E3%82%A6%E3%83%88%E6%8B%A1%E5%A4%A7%E7%B8%AE%E5%B0%8F%E7%A6%81%E6%AD%A2)
+* [iOS10のSafariでuser-scalable=no が効かなくズームがされる問題への対策](https://qiita.com/GrDolphium/items/d74e5758a36478fbc039)
+
+　どうやら`user-scalable=0`で拡大縮小させないようにする機能は使えなくなっているらしい。使えねー。なんのための属性だよ。
+
+* [JavaScript | ブラウザのズーム倍率をパーセント値で取得する方法](https://1-notes.com/javascript-get-browser-zoom-level/)
+
+　さらに調査したところ、ブラウザのズーム倍率をJSで取得できることがわかった。
+
+```javascript
+window.devicePixelRatio
+```
+
+　え、`devicePixelRatio`ってデバイスピクセル比だよね？　レティーナなど高精細ディスプレイのハードウェア的なピクセル数じゃなかったの？　ブラウザの拡大縮小まで考慮されるの？　でもデベロッパツールでGalaxy S5を再現したときは正しく計算できていたのに、ブラウザズームが150%なPCブラウザではフォントが大きく表示されて計算がずれてたよ？
+
+```javascript
+window.addEventListener(`resize`, () => {
+  let zoom_level = window.devicePixelRatio || window.screen.availWidth / document.documentElement.clientWidth;
+  zoom_level = Math.floor(zoom_level * 100);
+  
+  console.log(zoom_level);
+  document.querySelector('#output').innerHTML = zoom_level + '%';
+})
+```
+
+　まあ、これ以上は特に何もしなくても大丈夫だろう。ただ、ブラウザの拡大縮小については計算外。これをされると字／行やフォントサイズの値が狂ってしまう。つまりブラウザ拡大率100%のときだけ、正しく表示できる。
+
+## リサイズしてもフォントサイズは不変でいてほしい
+
+```javascript
+window.addEventListener("resize", function (e) { // 窓をリサイズしたら
+    console.log(e);
+});
+```
+
+　利用状況の想定として基本的にリサイズすることはない。スマホやタブレットは画面が小さいため全画面表示するだろう。PCでも同じだ。1920*1080であれば縦半分に配置することがあるかもしれない。けれどそれで丁度いいときは縦書きであり１行あたりの字数が40字／行のときだろう。フォントサイズは変えないまま、表示される行数だけが半分になるような表示だ。スクロール量が倍になる。なのでリサイズ時のフォントサイズ調整に関しては考えなくていい。
 
 ## 「縦中横」はHTML要素で囲う必要がある
 

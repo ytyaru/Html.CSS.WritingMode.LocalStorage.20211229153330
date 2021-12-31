@@ -1,7 +1,9 @@
 function calcFontSizePixelFromLineOfChars(lineOfChars) { // 字数／行からその値をピクセル単位に変換する
     const writingMode = document.querySelector('#WritingMode');
     const SIZE = ('vertical-rl' === writingMode.value) ? window.screen.availHeight : window.screen.availWidth;
+    console.log(`${SIZE / lineOfChars}px = ${SIZE}px / ${lineOfChars}字／行`);
 //    return Math.floor(SIZE / lineOfChars);
+//    return SIZE / (lineOfChars * window.devicePixelRatio);
     return SIZE / lineOfChars;
 }
 function setFontSizePixelFromLineOfChars(lineOfChars) { // 字数／行からその値をピクセル単位に変換してCSS変数にセットする
