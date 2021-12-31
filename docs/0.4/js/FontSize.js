@@ -15,7 +15,6 @@ function initFontSize() { // UI操作でフォントサイズを変更する
     fontSize.min = min;
     fontSize.max = max;
     fontSize.value = line_of_chars;
-
     function setLineOfCharsToHtml(value) { // CSSの変数をHTMLにセットする
         root.style.setProperty('--line-of-chars', `${value}`);
         setFontSizePixelFromLineOfChars(value); // CalcFontSize.js

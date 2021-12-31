@@ -15,9 +15,8 @@ function setMaxLineOfChars() {
 }
 function setLineOfCharsFromFontSizePixel() {// 画面の向きまたはWritingMode変更時にフォントサイズのピクセル値から字／行を取得してHTMLにセットする
     const px = parseFloat(document.querySelector('body').style.getPropertyValue('font-size'))
-    console.log(`px:::::${px}`);
     const lineOfChars = calcLineOfCharsFromFontSizePixel(px);
-    console.log(lineOfChars);
+    console.log(`${lineOfChars}字／行 ${px}px`);
     document.querySelector('#FontSize').value = lineOfChars;
     const fontSize = document.querySelector('#FontSize');
     fontSize.value = (lineOfChars < fontSize.min) ? fontSize.min : (fontSize.max < lineOfChars) ? fontSize.max : lineOfChars;
