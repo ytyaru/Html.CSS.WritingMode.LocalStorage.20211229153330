@@ -1,4 +1,3 @@
-console.log('XXXXXXXXXXXXXXXXXXXXXXX');
 function saveLineHeight() {
     const lineHeight = document.querySelector('#line-height');
     localStorage.setItem('line-height', lineHeight.value);

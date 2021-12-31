@@ -353,6 +353,8 @@ function calcLineOfCharsFromFontSizePixel(px) { // フォントのピクセル�
 ```javascript
 ```
 
+* 字間を調整するUIをいじったら「字数／行」と「最大字数／行」を再計算するべし
+
 ## 「縦中横」はHTML要素で囲う必要がある
 
 ```css
