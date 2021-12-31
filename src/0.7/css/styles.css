@@ -1,0 +1,63 @@
+@charset "utf-8";
+/* PC 13〜21インチ 1025px〜 */
+:root {
+    --line-of-chars:40;
+    --min-line-of-chars:20;
+    --max-line-of-chars:50;
+    --writing-mode:vertical-rl;
+    --text-orientation:upright;
+    --font-size-base:100vw;
+}
+/* タブレット 7〜13インチ 600〜1024px */
+@media screen and (max-width: 1024px) {
+:root {
+    --line-of-chars:30;
+    --min-line-of-chars:15;
+    --max-line-of-chars:40;
+}
+}
+/* スマホ 4〜7インチ 1〜599px  */
+@media screen and (max-width: 599px) {
+:root {
+    --line-of-chars:20;
+    --min-line-of-chars:10;
+    --max-line-of-chars:30;
+}
+}
+@font-face
+{
+    font-family: IPAex明朝;
+    src: local('IPAex明朝'), 
+         local('ipaexm.ttf') format('opentype'),
+         local('fonts-japanese-mincho.ttf') format('truetype'),
+         url('https://cdn.leafscape.be/IPAexfont/ipaexm_web.woff2') format("woff2");
+}
+* {
+    padding: 0;
+    margin: 0;
+}
+body {
+    font-family: 'IPAex明朝', sans-serif; 
+/*    font-size: calc(var(--font-size-base) / (var(--line-of-chars)));*/
+    font-size: 16px; /* JSで解像度、CSS変数、スライダーをもとに計算する */
+
+    /* 縦置き／横置きでの自動サイズ調整無効化 */
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+
+    writing-mode: var(--writing-mode); /* vertical-rl, horizontal-tb */
+    text-orientation: var(--text-orientation); /* upright, sideways */
+}
+.num {
+    text-combine-upright: all; /* 縦中横 */
+}
+img.icon {
+    width: 1em;
+    height: 1em;
+}
+button, input, select, textarea {
+  font-family : inherit;
+  font-size   : 100%;
+}

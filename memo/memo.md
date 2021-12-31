@@ -11,7 +11,7 @@
 `0.4`|縦だろうが横だろうが同じフォントサイズでいてほしい。けれど字／行の値は縦・横それぞれにふさわしい値になってほしい
 `0.5`|字／行のスライダーmax値が大きくなりすぎないようにする（最小フォントサイズ10pxで算出するが、CSS変数で指定した値を超過しないようにする）
 `0.6`|リサイズしたとき字／行を再計算してラベルに表示したい
-``|表示設定で全画面のON/OFFしたい（）
+`0.7`△|JSで全画面ON/OFFしたい
 ``|「縦中横」はHTML要素で囲う必要がある
 ``|字／行は「縦書き」と「横書き」でそれぞれ個別に持ちたい
 ``|縦書きにするとマウスホイールによるスクロールができない
@@ -246,6 +246,43 @@ MinFontSize.js
 　OK。これで全画面にしようがリサイズしようが正しい字／行が出る。
 
 * https://ytyaru.github.io/Html.CSS.WritingMode.LocalStorage.20211229153330/0.6/index.html
+
+## JSで全画面ON/OFFしたい
+
+　ボタンを押したときに全画面のON/OFFができるようになった。
+
+* https://ytyaru.github.io/Html.CSS.WritingMode.LocalStorage.20211229153330/0.7/index.html
+
+　だが、起動時に自動で全画面にはできなかった。
+
+* https://teratail.com/questions/339734
+
+　以下エラーになる。どうやら全画面はユーザ操作せねばできない仕様らしい。これは困る。
+
+```
+Failed to execute 'requestFullscreen' on 'Element': API can only be initiated by a user gesture.
+```
+
+　解法としてはマニフェストを使用する。
+
+* https://developer.mozilla.org/ja/docs/Web/Manifest
+
+```html
+<link rel="manifest" href="/manifest.webmanifest"/>
+```
+
+manifest.webmanifest
+```javascript
+{
+  "display": "fullscreen",
+}
+```
+
+　localStorageでユーザがアプリを終了した状態に応じて初期化したかったのだが。それはできなさそう。マニフェストはjsonファイルであり、書き換えることができないから。
+
+　そもそもPWAとかSPAとか、ServiceWorkerとかCacheとか難しすぎる。
+
+　なので今は一旦妥協する。フルスクリーンの自動化はしない。残念。本当は起動時に自動でフルスクリーンになってほしかったのに。
 
 ## 「縦中横」はHTML要素で囲う必要がある
 
