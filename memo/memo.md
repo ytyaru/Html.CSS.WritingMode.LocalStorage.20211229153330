@@ -12,6 +12,7 @@
 `0.5`|字／行のスライダーmax値が大きくなりすぎないようにする（最小フォントサイズ10pxで算出するが、CSS変数で指定した値を超過しないようにする）
 `0.6`|リサイズしたとき字／行を再計算してラベルに表示したい
 `0.7`△|JSで全画面ON/OFFしたい
+`0.8`|行間、字間の最適値をCSS定義したい
 ``|「縦中横」はHTML要素で囲う必要がある
 ``|字／行は「縦書き」と「横書き」でそれぞれ個別に持ちたい
 ``|縦書きにするとマウスホイールによるスクロールができない
@@ -283,6 +284,34 @@ manifest.webmanifest
 　そもそもPWAとかSPAとか、ServiceWorkerとかCacheとか難しすぎる。
 
 　なので今は一旦妥協する。フルスクリーンの自動化はしない。残念。本当は起動時に自動でフルスクリーンになってほしかったのに。
+
+## 行間、字間の最適値をCSS定義したい
+
+```css
+body {
+    font-size: 16px;
+    line-height: 1.5em; /* 行間 1.5〜2.0em */
+    letter-spacing: 0.05em; /* 字間 0.05〜0.1em */
+}
+```
+
+* https://ytyaru.github.io/Html.CSS.WritingMode.LocalStorage.20211229153330/0.8/index.html
+
+　情報源。
+
+* [letter-spacing](https://saruwakakun.com/html-css/reference/letter-spacing)
+* [line-height](https://saruwakakun.com/html-css/reference/line-height)
+
+　行間と字間の適切な値やその範囲は？
+
+* https://wunderstand.net/379/
+
+項目|最小|最大|中間
+----|----|----|----
+行間|1.5em|2.0em|1.75em
+字間|0.05em|0.1em|0.075em
+
+　今回は適正値がわからなかったので中間値にした。
 
 ## 「縦中横」はHTML要素で囲う必要がある
 
