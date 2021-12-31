@@ -20,6 +20,7 @@
 `0.3`|ブラウザが表示できる最小フォントより小さい「字／行」を入力できないようにしたい（max値を最小フォント値より大きくなるよう計算したい）
 `0.4`△|縦だろうが横だろうが同じフォントサイズでいてほしい。けれど字／行の値は縦・横それぞれにふさわしい値になってほしい
 `0.4`|リサイズしてもフォントサイズは不変でいてほしい
+`0.5`|字／行のスライダーmax値が大きくなりすぎないようにする（最小フォントサイズ10pxで算出するが、CSS変数で指定した値を超過しないようにする）
 ``|「縦中横」はHTML要素で囲う必要がある
 ``|字／行は「縦書き」と「横書き」でそれぞれ個別に持ちたい
 ``|縦書きにするとマウスホイールによるスクロールができない
@@ -157,7 +158,7 @@ window.devicePixelRatio
 window.addEventListener(`resize`, () => {
   let zoom_level = window.devicePixelRatio || window.screen.availWidth / document.documentElement.clientWidth;
   zoom_level = Math.floor(zoom_level * 100);
-  
+
   console.log(zoom_level);
   document.querySelector('#output').innerHTML = zoom_level + '%';
 })
@@ -174,6 +175,46 @@ window.addEventListener("resize", function (e) { // 窓をリサイズしたら
 ```
 
 　利用状況の想定として基本的にリサイズすることはない。スマホやタブレットは画面が小さいため全画面表示するだろう。PCでも同じだ。1920*1080であれば縦半分に配置することがあるかもしれない。けれどそれで丁度いいときは縦書きであり１行あたりの字数が40字／行のときだろう。フォントサイズは変えないまま、表示される行数だけが半分になるような表示だ。スクロール量が倍になる。なのでリサイズ時のフォントサイズ調整に関しては考えなくていい。
+
+* https://ytyaru.github.io/Html.CSS.WritingMode.LocalStorage.20211229153330/0.4/index.html
+
+　フォントサイズは不変でいいけど、字／行は増えることがある。フルスクリーン（全画面）にしたらメニューバーやタスクバーの分だけ表示領域が増えるから。そうなるとスライダーUIのラベル「字／行」の数を再計算させる必要が出てくる。
+
+## 字／行のスライダーmax値が大きくなりすぎないようにする（最小フォントサイズ10pxで算出するが、CSS変数で指定した値を超過しないようにする）
+
+　日本語は大体一行あたり40字くらいが読みやすい。作文用紙も40字だし、本もほぼ同じである。なのでできるだけその範囲に近づけたい。
+
+```css
+/* PC 13〜21インチ 1025px〜 */
+:root {
+    --max-line-of-chars:50;
+}
+/* タブレット 7〜13インチ 600〜1024px */
+@media screen and (max-width: 1024px) {
+:root {
+    --max-line-of-chars:40;
+}
+}
+/* スマホ 4〜7インチ 1〜599px  */
+@media screen and (max-width: 599px) {
+:root {
+    --max-line-of-chars:30;
+}
+}
+```
+
+MinFontSize.js
+```javascript
+function calcMaxLineOfChars() { // 解像度と画面の向きから最小フォントサイズ（10px）字の最大字数／行を算出する（但しCSSで指定した最大値より大きくはならない）
+    const MIN_FONT_SIZE = 10; // px。各ブラウザによって9px,10pxだったりする。ここでは10pxと決め打ちする。
+    const writingMode = document.querySelector('#WritingMode');
+    const SIZE = ('vertical-rl' === writingMode.value) ? window.screen.availHeight : window.screen.availWidth;
+//    return Math.floor(SIZE / MIN_FONT_SIZE);
+    return Math.min(Math.floor(SIZE / MIN_FONT_SIZE), getComputedStyle(document.querySelector(':root')).getPropertyValue('--max-line-of-chars'))
+}
+```
+
+* https://ytyaru.github.io/Html.CSS.WritingMode.LocalStorage.20211229153330/0.5/index.html
 
 ## 「縦中横」はHTML要素で囲う必要がある
 
