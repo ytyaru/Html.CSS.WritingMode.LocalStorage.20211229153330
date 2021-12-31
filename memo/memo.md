@@ -13,6 +13,7 @@
 `0.6`|リサイズしたとき字／行を再計算してラベルに表示したい
 `0.7`△|JSで全画面ON/OFFしたい
 `0.8`|行間、字間の最適値をCSS定義したい
+`0.9`|行間、字間を考慮した字／行を算出したい
 ``|「縦中横」はHTML要素で囲う必要がある
 ``|字／行は「縦書き」と「横書き」でそれぞれ個別に持ちたい
 ``|縦書きにするとマウスホイールによるスクロールができない
@@ -312,6 +313,31 @@ body {
 字間|0.05em|0.1em|0.075em
 
 　今回は適正値がわからなかったので中間値にした。
+
+## 行間、字間を考慮した字／行を算出したい
+
+　行間と字間を追加したら字／行の計算が狂った。現在の計算式には行間と字間が考慮されていないからだ。そこでこれらを考慮した計算式にしたい。
+
+* https://ytyaru.github.io/Html.CSS.WritingMode.LocalStorage.20211229153330/0.9/index.html
+
+```javascript
+function calcFontSizePixelFromLineOfChars(lineOfChars) { // 字数／行からその値をピクセル単位に変換する（字間を抜いたサイズ）
+    const writingMode = document.querySelector('#WritingMode');
+    const SIZE = ('vertical-rl' === writingMode.value) ? document.body.clientHeight : document.body.clientWidth;
+    const letterSpacing = getComputedStyle(document.querySelector(':root')).getPropertyValue('--letter-spacing');
+    const px = SIZE / lineOfChars;
+    console.log(`${px - (px * letterSpacing)}px = ${px}px(= ${SIZE}px / (${lineOfChars}字／行) - ${px * letterSpacing}px(${px}px * letterSpacing:${letterSpacing })行間)`);
+    return px - (px * letterSpacing);
+}
+function calcLineOfCharsFromFontSizePixel(px) { // フォントのピクセル数から字数／行に変換する
+    const writingMode = document.querySelector('#WritingMode');
+    const SIZE = ('vertical-rl' === writingMode.value) ? document.body.clientHeight : document.body.clientWidth;
+//    return Math.floor(SIZE / px);
+    return Math.floor(SIZE / (px + (px * getComputedStyle(document.querySelector(':root')).getPropertyValue('--letter-spacing'))));
+}
+```
+
+　字間を考慮していなかった従来の計算値から、字間の分だけ差し引いた。
 
 ## 「縦中横」はHTML要素で囲う必要がある
 
