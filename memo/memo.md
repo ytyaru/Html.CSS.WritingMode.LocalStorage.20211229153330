@@ -17,6 +17,7 @@
 `0.10`|行間、字間を調整するUIが欲しい（UI縦書き、字間によるフォントサイズ再計算）
 `0.11`|スライダーUI縦書き時にラベルが次行になってしまうのを防ぐ
 `0.11`△|スライダーUIのラベルの数値を縦中横にしたい
+`0.12`|字間、行間の単位をemから%字にしたい
 ``|「縦中横」はHTML要素で囲う必要がある
 ``|字／行は「縦書き」と「横書き」でそれぞれ個別に持ちたい
 ``|縦書きにするとマウスホイールによるスクロールができない
@@ -535,6 +536,8 @@ input[type="range"] {
 }
 ```
 
+* https://ytyaru.github.io/Html.CSS.WritingMode.LocalStorage.20211229153330/0.11/index.html
+
 ## スライダーUIのラベルの数値を縦中横にしたい
 
 ```html
@@ -551,6 +554,8 @@ input[type="range"] {
     text-transform: full-width; /* 全字全角 */
 }
 ```
+
+* https://ytyaru.github.io/Html.CSS.WritingMode.LocalStorage.20211229153330/0.11/index.html
 
 ### ラベル数値が小さくなりすぎる問題
 
@@ -594,6 +599,26 @@ holizontal|半角
 * 縦書き用フォントを用いる（縦書きにしたときのフォント位置が適切になるよう調整されている）
 * 半角でなく全角にする
 * 字数（桁数）を減らす
+
+## 字間、行間の単位をemから%字にしたい
+
+* https://ytyaru.github.io/Html.CSS.WritingMode.LocalStorage.20211229153330/0.12/index.html
+
+　縦中横のとき`em`単位だと桁数が多くて字が小さくなりすぎる。そこで単位を百倍した`%字`にすることで桁数を減らす。たとえば字間`0.075`emの5桁を、`7.5`%字の3桁に減らす。これにて縦中横にしたときのフォントサイズが大きくなり読み取れるようになるはず。
+
+　字間については`0.5`単位で丸める必要があったので関数を作った。
+
+```javascript
+function round(value, step=1.0) { // 指定したstep単位で丸める（今回は0.5単位で丸めたい）
+    var inv = 1.0 / step;
+    return Math.round(value * inv) / inv;
+}
+```
+```javascript
+document.querySelector('#letter-spacing_').innerHTML = round(value * 100, 0.5);
+```
+
+　JS内部では`em`単位で保持して、HTMLのラベルに表示するときは`%字`単位にする。
 
 ## 「縦中横」はHTML要素で囲う必要がある
 
