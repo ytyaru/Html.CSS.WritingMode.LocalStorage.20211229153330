@@ -22,13 +22,15 @@ window.addEventListener('beforeunload', (event) => {
 window.addEventListener("orientationchange", function () { // 画面向きに応じて最大字数／行を変更する
     console.log("orientationchange");
     setMaxLineOfChars(); // CalcFontSize.js
-    setLineOfCharsFromFontSizePixel(); // CalcFontSize.js
+//    setLineOfCharsFromFontSizePixel(); // CalcFontSize.js
+    setLineOfChars(document.querySelector('#WritingMode').value);
     document.querySelector('#FontSize_').innerHTML = calcLineOfCharsFromFontSizePixel(parseFloat(document.querySelector('body').style.getPropertyValue('font-size')));
 });
 window.addEventListener("resize", function (e) { // 全画面やリサイズ時に字／行の値を再計算する
     console.log("resize");
     setMaxLineOfChars(); // CalcFontSize.js
-    setLineOfCharsFromFontSizePixel(); // CalcFontSize.js
+//    setLineOfCharsFromFontSizePixel(); // CalcFontSize.js
+    setLineOfChars(document.querySelector('#WritingMode').value);
     document.querySelector('#FontSize_').innerHTML = calcLineOfCharsFromFontSizePixel(parseFloat(document.querySelector('body').style.getPropertyValue('font-size')));
 });
 
