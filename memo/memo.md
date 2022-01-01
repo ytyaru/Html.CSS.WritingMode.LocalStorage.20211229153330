@@ -353,7 +353,175 @@ function calcLineOfCharsFromFontSizePixel(px) { // フォントのピクセル�
 ```javascript
 ```
 
+* UIを縦にする
 * 字間を調整するUIをいじったら「字数／行」と「最大字数／行」を再計算するべし
+    * どちらを変更するか
+        * フォントサイズ（こちらが望ましい。字数／行はユーザにとっての指標だから。ただし計算が複雑）
+        * 字数／行（現状はこちら。せっかく字数／行を調整したのに字間を調整すると変わってしまうのは嫌）
+
+```javascript
+function calcFontSizePixcel(writingMode, lineOfChars) { // フォントサイズをピクセル単位で算出する
+    const SIZE = ('vertical-rl' === writingMode) ? document.body.clientHeight : document.body.clientWidth;
+    let FontPx = SIZE / lineOfChars;
+    const letterSpacingPx = FontPx * letterSpacing;
+
+    SIZE = (FontPx * lineOfChars) + (letterSpacingPx * (lineOfChars - 1)
+    return FontPx - letterSpacingPx;
+}
+
+```
+
+```
+        clientWidth
+|--------------------------|
+ ◯||◯  ◯  ◯  ◯  ◯  ◯
+ ||||
+ F L
+
+writingMode = horizontal-tb
+clientWidth = 360px
+--letter-spacing = 0.05;
+
+◯ = 字
+７字／行
+lineOfChars = 7
+
+F = FontSizePixel
+L = LetterSpacingPixel
+
+F = clientWidth / lineOfChars
+F = 360 / 7 = 51.4285714286;
+L = F * --letter-spacing
+L = 51.4... * 0.05 = 2.57142857143;
+clientWidth = (newF * lineOfChars) + (L * (lineOfChars - 1));
+360 = (newF * lineOfChars) + (2.57... * 6);
+360 = 7newF + 15.4285714286
+7newF = 360 - 15.4285714286
+7newF = 360 - 15.4285714286 = 344.571428571
+newF = 344.571428571 / 7 = 49.2244897959;
+字間を抜いたフォントサイズ＝49.2244897959;
+
+
+newF = SIZE - (L * (lineOfChars - 1)) / lineOfChars
+```
+
+```
+const FontSizePx = parseFloat(document.querySelector('body').style.getPropertyValue('font-size'));
+const LetterSpacingPx = FontSizePx * document.querySelector('#letter-spacing').value;
+SIZE = (FontSizePx * lineOfChars) + (LetterSpacingPx * (lineOfChars - 1));
+360 = (F * li) + (L * (li-1))
+360 = (50 li) + (5 (li-1))
+360 = (50x) + (5(x-1))
+360 = 50x + 5x -5
+360 = 55x - 5
+55x = 360 + 5 = 365
+x = 365 / 55
+lineOfChars = (SIZE + (LetterSpacingPx*1)) / (FontSizePx + LetterSpacingPx)
+lineOfChars = (SIZE + LetterSpacingPx) / (FontSizePx + LetterSpacingPx)
+lineOfChars = (360 + 2.5) / (51.4 + 2.5)
+lineOfChars = (362.5) / (53.9)
+```
+```
+const FontSizePx = (SIZE - ALL_LETTER_SPACING) / lineOfChars; // 入力した字／行と字間からピクセル単位でフォントサイズを算出する
+
+const FontSizePx = parseFloat(document.querySelector('body').style.getPropertyValue('font-size'));
+const LetterSpacingPx = FontSizePx * document.querySelector('#letter-spacing').value;
+const SIZE = ('vertical-rl' === writingMode) ? document.body.clientHeight : document.body.clientWidth; // １行の表示領域
+const ALL_LETTER_SPACING = LetterSpacingPx * (lineOfChars - 1); // 全字間サイズ（px）
+
+FontSizePx = (SIZE - (LetterSpacingPx * (lineOfChars - 1))) / lineOfChars;
+49.1 = (360 - (2.5 * (li - 1))) / li
+49.1 = (360 - (2.5li - 2.5)) / li
+49.1li = 360 - 2.5li - 2.5
+49.1li + 2.5li = 360 - 2.5
+
+(FontSizePx + LetterSpacingPx) * li = 360 - 2.5
+(FontSizePx + LetterSpacingPx) * li = SIZE - LetterSpacingPx
+FontSizePx + LetterSpacingPx = (SIZE - LetterSpacingPx) / li
+
+(SIZE - LetterSpacingPx) / li = FontSizePx + LetterSpacingPx
+
+li / (SIZE - LetterSpacingPx)
+
+((SIZE - LetterSpacingPx) / li) * (li / (SIZE - LetterSpacingPx)) = (FontSizePx + LetterSpacingPx / 1) * (li / (SIZE - LetterSpacingPx))
+
+(SIZE - LetterSpacingPx) * li   (FontSizePx + LetterSpacingPx) * li
+----------------------------- = -----------------------------------
+li * (SIZE - LetterSpacingPx)   1 * (SIZE - LetterSpacingPx)
+
+(360 - 2.5) * li    (49.1 + 2.5) * li
+----------------- = -----------------
+li * (360 - 2.5)    (360 - 2.5)
+
+    (49.1 + 2.5) * li
+1 = -----------------
+    (360 - 2.5)
+
+    (FontSizePx + LetterSpacingPx) * li
+1 = -----------------------------------
+    (SIZE - LetterSpacingPx)
+
+(SIZE - LetterSpacingPx) = (FontSizePx + LetterSpacingPx) * li
+(FontSizePx + LetterSpacingPx) * li = (SIZE - LetterSpacingPx)
+li = (SIZE - LetterSpacingPx) / (FontSizePx + LetterSpacingPx)
+
+１行あたりの字数＝(SIZE - LetterSpacingPx) / (FontSizePx + LetterSpacingPx)
+
+3/x * x/3 = 1
+x=4
+3/4 * 4/3 = (3*4)/(4*3) = 1
+
+
+50x + 5x
+```
+
+```
+const FontSizePx = parseFloat(document.querySelector('body').style.getPropertyValue('font-size'));
+const L = document.querySelector('#letter-spacing').value;
+const ALL_LETTER_SPACING = L * (lineOfChars - 1); // 全字間サイズ（px）
+
+F = 
+clientWidth = (F * lineOfChars) + (L * (lineOfChars - 1));
+```
+
+calcFontSize.js
+```javascript
+function calcFontSizePixcel(writingMode, lineOfChars, letterSpacing) { // フォントサイズをピクセル単位で算出する
+    const SIZE = ('vertical-rl' === writingMode) ? document.body.clientHeight : document.body.clientWidth; // １行の表示領域
+    const F = SIZE / lineOfChars; // 字間なし時の１字あたりのフォントサイズ
+    const L = F * letterSpacing; // 字間サイズ（emからpxに変換）
+    const ALL_LETTER_SPACING = L * (lineOfChars - 1); // 全字間サイズ（px）
+    return (SIZE - ALL_LETTER_SPACING) / lineOfChars; // 入力した字／行と字間からフォントサイズを算出する（ピクセル単位）
+}
+```
+
+　さらに画面の向きやwritingModeが変わったときは、フォントサイズのピクセル値から字／行を算出してHTMLにセットしたい。この目的は、縦横が変化してもフォントの絶対値は自動で変更させないようにするためである。
+
+MinFontSize.js
+```javascript
+function setLineOfCharsFromFontSizePixel() {// 画面の向きまたはWritingMode変更時にフォントサイズのピクセル値から字／行を取得してHTMLにセットする
+    const px = parseFloat(document.querySelector('body').style.getPropertyValue('font-size'))
+    const lineOfChars = calcLineOfCharsFromFontSizePixel(px);
+    console.log(`${lineOfChars}字／行 ${px}px`);
+    document.querySelector('#FontSize').value = lineOfChars;
+    const fontSize = document.querySelector('#FontSize');
+    fontSize.value = (lineOfChars < fontSize.min) ? fontSize.min : (fontSize.max < lineOfChars) ? fontSize.max : lineOfChars;
+    document.querySelector('#FontSize_').innerHTML = lineOfChars;
+}
+```
+
+calcFontSize.js
+```javascript
+function calcLineOfChars(writingMode) { // 字数／行を算出する（writingMode,フォントサイズpx,行間emから。縦横ボタン押下時）
+    // １行あたりの字数＝(SIZE - LetterSpacingPx) / (FontSizePx + LetterSpacingPx)
+    const FontSizePx = parseFloat(document.querySelector('body').style.getPropertyValue('font-size'));
+    const LetterSpacingPx = FontSizePx * document.querySelector('#letter-spacing').value;
+    const SIZE = ('vertical-rl' === writingMode) ? document.body.clientHeight : document.body.clientWidth; // １行の表示領域
+    const lineOfChars = (SIZE - LetterSpacingPx) / (FontSizePx + LetterSpacingPx);
+    return lineOfChars;
+}
+```
+
 
 ## 「縦中横」はHTML要素で囲う必要がある
 

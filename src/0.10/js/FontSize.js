@@ -17,7 +17,8 @@ function initFontSize() { // UI操作でフォントサイズを変更する
     fontSize.value = line_of_chars;
     function setLineOfCharsToHtml(value) { // CSSの変数をHTMLにセットする
         root.style.setProperty('--line-of-chars', `${value}`);
-        setFontSizePixelFromLineOfChars(value); // CalcFontSize.js
+//        setFontSizePixelFromLineOfChars(value); // CalcFontSize.js
+        setFontSizePixel(document.querySelector('#WritingMode').value, value, document.querySelector('#letter-spacing').value);
         document.querySelector('#FontSize_').innerHTML = value;
         console.log(`${value}`);
     }

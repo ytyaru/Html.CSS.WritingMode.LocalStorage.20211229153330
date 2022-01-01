@@ -3,6 +3,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
     initWritingMode();
     initFontSize();
     initLineHeight();
+    initLetterSpacing();
     console.log("DOMContentLoaded");
     console.log(`devicePixelRatio = ${window.devicePixelRatio}`);
 ;
@@ -16,6 +17,7 @@ window.addEventListener('beforeunload', (event) => {
     saveWritingMode();
     saveFontSize();
     saveLineHeight();
+    saveLetterSpacing();
 });
 window.addEventListener("orientationchange", function () { // 画面向きに応じて最大字数／行を変更する
     console.log("orientationchange");

@@ -42,7 +42,8 @@ function initWritingMode() { // UI操作でフォントサイズを変更する
         toggleWritingModeToHtml(e);
         setInputRangeWritingMode();
         setMaxLineOfChars(); // MinFontSize.js
-        setLineOfCharsFromFontSizePixel(); // CalcFontSize.js
+//        setLineOfCharsFromFontSizePixel(); // CalcFontSize.js
+        setLineOfChars(e.target.value);
     });
     setInputRangeWritingMode();
     return writingMode;

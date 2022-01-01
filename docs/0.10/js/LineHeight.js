@@ -1,4 +1,3 @@
-console.log('XXXXXXXXXXXXXXXXXXXXXXX');
 function saveLineHeight() {
     const lineHeight = document.querySelector('#line-height');
     localStorage.setItem('line-height', lineHeight.value);
@@ -14,7 +13,6 @@ function initLineHeight() { // UI操作で行間を変更する
     lineHeight.value = value;
     function setLineHeightToHtml(value) { // CSSの変数をHTMLにセットする
         root.style.setProperty('--line-height', `${value}`);
-//        setFontSizePixelFromLineOfChars(parseFloat(document.querySelector('body').style.getPropertyValue('font-size'))); // CalcLineHeight.js
         document.querySelector('#line-height_').innerHTML = value;
         console.log(`line-height: ${value}`);
     }

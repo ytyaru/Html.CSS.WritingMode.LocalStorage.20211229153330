@@ -27,20 +27,23 @@ function initWritingMode() { // UI操作でフォントサイズを変更する
         root.style.setProperty('--text-orientation', getTextOrientationValue(switchedWritingMode));
     }
     function setInputRangeWritingMode() {
-        const input = document.querySelector('#FontSize');
-        if ('vertical-rl' === writingMode.value) {
-            input.setAttribute('style', '-webkit-appearance:slider-vertical; writing-mode: bt-lr;');
-            input.setAttribute('orient', 'vertical');
-        } else {
-            input.setAttribute('style', '');
-            input.setAttribute('orient', '');
+        for (const input of document.querySelectorAll('input[type="range"]')) {
+            console.log(input)
+            if ('vertical-rl' === writingMode.value) {
+                input.setAttribute('style', '-webkit-appearance:slider-vertical; writing-mode: bt-lr;');
+                input.setAttribute('orient', 'vertical');
+            } else {
+                input.setAttribute('style', '');
+                input.setAttribute('orient', '');
+            }
         }
     }
     writingMode.addEventListener('click', e => {
         toggleWritingModeToHtml(e);
         setInputRangeWritingMode();
         setMaxLineOfChars(); // MinFontSize.js
-        setLineOfCharsFromFontSizePixel(); // CalcFontSize.js
+//        setLineOfCharsFromFontSizePixel(); // CalcFontSize.js
+        setLineOfChars(e.target.value);
     });
     setInputRangeWritingMode();
     return writingMode;
