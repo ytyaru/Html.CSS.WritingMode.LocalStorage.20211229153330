@@ -633,6 +633,216 @@ function setLineOfChars(writingMode) { // 字数／行を算出してHTMLにセ�
 }
 ```
 
+## WritingMode縦横それぞれのときでフォントサイズを共有しようとするとスライダー最大値を超えてしまうことがある
+
+　デバイスピクセル比1(ブラウザ拡大率100%)、1920*1080、縦書き（WritingMode=vertical-rl）のとき、40字／行にしたあと、横書き（WritingMode=holizontal-tb）にしたら、71字／行になってしまう。これは縦横どちらのときも同じフォントサイズを維持するという現在の独自仕様によるものである。
+
+* 最大字／行は50にしたい。日本語は１行あたり40字が適切とされており、最大でも50字以内が上限と考えられるから
+* フォントサイズは変えたくない。何もしないとブラウザが自動的に縦横を変えたときフォントサイズを変えてしまう。私はそれが嫌で縦横フォントサイズを共通化した。けれど縦書き40字のときのフォントサイズを、横書きに適用すると71字分になってしまう。これはアスペクト比16:9のせい。
+
+　さて、どうしたものか。選択肢は４つ。
+
+* ブラウザのデフォルト実装にする。つまり縦横を変えたらフォントサイズも変更してしまう
+* 現状の独自実装のままにする。つまり`WritingMode`、`screen.orientation`、`clientWidth`,`clientHeight`、`字／行`、`字間`からフォントサイズを算出する。現状のバグがある
+* 現状の独自実装に倣いつつ、縦と横それぞれの字数／行を保持する。ユーザとしては二度手間な上に、縦と横でフォントサイズが共有されなくなるため使い勝手が悪い。デフォルトのブラウザ動作と同じであり、それが嫌で独自実装したため回帰したら本末転倒。
+* 現状の独自実装に倣いつつ、WritingModeや画面向き変更時に字／行の数が最大値50を超えたら50にする。このときLocalStorageに保存する`WritingMode`と`字／行`は、超過する前のものであるべき。さもなくばリロードしたあとにWritingModeを戻すと超過後の値を基準に再計算されてしまうから。そうなると保存すべき値はピクセル単位のフォントサイズにするのがいいだろう。そこから縦／横それぞれに応じて字／行を算出すればいい。
+
+screen.orientation|writingMode|解像度|最小字／行|最大字／行|初期値
+------------------|-----------|------|----------|----------|------
+`portrait`(縦置き)|`vertical-rl`(縦書き)|`clientHeight` <= `599`px|15|30|20
+`portrait`(縦置き)|`vertical-rl`(縦書き)|`clientHeight` <= `1024`px|20|40|30
+`portrait`(縦置き)|`vertical-rl`(縦書き)|`clientHeight` >= `1025`px|25|50|40
+`portrait`(縦置き)|`holizontal-tb`(横書き)|`clientWidth` <= `599`px|15|30|20
+`portrait`(縦置き)|`holizontal-tb`(横書き)|`clientWidth` <= `1024`px|20|40|30
+`portrait`(縦置き)|`holizontal-tb`(横書き)|`clientWidth` >= `1025`px|25|50|40
+`landscape`(横置き)|`vertical-rl`(縦書き)|`clientHeight` <= `599`px|15|30|20
+`landscape`(横置き)|`vertical-rl`(縦書き)|`clientHeight` <= `1024`px|20|40|30
+`landscape`(横置き)|`vertical-rl`(縦書き)|`clientHeight` >= `1025`px|25|50|40
+`landscape`(横置き)|`holizontal-tb`(横書き)|`clientHeight` <= `599`px|15|30|20
+`landscape`(横置き)|`holizontal-tb`(横書き)|`clientHeight` <= `1024`px|20|40|30
+`landscape`(横置き)|`holizontal-tb`(横書き)|`clientHeight` >= `1025`px|25|50|40
+
+* 最小フォントサイズ`10px`
+* 最小スマホ解像度`320*480`
+* 最小タブレット解像度`600`
+
+```
+320px / 10px = 32字
+```
+
+　スマホでは30最大字／行と考えてよい。`10px`は人が識字できる最小限度だと思われる。画数の多い漢字だと識字できない恐れもある。
+
+```
+600px / 10px = 60字
+600px / 12px = 50字
+600px / 15px = 40字
+```
+
+　タブレットでは40最大字／行と考えてよい。CSSでは`16px`が基準値だが、それより少し小さい。
+
+```
+1024px / 16px = 64字
+1024px / 20.48px = 50字
+1024px / 25.6px = 40字
+```
+
+　1024pxあれば40字を表示するのに１字あたり25pxにできる。こうなると１行あたりの適切な字数である40を基準にしたほうがよい。最大でも50字。それ以上はフォントサイズや余白で調整するようにしたほうが読みやすいだろう。
+
+### 解像度ブレークポイント（ScreenSizeBreakPoint）
+
+長辺|最小字／行|最大字／行|初期値
+----|----------|----------|------
+599px以下|15|30|20
+1024px以下|20|40|30
+1025px以上|25|50|40
+
+ScreenSizeBreakPoint
+```
+long side px
+long edge px
+min line of chars
+max line of chars
+line of chars
+```
+```javascript
+default class ScreenSizeBreakPoint {
+    #longEdge;
+    #lineOfChars;
+    #minLineOfChars;
+    #maxLineOfChars;
+    constructor(longEdge, lineOfChars, minLineOfChars, maxLineOfChars) {
+        this.#longEdge = longEdge;
+        this.#lineOfChars = lineOfChars;
+        this.#minLineOfChars = minLineOfChars;
+        this.#maxLineOfChars = minLineOfChars;
+    }
+    get LongEdge() { return this.#longEdge; }
+    get LineOfChars() { return this.#lineOfChars; }
+    get MinLineOfChars() { return this.#minLineOfChars; }
+    get MaxLineOfChars() { return this.#maxLineOfChars; }
+}
+```
+ScreenSizeBreakPointFactory.js
+
+```
+[
+    [599, 20, 15, 30],
+    [1024, 30, 20, 40],
+    [-1, 40, 25, 50],
+]
+```
+
+```
+const f = new ScreenSizeBreakPointFactory();
+f.create([ // 字／行、最小字／行、最大字／行、解像度閾値（指定値以下なら適用する）
+    [40, 25, 50],
+    [30, 20, 40, 1024],
+    [20, 15, 30, 599],
+]);
+```
+
+```
+const f = new ScreenSizeBreakPointFactory();
+f.create([ // 字／行、最小字／行、最大字／行、解像度閾値（指定値以下なら適用する）
+    [20, 15, 30, 599],
+    [30, 20, 40, 1024],
+    [40, 25, 50],
+]);
+```
+
+* SmartPhoneFirst
+* DesktopFirst
+
+ScreenSizeBreakPointFactory.js
+```javascript
+import {ScreenSizeBreakPoint} from 'ScreenSizeBreakPoint.js'
+default class ScreenSizeBreakPointFactory {
+    #breakPoints = [];
+    constructor(data) {
+        for (const i of data) {
+            this.#breakPoints.append(new ScreenSizeBreakPoint(i[0], i[1], i[2], (3 < i.length) ? i[3] : -1));
+        }
+    }
+    get BreakPoints() { return this.#breakPoints; }
+}
+```
+
+
+ScreenSizeBreakPointFactory.js
+```javascript
+import {ScreenSizeBreakPoint} from 'ScreenSizeBreakPoint.js'
+default class ScreenSizeBreakPointFactory {
+    #smartPhone;
+    #tablet;
+    #desktop;
+    constructor() {
+        this.#smartPhone = new ScreenSizeBreakPoint(599, 20, 15, 30);
+        this.#smartPhone = new ScreenSizeBreakPoint(1024, 30, 20, 40);
+        this.#smartPhone = new ScreenSizeBreakPoint(1025, 40, 25, 50);
+    }
+    get SmartPhone() { return this.#smartPhone; }
+    get Tablet() { return this.#tablet; }
+    get Desktop() { return this.#desktop; }
+    get S() { return this.#smartPhone; }
+    get M() { return this.#tablet; }
+    get L() { return this.#desktop; }
+}
+```
+
+　さらに全角の字数と半角の字数で分けたい。
+
+BP|全角|半角
+--|----|----
+599px以下|15,20,30|30,40,60
+799px以下|20,30,40|40,60,80
+1024px以下|20,30,40|40,60,100
+1279px以下|25,40,50|50,80,125
+1280px以上|25,40,50|50,100,140
+
+　最大字／行は小さくなる場合がある。たとえば599px以下である480pxのとき、半角の最大字／行は60だが、最小フォント10pxで並べると48字までとなる。ブラウザ仕様により最小フォントより小さくはできないため、最大字／行は60でなく48とするべき。
+
+　逆に最大字／行はその閾値を超えることはない。たとえば1025px以上である1920pxのとき、最小フォント10pxで並べると192字までとなる。だが１行あたりが多すぎたり、フォントが小さすぎると読みづらい。なので英語圏Twitter上限値である140字を上限とする。
+
+　端末やプログラミングでは80字／行である。これは半角文字を基準とした値である。なので初期値は80半角字／行とする。
+
+　日本語圏では50最大全角字／行である。これは全角である。全角は半角の倍のサイズとなる。なので全角を基準としたとき半角では倍の100最大半角字／行となる。だが、日本語では１字あたりに多くの意味を伝えられるため少ない字数でもいいが、英語では１字あたりに込められる意味が少ない。必ず複数のアルファベットを用いる。つまり言語による情報密度の違いがある。よって全角／半角の幅だけで最大字数を決めるのはふさわしくない。
+
+　概算だが、日本語は英語とくらべて情報密度が2.5倍だと言われている。
+
+* https://nlab.itmedia.co.jp/nl/articles/1709/27/news114.html
+
+英語|日本語
+----|------
+140|56
+
+日本語|英語
+----|------
+50|125
+
+　英語140字の情報量＝日本語56字の情報量である。
+
+　日本語は１行あたり最大50字が適切。これが情報量に基づいた数だと仮定すると、英語では１行あたり125(`50 * 2.5`)字が適切だということになる。
+
+　なお、端末では１行あたり80字が適切だという風習があった。これはディスプレイの解像度に関する限界値と思われる。現在は解像度が高まったことから100〜120字くらいが適切だとされているらしい。
+
+　Twitterの140字制限の根拠はSMS（携帯のショートメール）によるもの。全部で160字だが20字分はユーザ名にあてており残り140字を自由につぶやける字数としたらしい。短く要約したほうが読むのに時間がかからず読みやすいのも理由か。
+
+　2017年、Twitterは日本語以外、280字が上限となった。この事実からも日本語を含む漢字圏の言語では１字あたりの情報量が高いことを表している。ただ、この字数増加は政治的な戦略のものにすぎず、実際は必要性があまりないらしい。
+
+* https://japan.cnet.com/article/35110222/2/
+
+　重要なのは「要約すること」だと思う。何を言っているのかを端的に伝えることが大切だ。記事のタイトルをキャッチーにするのも同じことだ。パラグラフライティングではひとつのパラグラフ（段落）の先頭文に要約文（トピック・センテンス）を書く。日本語では１行あたり40字であり、それを１文の長さと仮定する。１文あたりは短くしたほうが理解しやすいため短くてもよいが、短すぎると情報量が足りない。その兼ね合いが難しい。概算として、要約文20字、詳細文40〜80字（1〜2文）、合計60〜100字くらいが、ひとつの話題について語れる適切な字数なのではないだろうか。だとすると英語140字とおなじ情報量である日本語56字というのは、かなり厳しい。要約した上でさらに端的に詳細を語らねばならない。頑張ればギリギリ収まるので、要約力が身につきそう。
+
+　要約文は誤りやプロパガンダになりやすい。短い文字数だと情報量が減って「語れない事」が出てくる。それを字数制限のせいにして意図的に「語らない」ことで、人々の思考を誘導するような発言をくりかえす環境になる。ツイッターはまさにそういった環境であり、それが問題となって字数増加という対症療法をとったらしい。本や記事のキャッチーなタイトルも短い文である。よって要約された短文は、単純化された強力な伝達力をもつのである。
+
+　そもそも英語圏は字数ではなく単語数が基準になる。折り返しの基準も単語（スペース）である。文書の規模を概算するのも単語数である。フォントが等幅ではなくプロポーショナルを使用していることが多いのも影響しているのだろう。
+
+　だが、英語でも限られた紙面や画面に表示する１行あたりの字数という基準があってもいいと思う。プログラミングでは等幅のほうが見やすい。かつては解像度の限界から端末で80字／行とされていた。
+
+
+
+　日本語では「川」という1字だが英語なら「river」の5字である。画数も少ない。
+
 ## 「縦中横」はHTML要素で囲う必要がある
 
 ```css
