@@ -620,6 +620,19 @@ document.querySelector('#letter-spacing_').innerHTML = round(value * 100, 0.5);
 
 　JS内部では`em`単位で保持して、HTMLのラベルに表示するときは`%字`単位にする。
 
+## バグ修正。WritingMode変更時に字／行の値がvalue属性に反映されていない
+
+* https://ytyaru.github.io/Html.CSS.WritingMode.LocalStorage.20211229153330/0.13/index.html
+
+calcFontSize.js
+```javascript
+function setLineOfChars(writingMode) { // 字数／行を算出してHTMLにセットする
+    const lineOfChars = parseInt(calcLineOfChars(writingMode))
+    document.querySelector('#FontSize_').innerHTML = lineOfChars;
+    document.querySelector('#FontSize').value = lineOfChars;
+}
+```
+
 ## 「縦中横」はHTML要素で囲う必要がある
 
 ```css
