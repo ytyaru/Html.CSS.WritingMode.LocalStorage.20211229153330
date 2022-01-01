@@ -43,5 +43,5 @@ function calcLineOfChars(writingMode) { // 字数／行を算出する（writing
     return lineOfChars;
 }
 function setLineOfChars(writingMode) { // 字数／行を算出してHTMLにセットする
-    document.querySelector('#FontSize_').innerHTML = calcLineOfChars(writingMode);
+    document.querySelector('#FontSize_').innerHTML = parseInt(calcLineOfChars(writingMode));
 }
