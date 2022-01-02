@@ -1,9 +1,8 @@
 function saveFullScreen() {
-    const writingMode = document.querySelector('#FullScreen');
-    localStorage.setItem('FullScreen', document.querySelector('#FullScreen').value);
+    localStorage.setItem('FullScreen', document.querySelector('#full-screen').value);
 }
 function setFullScreen(value) {
-    const fullScreen = document.querySelector('#FullScreen');
+    const fullScreen = document.querySelector('#full-screen');
     if ('0' === value) {
         window.document.exitFullscreen.call(window.document);
         fullScreen.innerHTML = '―'; 
@@ -15,13 +14,15 @@ function setFullScreen(value) {
     }
 }
 function initFullScreen() { // UI操作で全画面ON/OFF切替
-    const init_value = localStorage.getItem('FullScreen') || '0'; /* 0, 1 */
+    /*
     // フルスクリーン化はユーザ操作が必要。自動化しようとするとエラーになり動作しない
     // https://teratail.com/questions/339734
+    const init_value = localStorage.getItem('full-screen') || '0'; // 0, 1
     setFullScreen(init_value); // Failed to execute 'requestFullscreen' on 'Element': API can only be initiated by a user gesture.
-    const fullScreen = document.querySelector('#FullScreen');
+    */
+    const fullScreen = document.querySelector('#full-screen');
     fullScreen.addEventListener('click', e => {
-        const v = document.querySelector('#FullScreen').value
+        const v = document.querySelector('#full-screen').value;
         setFullScreen(('0' === v) ? '1' : '0');
     });
 }

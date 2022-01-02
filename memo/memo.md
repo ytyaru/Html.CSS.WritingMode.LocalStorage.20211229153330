@@ -18,6 +18,8 @@
 `0.11`|スライダーUI縦書き時にラベルが次行になってしまうのを防ぐ
 `0.11`△|スライダーUIのラベルの数値を縦中横にしたい
 `0.12`|字間、行間の単位をemから%字にしたい
+`0.13`|バグ修正。WritingMode変更時に字／行の値がvalue属性に反映されていない
+`0.14`|名前の統一（ファイル名、変数名）。考察メモ追加（WritingMode縦横それぞれのときでフォントサイズを共有しようとするとスライダー最大値を超えてしまうことがある。どうやって解決するか。段組みシステムを実装し、段組み数を増加することで同一フォントを維持するようにする））
 ``|「縦中横」はHTML要素で囲う必要がある
 ``|字／行は「縦書き」と「横書き」でそれぞれ個別に持ちたい
 ``|縦書きにするとマウスホイールによるスクロールができない
@@ -1040,6 +1042,283 @@ if (40 > (line-of-px / standard-font-size-px)) { // スマホ想定（639px以�
 * 同一フォントサイズを維持しつつ、字／行を超えていたら段組み数の増加で調整する
 
 　これが最もスマートな解決策である。よって、この問題を解決するためにはまず段組みシステムを実装する必要がある。
+
+## 名前の統一（ファイル名、変数名）
+
+* https://ytyaru.github.io/Html.CSS.WritingMode.LocalStorage.20211229153330/0.14/index.html
+
+　対象項目は以下。
+
+* CSS変数名
+* HTMLの`id`,`name`,`value`属性値
+* HTMLのカスタム要素名(`a-b`)
+* JS(HTML要素名。`querySelector()`戻り値の変数名)
+
+項目|現状|改善後
+----|----|------
+ファイル名|CamelCase|chain-case
+CSSカスタムプロパティ|chain-case|chain-case
+HTML属性値|CamelCase|chain-case
+HTMLカスタム要素名|-|chain-case
+JS（HTML要素）|CamelCase|CamelCase
+JS（HTML属性値）|CamelCase|CamelCase
+
+　現状のファイル名を次のように変更する。
+
+前|後
+--|--
+`main.js`|`main.js`
+`WritingMode.js`|`writing-mode.js`
+`MinFontSize.js`|削除し`line-of-chars.js`に統合
+`LineHeight.js`|`line-height.js`
+`LetterSpacing.js`|`letter-spacing.js`
+`FullScreen.js`|`full-screen.js`
+`FontSize.js`|`line-of-chars.js`
+`CalcFontSize.js`|`resize.js`
+
+　現状のJS変数名を次のように変更する。
+
+前|後
+--|--
+`SIZE`|`LINE_OF_PX`
+
+　JS関数名を次のように変更する。
+
+前|後
+--|--
+`saveFontSize`|`saveLineOfChars`
+`initFontSize`|`initLineOfChars`
+
+　HTML要素の`id`,`name`属性値を次のように変更する。これに伴いJSの`querySelector`引数値も変更する。
+
+前|後
+--|--
+`WritingMode`|`writing-mode`
+`LineHeight`|`line-height`
+`LetterSpacing`|`letter-spacing`
+`FullScreen`|`full-screen`
+`FontSize`|`line-of-chars`
+
+　HTML要素のうちスライダーUIのラベル要素ID属性値を次のように変更する。
+
+前|後
+--|--
+`LineHeight_`|`line-height-label`
+`LetterSpacing_`|`letter-spacing-label`
+`FontSize_`|`line-of-chars-label`
+
+　CSSクラス名を次のように変更する。
+
+前|後
+--|--
+`.num{}`|`.upright{}`
+
+　パターン分析。
+
+項目|現状|改善後
+----|----|------
+ファイル名|CamelCase|chain-case
+CSSカスタムプロパティ|chain-case|chain-case
+HTML属性値|CamelCase|chain-case
+HTMLカスタム要素名|-|chain-case
+JS（HTML要素）|CamelCase|CamelCase
+JS（HTML属性値）|CamelCase|CamelCase
+
+　JSではHTMLの要素名と属性値が同じ変数名になってしまうことがある。たとえば行間。以下のように`<input type='range'>`要素である。それをJSで受け取ったときの変数名は`lineHeight`となる。ところがその`value`属性値も同じだ。ほかにもCSS変数やLocalStorageなど取得元が異なる同じ値が複数ある。はたしてこのとき適切に変数名をつけるとしたらどうすべきか。
+
+```html
+<input type="range" id="line-height" name="line-height" min="1.5" max="2.0" step="0.05"><label for="volume"><span id="line-height_" class="num"></span><span class="num">％字</span><span class="num">行間</span></label>
+```
+```javascript
+// すべて同じ変数名になっちゃうよ！　同じ関数内で使いたいから別名をつけて別変数として同居させねばならない。どんな変数名にすべきか？
+const lineHeight = document.querySelector('#line-height');
+const lineHeight = document.querySelector('#line-height').value;
+const lineHeight = getComputedStyle(root).getPropertyValue('--line-height')
+const lineHeight = localStorage.getItem('line-height');
+```
+
+　次の２パターン。
+
+* JS変数名は、要素名を`lineHeight`にし、値を`value`にする
+* JS関数に分ける（値計算とHTMLセット用の2関数に分ける）
+    * HTML要素を一切取得しない`value`値をもちいた計算用関数にしてJS変数名は`lineHeight`にする
+    * HTML要素をセットするだけの関数を用意し、計算用関数を呼び出す（変数名の定義はしない）
+
+```javascript
+funciton initialize() {
+    const lineHeight = document.querySelector('#line-height');
+    const value = ('line-height' in localStorage) ? localStorage.getItem('line-height') : getComputedStyle(root).getPropertyValue('--line-height');
+}
+```
+```javascript
+funciton calcLineHeight() { // 値を計算する
+    const lineHeight = ('line-height' in localStorage) ? localStorage.getItem('line-height') : getComputedStyle(root).getPropertyValue('--line-height');
+    return lineHeight;
+}
+funciton setHeight() { // HTML要素にセットする
+    document.querySelector('#line-height').value = calcLineHeight();
+    document.querySelector('#line-height').innerHTML = calcLineHeight();
+}
+```
+
+　おそらくクラス化したり、クラス化したカスタム要素で実装すればスコープ範囲が限られるので名前がつけやすいと思う。値計算用メソッドとHTMLセット用メソッドに分け、それぞれの関数内で値と要素の変数名を`lineHeight`にできるだろう。
+
+CSS|JS|値|以前|概要
+---|--|--|----|----
+`min-font-size-px = 10;`|`MinFontSize`|最小フォントサイズ（ピクセル単位）
+`standard-font-size-px = 16;`|`StandardFontSizePx`|標準フォントサイズ（ピクセル単位）
+
+CSS|JS|値|以前|概要
+---|--|--|----|----
+`line-height = localStorage || 1.5;`|`LineHeight`|行間（`em`単位）
+`min-line-height = 1.5;`|`MinLineHeight`|最小行間（`em`単位）
+`max-line-height = 2.0;`|`MaxLineHeight`|最大行間（`em`単位）
+
+CSS|JS|値|以前|概要
+---|--|--|----|----
+`letter-spacing = localStorage || 0.05em;`|`LetterSpacing`|字間（`em`単位）
+`min-letter-spacing = 0.05em;`|`MinLetterSpacing`|最小字間（`em`単位）
+`max-letter-spacing = 0.10em;`|`MaxLetterSpacing`|最大字間（`em`単位）
+
+CSS|JS|値|以前|概要
+---|--|--|----|----
+`en-chars-weight = 1.0`|`EnCharsWeight`|英語1字あたりの情報比（アルファベット）
+`jp-chars-weight = 2.5`|`EnCharsWeight`|日本語1字あたりの情報比（CJKなどの漢字圏）
+
+CSS|JS|値|以前|概要
+---|--|--|----|----
+`jp-min-line-of-chars = 40;`|`JpStandardLineOfChars`|日本語標準最小字／行
+`jp-max-line-of-chars = 50;`|`JpMaxStandardLineOfChars`|日本語標準最大字／行
+`en-min-line-of-chars = 80;`|`EnMinLineOfChars`|英語標準最小字／行
+`en-max-line-of-chars = 100;`|`EnMaxLineOfChars`|英語標準最大字／行
+
+CSS|JS|値|以前|概要
+---|--|--|----|----
+`writing-mode = localStorage || 'vertical-rl'`|`writingMode`|表記方向（縦書き`vertical-rl`／横書き`holizontal-tb`）
+
+CSS|JS|値|以前|概要
+---|--|--|----|----
+`line-of-px = ('vertical-rl' === writingMode) ? document.body.clientHeight : document.body.clientWidth;`|`LineOfPx`|表示領域／行（ピクセル単位）
+`line-of-chars = localStorage || jp-standard-line-of-chars;`|`LineOfChars`|字／行
+`min-line-of-chars = jp-standard-line-of-chars;`|`MinLineOfChars`|最小字／行
+`max-line-of-chars = jp-max-standard-line-of-chars;`|`MaxLineOfChars`|最大字／行
+
+CSS|JS|値|以前|概要
+---|--|--|----|----
+`columns = localStorage || 1;`|`columns`|段組数
+`min-columns = 1;`|`MinColumns`|最小段組数
+`max-columns = parseInt((line-of-px / standard-font-size-px) / jp-standard-line-of-chars);`|`MaxColumns`|最大段組数
+
+　JSで簡単にアクセスできるよう専用クラスを作るといいかもしれない。
+
+* 識別子
+* 定数
+* 変数
+* HTML要素
+
+```javascript
+default class ViewElementId {
+    get LineOfChars() { return 'line-of-chars'; }
+}
+```
+```javascript
+default class ViewValue {
+    get LineOfChars() { return; }
+}
+```
+```javascript
+import {ViewElementId} from 'ViewElementId.js';
+import {ViewValue} from 'ViewValue.js';
+default class ViewElement {
+    get LineOfChars() { return document.querySelector(`#${ViewElementId.LineOfChars}`); }
+}
+```
+
+　どうも効率が悪い。特定の法則にもとづいた識別子を定義し、それを使い回すことで各要素のCSS変数、HTML要素、ストレージ値などを取得できるようにしたい。
+
+```javascript
+const id = 'line-of-chars';
+const lineHeight = document.querySelector(`#${id}`);
+const lineHeight = document.querySelector(`#${id}`).value;
+const lineHeight = getComputedStyle(document.querySelector(':root')).getPropertyValue(`--${id}`)
+const lineHeight = localStorage.getItem(`${id}`);
+document.querySelector(':root').style.setPropertyValue(`--${id}`)
+localStorage.setItem(`${id}`, value);
+```
+
+```javascript
+default class ViewElementId {
+    get LineOfChars() { return 'line-of-chars'; }
+}
+```
+```javascript
+default class ViewElementProperty {
+    getCss(id) { return getComputedStyle(document.querySelector(':root')).getPropertyValue(`--${id}`); }
+    setCss(id, value) { document.querySelector(':root').style.setPropertyValue(`--${id}`, value); }
+    getHtml(id) { return document.querySelector(`#${id}`); }
+    //setHtml(id) {}
+    getStorage(id) { return localStorage.getItem(`${id}`); }
+    setStorage(id, value) { return localStorage.setItem(`${id}`, value); }
+}
+```
+```javascript
+ViewElementProperty.getCss(ViewElementId.LineOfChars);
+ViewElementProperty.getHtml(ViewElementId.LineOfChars);
+ViewElementProperty.getStorage(ViewElementId.LineOfChars);
+ViewElementProperty.setCss(ViewElementId.LineOfChars, value);
+ViewElementProperty.setStorage(ViewElementId.LineOfChars, value);
+```
+
+　なーんか冗長だな。以下のようにしたい。
+
+```javascript
+Property.ViewSetting.LineOfChars.getCss();
+Property.ViewSetting.LineOfChars.getHtml();
+Property.ViewSetting.LineOfChars.getStorage();
+Property.ViewSetting.LineOfChars.setCss(value);
+Property.ViewSetting.LineOfChars.setStorage(value);
+```
+```javascript
+Scene.View.LineOfChars.getCss();
+Scene.View.LineOfChars.getHtml();
+Scene.View.LineOfChars.getStorage();
+Scene.View.LineOfChars.setCss(value);
+Scene.View.LineOfChars.setStorage(value);
+```
+```javascript
+class PropertyAccessor {
+    #id;
+    constructor(id) { this.#id = id; }
+    get Id() { return this.#id; }
+    get Css() { return getComputedStyle(document.querySelector(':root')).getPropertyValue(`--${this.#id}`); }
+    set Css(value) { return document.querySelector(':root').style.setPropertyValue(`--${this.#id}`, value); }
+    get Html() { return document.querySelector(`#${this.#id}`); }
+    get Storage() { return localStorage.getItem(`${this.#id}`); }
+    set Storage(value) { return localStorage.setItem(`${this.#id}`, value); }
+    get Db() { return ; } // IndexedDb
+    set Db(value) { return ; } // IndexedDb
+}
+```
+```javascript
+class LineOfChars extends PropertyAccessor {
+    constructor(id=LineOfChars.name) {}
+}
+```
+```javascript
+class Property {
+    static View = new View();
+    class View {
+        #lineOfChars = new PropertyAccessor('line-of-chars');
+        constructor(){
+            this.#lineOfChars = new PropertyAccessor('line-of-chars');
+        }
+        get LineOfChars() { return this.#lineOfChars; }
+    }
+}
+```
+
+
+## 段組み用CSS変数追加
 
 ## 「縦中横」はHTML要素で囲う必要がある
 

@@ -1,10 +1,10 @@
 function saveWritingMode() {
-    const writingMode = document.querySelector('#WritingMode');
+    const writingMode = document.querySelector('#writing-mode');
     localStorage.setItem('WritingMode', getComputedStyle(document.querySelector(':root')).getPropertyValue('--writing-mode'));
 }
 function initWritingMode() { // UI操作でフォントサイズを変更する
     const root = document.querySelector(':root');
-    const writingMode = document.querySelector('#WritingMode');
+    const writingMode = document.querySelector('#writing-mode');
     function getButtonValue(value) { return ('vertical-rl' === value) ? value : 'horizontal-tb'; }
     function getButtonText(value) { return ('vertical-rl' === value) ? '縦' : '横'; }
     function getFontSizeBaseValue(value) { return `100v${('vertical-rl' === value) ? 'h' : 'w'}`; }
@@ -28,7 +28,6 @@ function initWritingMode() { // UI操作でフォントサイズを変更する
     }
     function setInputRangeWritingMode() {
         for (const input of document.querySelectorAll('input[type="range"]')) {
-            console.log(input)
             if ('vertical-rl' === writingMode.value) {
                 input.setAttribute('style', '-webkit-appearance:slider-vertical; writing-mode: bt-lr;');
                 input.setAttribute('orient', 'vertical');
@@ -42,8 +41,8 @@ function initWritingMode() { // UI操作でフォントサイズを変更する
         toggleWritingModeToHtml(e);
         setInputRangeWritingMode();
         setMaxLineOfChars(); // MinFontSize.js
-//        setLineOfCharsFromFontSizePixel(); // CalcFontSize.js
-        setLineOfChars(e.target.value);
+//        setLineOfChars(e.target.value); // resize.js
+        setLineOfChars(); // resize.js
     });
     setInputRangeWritingMode();
     return writingMode;

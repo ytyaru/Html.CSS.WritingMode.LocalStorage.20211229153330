@@ -55,7 +55,7 @@ body {
     writing-mode: var(--writing-mode); /* vertical-rl, horizontal-tb */
     text-orientation: var(--text-orientation); /* upright, sideways */
 }
-.upright {
+.num {
     text-combine-upright: all; /* 縦中横 */
     letter-spacing: 0; /* 字間 */
     text-transform: full-width; /* 全字全角 */
