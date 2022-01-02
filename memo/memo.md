@@ -837,11 +837,209 @@ BP|全角|半角
 
 　そもそも英語圏は字数ではなく単語数が基準になる。折り返しの基準も単語（スペース）である。文書の規模を概算するのも単語数である。フォントが等幅ではなくプロポーショナルを使用していることが多いのも影響しているのだろう。
 
-　だが、英語でも限られた紙面や画面に表示する１行あたりの字数という基準があってもいいと思う。プログラミングでは等幅のほうが見やすい。かつては解像度の限界から端末で80字／行とされていた。
+　だが、英語でも限られた紙面や画面に表示する１行あたりの字数という基準があってもいいと思う。じゃあ一体いくつにすればいい？　題材を調べてみる。プログラミングや端末では、かつて解像度の限界から80字／行とされていた。現在では100〜120が主流らしい。英語のブログでは90字程度だが、左右の余白が多かったり、著者情報など段組みされている。新聞でも段組みされており、１行あたりの字数が多くなりすぎないような工夫がある。
 
+### 字／行の最大値や最小値を算出する
 
+長辺閾値|最小|最大
+--------|----|----
+320〜599px|15|min(30, 32〜59=(長辺 / 10px))
+600〜1024px|20|min(40, 60〜102=(長辺 / 10px), 40〜68.2(長辺 / 15px), 37.5〜64(長辺 / 16px))
+1025〜1280px|25|min(50, 102〜128=(長辺 / 10px), 68.3〜85.3(長辺 / 15px), 64〜80(長辺 / 16px))
 
-　日本語では「川」という1字だが英語なら「river」の5字である。画数も少ない。
+* 最小フォント: 10px
+* 標準フォント: 16px
+* 標準字／行: 40
+* 最大字／行: 50
+
+判定|最大字／行
+----|----------
+(SIZE / 10px) < 40|30
+上下の中間|`(SIZE / 10px)`
+(SIZE / 10px) > 50|50
+(SIZE / 16px) > 50|50
+((SIZE / 16px) / 40) < 2|40*2段
+((SIZE / 16px) / 50) < 2|50*2段
+
+　段組みすべきときはいつか。
+
+* １行あたりが長過ぎる（50字以上）とき：ブログ
+* 面積あたりに詰め込みたいとき：新聞
+
+1920 / 10 = 192
+1920 / 16 = 120
+
+3 ((120字／行) / 40 ) < 2: 偽
+2.4 ((120字／行) / 50 ) < 2: 偽
+
+判定|最小字／行
+----|----------
+(SIZE / 10px) < 40|30
+上下の中間|`(SIZE / 10px)`
+(SIZE / 10px) > 50|50
+(SIZE / 16px) > 50|50
+((SIZE / 16px) / 40) < 2|40*2段
+((SIZE / 16px) / 50) < 2|50*2段
+
+　字／行の最大値や最小値の算出には文化圏・言語圏が関わっている。その言語における１字あたりの情報量に応じて変わる。英語圏が`1`だとすると日本語圏は`2.5`である。また、スマホやPCなどディスプレイの物理サイズや解像度でも変わってくる。大きければその言語圏における適切な字／行にすればよいが、画面が小さければ妥協して字数を減らさねばフォントが小さすぎて見えなくなってしまう。
+
+### 段組み
+
+* https://developer.mozilla.org/ja/docs/Web/CSS/CSS_Columns/Using_multi-column_layouts
+
+```css
+#col {
+  column-count: 2;
+}
+```
+```html
+<div id="col">
+  <p>
+    Lorem ipsum dolor sit amet, consectetur adipisicing elit,
+    sed do eiusmod tempor incididunt ut labore et dolore magna
+    aliqua.
+  </p>
+  <p>
+    Ut enim ad minim veniam, quis nostrud exercitation ullamco
+    laboris nisi ut aliquip ex ea commodo consequat.
+  </p>
+  <p>
+    Duis aute irure dolor in reprehenderit in voluptate velit
+    esse cillum dolore eu fugiat nulla pariatur.
+  </p>
+  <p>
+    Excepteur sint occaecat cupidatat non proident, sunt in
+    culpa qui officia deserunt mollit anim id est laborum.
+  </p>
+</div>
+```
+```
+Lorem ipsum dolor sit amet, consectetur          |Duis aute irure dolor in 
+adipisicing elit, sed do eiusmod tempor          |reprehenderit in voluptate velit esse cillum dolore eu fugiat 
+incididunt ut labore et dolore magna aliqua.     |nulla pariatur.
+                                                 |
+Ut enim ad minim veniam, quis nostrud            |Excepteur sint occaecat cupidatat non 
+exercitation ullamco laboris nisi ut aliquip ex  |proident, sunt in culpa qui officia deserunt 
+ea commodo consequat.                            |mollit anim id est laborum.
+````
+
+　縦書きで段組みすると以下。
+
+* https://www.webcreatorbox.com/tech/responsive-tategaki
+
+```
+```
+２は
+行じ
+目ま
+　り
+----
+４３
+行行
+目目
+```
+
+　段組みするときでも最小フォントサイズ10pxと標準字／行を意識すること。
+
+```
+段組み是非 = true/false
+段組み数 = ((SIZE / 16px) / 40)
+段組み数 = ((SIZE / 16px) / 50)
+```
+
+* 段組みToggleボタン
+* 段組み数スライダー（最小値、最大値、初期値）
+
+　段組みは見た目が大きく変わってしまう。ユーザの好みが分かれるため基本的には段組みせず１段で表示する。このときディスプレイサイズが大きいとフォントサイズを大きくすることで最大50字を表示するモードになる。ただ、人によってはもっとフォントサイズが小さくてもいいから１画面あたりの字数を増やしてページ送りに必要なクリック数を減らしたい人もいるだろう。そこで段組み表示できるオプションを用意する。
+
+　段組みする段数を算出する。段組みは基本的に50字／行では少なかったり、フォントサイズをもっと小さくしても余裕で可読できるような大型ディスプレイを想定している。なので算出にもちいるフォントサイズは最小10pxではなく標準16pxにし、さらに字／行も標準40と最大50をもちいる。
+
+　よって段組みモードのときのフォントサイズ指定は、字／行の40〜50の範囲しかない。さらに段組み数の最大値は`段組み数 = ((SIZE / 16px) / 40)`で計算される。最小値は`2`段。もし最大値が`2`ならスライダーUIにする必要はない。単に段組みToggleボタンだけでよい。もし最大値が`3`以上ならスライダーにする。もっともステップ値は`1`であるため、`2`と`3`のいずれかしかないが。
+
+　このことから段組み１段のときと２段以上のときとでは、字／行の最小／最大値の算出方法が異なる。このため実装が複雑になるだろう。たとえばLocalStorageで起動時に状態を復元する時はどう保存するか。次の選択肢がある。
+
+* 段組み数パターンどれかひとつだけを保存する
+* １段とそれ以上の２パターンを保存する
+
+　１パターンのみ保存するのが望ましい。理由は、保存して復元する目的が「そのデバイスとユーザにとって最適な表示」をすることだから。つまりユーザが自分の好みによって段組み数も決めているのだから、それこそが最適な状態だと判断する。
+
+　ということは最初から段組みを想定したUI設計と計算式を考えて、実装もそれに作り直すべき。
+
+　段組み数の最小値は1。ステップ値は`1`。最大値は以下の計算式により算出する。このときの`16px`は段組み時の最小フォント値、`40`は最小字／行である。
+
+```
+段組み最大値＝((SIZE / 16px) / 40)
+```
+
+　1920*1080、横置き、縦書きしたときの最大段組み数は1.6。整数値で小数点以下を切り捨てることから`1`になる。つまり段組みしない状態。
+
+```
+1.6875=(1080px / 16px) / 40字
+```
+
+　1920*1080、横置き、横書きしたときの最大段組み数は3。縦書き時とくらべて３倍である。
+
+```
+3=(1920px / 16px) / 40字
+```
+
+　段組みしたときのフォントサイズは最小でも16pxになる。あとは段組み数と字／行をスライダーで調整したとき自動的に変わる。最大3段まで組めるとき3段にしたら16pxだし、2段にしたらそれ以上、1段にしたらさらに増える。
+
+　となると、今まで１段しか考えていない状態で字／行の閾値を決めていたが、今は段組みを考慮した上で字／行の閾値を決めるべきではないかと思えるのだ。
+
+　たとえば1920*1080横置き、横書きのとき最大段組み数は`3`である。もし段組み数が`2`以上なら大型ディスプレイと判断してよい。そのときはたとえ1段であろうと字／行の最小値は40にしてしまっていいのではないだろうか。
+
+```
+16px/字 * 40字／行 * 2段 = 1280px
+16px/字 * 50字／行 * 2段 = 1600px
+```
+
+　`1600`px以上あれば段組み数`2`にできると判断し、１段あたりの最小字／行を`40`、最大字／行を`50`にしてしまってよいと思われる。段組みしたときの字／行は`40`〜`50`にしたいため、最大である50字／行で計算したときの`1600`px以上を段組み`2`にできる判断の閾値としたい。
+
+```
+min-font-size-px = 10px;
+standard-font-size-px = 16px;
+
+line-height = localStorage || 1.5em;
+min-line-height = 1.5em;
+max-line-height = 2.0em;
+
+letter-spacing = localStorage || 0.05em;
+min-letter-spacing = 0.05em;
+max-letter-spacing = 0.10em;
+
+jp-standard-line-of-chars = 40;
+jp-max-standard-line-of-chars = 50;
+en-standard-line-of-chars = 80;
+en-max-standard-line-of-chars = 100;
+
+writingMode = localStorage || 'vertical-rl'
+
+line-of-px = ('vertical-rl' === writingMode) ? document.body.clientHeight : document.body.clientWidth; // １行の表示領域
+line-of-chars = localStorage || jp-standard-line-of-chars;
+min-line-of-chars = jp-standard-line-of-chars;
+max-line-of-chars = jp-max-standard-line-of-chars;
+
+columns = localStorage || 1; // 1,2,3,...
+min-columns = 1;
+max-columns = parseInt((line-of-px / standard-font-size-px) / jp-standard-line-of-chars);
+
+if (40 > (line-of-px / standard-font-size-px)) { // スマホ想定（639px以下）
+  line-of-chars = localStorage || 20;
+  min-line-of-chars = 15;
+  max-line-of-chars = 30;
+} else if (line-of-px < 1025) { // タブレット想定（1025px以下）
+  line-of-chars = localStorage || 30;
+  min-line-of-chars = 20;
+  max-line-of-chars = 40;
+}
+```
+
+　さて、本来の問題に戻ろう。縦置きから横置きに変えたときフォントサイズを維持する。しかしアスペクト比が違いすぎて字／行が最大値を超えてしまうことがある。どうしたらよいか。
+
+* 同一フォントサイズを維持しつつ、字／行を超えていたら段組み数の増加で調整する
+
+　これが最もスマートな解決策である。よって、この問題を解決するためにはまず段組みシステムを実装する必要がある。
 
 ## 「縦中横」はHTML要素で囲う必要がある
 
