@@ -1,5 +1,5 @@
 function saveFullScreen() {
-    localStorage.setItem('full-screen', document.querySelector('#full-screen').value);
+    localStorage.setItem('FullScreen', document.querySelector('#full-screen').value);
 }
 function setFullScreen(value) {
     const fullScreen = document.querySelector('#full-screen');
