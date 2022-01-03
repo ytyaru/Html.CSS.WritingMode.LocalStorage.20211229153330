@@ -23,6 +23,12 @@
 `0.15`|段組み用CSS変数追加（ついでにJSで計算している値や、将来使うかもしれない値などを用意する。ただしJS側が未対応）
 `0.16`|フォント計算式をCSSに作る（JSでイベントフックしCSS変数に値セットする）
 `0.17`|段組み用スライダーUIを用意する（1600px以上のとき2段以上にできる。フォントサイズ計算は未実装のため2段以上で字／行不一致バグあり）
+`0.18`|字／行の計算に段組数を反映させる
+
+``|`h1,h2,h3,h4,h5,h6 { column-span:all; }`を指定する。
+
+``|画面が見切れないようにする（ページ単位、行単位で表示する）
+``|ページ数を算出する（画面サイズ、フォントサイズ、スクロール位置から算出）
 
 ``|スライダーの固定された最小・最大値をJSでセットする。CSS変数から取得する。べつにHTMLに直書きでもいいのでは？困ってから対処しよう
 ``|スライダーの現在値をCSSでセットする（`input[type='ranger'] > label > span:first-of-type {content: attr(value)}`,`attr`）。writing-mode変更時はJSでセットせねばならないためCSSで値セットする必要性・有効性がない。よって却下。
@@ -33,4 +39,16 @@
 　以下の初版を作って動作させたところ、上記のように大量の問題点が出てきた。
 
 * https://ytyaru.github.io/Html.CSS.WritingMode.LocalStorage.20211229153330/0/index.html
+
+　気になる情報。
+
+* [Webブラウザで本を作ろう【CSSで組版 第1回】](https://www.ntt-tx.co.jp/column/dojo_review_blog/20180710/)
+    * [vivliostyle](https://vivliostyle.org/)
+    * [Vivliostyle Chrome拡張](https://chrome.google.com/webstore/detail/vivliostyle/ffeiildjegeigkbobbakjjmfeacadbne)
+    * [Web Server for Chrome](https://chrome.google.com/webstore/detail/web-server-for-chrome/ofhbbkphhbklhfoeikjpcbhemlocgigb)
+* [縦書きCSSの夢：電子書籍みたいにページ単位でページ送りをする話](https://qiita.com/rutan/items/4d038b8ed14c99040617)
+* [【CSS】本のページをめくるCSS【シンプルに改善版】](https://little-strange.hatenablog.com/entry/2021/08/30/235839)
+* [表示領域にピタッと移動！CSSでスクロールスナップを実装しよう](https://www.webcreatorbox.com/tech/scroll-snap)
+* [CSSスクロールスナップ](https://developer.mozilla.org/ja/docs/Web/CSS/CSS_Scroll_Snap/Basic_concepts)
+
 
