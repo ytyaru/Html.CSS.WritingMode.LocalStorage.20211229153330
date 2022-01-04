@@ -27,9 +27,18 @@ window.addEventListener('DOMContentLoaded', (event) => {
         console.log(`START:${START}, LINE_OF_PX:${LINE_OF_PX}`);
         if (START <= LINE_OF_PX) {
             // この位置で改ページ（改段組み）すると見切れることがなくなるはず。なのに再描画されない……。
+            // F11で全画面ON/OFFすると再描画され、見切れることがなくなる。けれどこれを自動化することはできない。API仕様。ぐぬぬ！
             p.style.setProperty('break-after', 'column');
+            p.style.setProperty('break-after', 'always');
+            p.style.setProperty('break-before', 'always');
             console.log('------------------------------------')
         }
     }
+    // 再描画イベント発火用処理（ムリヤリ）
+//    window.dispatchEvent(new Event('resize'));
+//    window.document.dispatchEvent(new Event('resize'));
+//    document.querySelector('body').style.display = 'none';
+//    document.querySelector('body').style.display = 'block';
+    document.querySelector('body').style.display = 'inline';
 });
 
