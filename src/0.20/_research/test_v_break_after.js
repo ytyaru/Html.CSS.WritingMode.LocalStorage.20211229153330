@@ -12,8 +12,8 @@ window.addEventListener('DOMContentLoaded', (event) => {
     const writingMode = document.querySelector('body').style.getPropertyValue('writing-mode');
 //    const writingMode = getComputedStyle(document.querySelector(':root')).getPropertyValue('writing-mode');
 
-    document.querySelector('body').style.setProperty('client-width', document.body.clientWidth);
-    document.querySelector('body').style.setProperty('client-height', document.body.clientHeight);
+    document.querySelector(':root').style.setProperty('--client-width', document.body.clientWidth);
+    document.querySelector(':root').style.setProperty('--client-height', document.body.clientHeight);
     const COL_OF_PX = ('vertical-rl' === writingMode) ? document.body.clientHeight : document.body.clientWidth; // 1列の表示領域
     console.log(`writingMode:${writingMode}, COL_OF_PX:${COL_OF_PX}`);
 
