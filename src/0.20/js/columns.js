@@ -25,6 +25,7 @@ function initColumns() { // UI操作でフォントサイズを変更する
     }
     columns.addEventListener('input', e => {
         setColumnsToHtml(e.target.value);
+        resetBreak(); // break.js
     });
     setMaxColumns();
     columns.dispatchEvent(new Event('input'));

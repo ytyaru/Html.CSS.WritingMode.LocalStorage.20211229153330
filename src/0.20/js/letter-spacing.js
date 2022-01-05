@@ -24,6 +24,7 @@ function initLetterSpacing() { // UI操作で行間を変更する
     }
     letterSpacing.addEventListener('input', e => {
         setLetterSpacingToHtml(e.target.value);
+        resetBreak(); // break.js
     });
     letterSpacing.dispatchEvent(new Event('input'));
     return letterSpacing;

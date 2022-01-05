@@ -44,6 +44,7 @@ function initWritingMode() { // UI操作でフォントサイズを変更する
         setMaxLineOfChars(); // MinFontSize.js
         setFontSizePixel(e.target.value, document.querySelector('#line-of-chars').value, document.querySelector('#letter-spacing').value);
 //        setLineOfChars(); // resize.js
+        resetBreak(); // break.js
     });
     setInputRangeWritingMode();
     return writingMode;

@@ -18,6 +18,7 @@ function initLineHeight() { // UI操作で行間を変更する
     }
     lineHeight.addEventListener('input', e => {
         setLineHeightToHtml(e.target.value);
+        resetBreak(); // break.js
     });
     lineHeight.dispatchEvent(new Event('input'));
     return lineHeight;

@@ -5,6 +5,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
     initLineOfChars();
     initLineHeight();
     initLetterSpacing();
+    resetBreak(); // break.js
     console.log("DOMContentLoaded");
     console.log(`devicePixelRatio = ${window.devicePixelRatio}`);
 });
@@ -26,6 +27,7 @@ window.addEventListener("orientationchange", function () { // 画面向きに応
     setMaxLineOfChars(); // resize.js
     setFontSizePixel(document.querySelector('#writing-mode').value, document.querySelector('#line-of-chars').value, document.querySelector('#letter-spacing').value); // resize.js
 //    setLineOfChars(); // resize.js
+    resetBreak(); // break.js
 });
 window.addEventListener("resize", function (e) { // 全画面やリサイズ時に字／行の値を再計算する
     console.log("resize");
@@ -38,6 +40,6 @@ window.addEventListener("resize", function (e) { // 全画面やリサイズ時�
     setMaxLineOfChars(); // resize.js
     setFontSizePixel(document.querySelector('#writing-mode').value, document.querySelector('#line-of-chars').value, document.querySelector('#letter-spacing').value); // resize.js
 //    setLineOfChars(); // resize.js
-
+    resetBreak(); // break.js
 });
 

@@ -27,6 +27,7 @@ function initFullScreen() { // UI操作で全画面ON/OFF切替
     fullScreen.addEventListener('click', e => {
         const v = document.querySelector('#full-screen').value;
         setFullScreen(('0' === v) ? '1' : '0');
+        resetBreak(); // break.js
     });
 }
 

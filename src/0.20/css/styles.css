@@ -40,6 +40,13 @@
 
     /*--column-gap-px:calc(var(--font-size-px) * 2);*/ /* 段組み余白2em */
     --column-gap-px:32; /* 段組み余白2em(16px/字=32px) */
+
+    /*
+    --client-width:1920;
+    --client-height:1080;
+    */
+    --screen-avail-width:1920;
+    --screen-avail-height:1080;
 }
 /* ノートPC 13インチ 1025〜1599px （1600px = (16px * 50字) * 2段）*/
 @media screen and (max-width: 1600px) {
@@ -103,13 +110,47 @@ body {
     writing-mode: var(--writing-mode); /* vertical-rl, horizontal-tb */
     text-orientation: var(--text-orientation); /* upright, sideways */
 
-    column-count: var(--columns); /* 段組み数 */
+    width: calc(var(--screen-avail-width)*1px);
+    height: calc(var(--screen-avail-height)*1px);
+    column-width: calc(var(--screen-avail-width)*1px);
+    /*
+    width: 1920px;
+    height: 1080px;
+    column-width: 1920px;
+    */
+
+    /*column-count: var(--columns);*/ /* 段組み数 */
+    /*
+    width: var(--client-width);
+    height: var(--client-height);
+    column-width: calc((var(--client-width))*1px);
+    */
     /*column-gap: 2em;*/ /* 段組み余白 */
     column-gap: calc(var(--column-gap-px) * 1px);
     column-rule: thick inset black; /* 段組み装飾 */
     /*
     column-count: 2;
     */
+}
+main {
+    /*
+    width: 500px;
+    height: 1080px;
+    column-width: 500px;
+    column-count: var(--columns);
+    */
+
+    /* 1画面(ページ)もcolumn単位で分割しているし、段組みもcolumn単位で分割しているため、両者の区別がつかなくなってしまっている！ */
+    /* break-after:columnを要素に仕込んでも、body{}とmain{}の両方に適用されてしまうはず！ */
+    /* bodyは画面単位でbreakしたいし、mainは段組みを指定数にしたい。 */
+    /*
+    column-count: 2;
+    column-gap: calc(var(--column-gap-px) * 1px);
+    column-rule: thick inset black;
+    */
+    column-count: var(--columns);
+    column-gap: calc(var(--column-gap-px) * 1px);
+    column-rule: thick inset black;
 }
 p {
     text-indent: 1em;

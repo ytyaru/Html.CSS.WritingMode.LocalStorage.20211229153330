@@ -29,8 +29,8 @@ window.addEventListener('DOMContentLoaded', (event) => {
             // この位置で改ページ（改段組み）すると見切れることがなくなるはず。なのに再描画されない……。
             // F11で全画面ON/OFFすると再描画され、見切れることがなくなる。けれどこれを自動化することはできない。API仕様。ぐぬぬ！
             p.style.setProperty('break-after', 'column');
-            p.style.setProperty('break-after', 'always');
-            p.style.setProperty('break-before', 'always');
+//            p.style.setProperty('break-after', 'always');
+//            p.style.setProperty('break-before', 'always');
             console.log('------------------------------------')
         }
     }

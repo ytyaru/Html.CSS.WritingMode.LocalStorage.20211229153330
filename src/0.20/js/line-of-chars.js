@@ -24,6 +24,7 @@ function initLineOfChars() { // UI操作でフォントサイズを変更する
     }
     lineOfChars.addEventListener('input', e => {
         setLineOfCharsToHtml(e.target.value);
+        resetBreak(); // break.js
     });
     lineOfChars.dispatchEvent(new Event('input'));
     return lineOfChars;
