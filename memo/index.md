@@ -25,10 +25,16 @@
 `0.17`|段組み用スライダーUIを用意する（1600px以上のとき2段以上にできる。フォントサイズ計算は未実装のため2段以上で字／行不一致バグあり）
 `0.18`|字／行の計算に段組数を反映させる
 `0.19`|最大段組数が1のときは段組数スライダーを隠す
+`0.20`|調査中。段組み領域を1画面サイズにしたい（widthやheightを調整すればよい。column-widthは常に100vw。column-countは不要）
+`0.21`|段組み領域を1画面サイズにしたい（widthやheightを調整すればよい。column-widthは常に100vw。column-countは不要。ただしcolumn-gap,column-rule-widthにおける余白が考慮されていないため1画面よりわずかに大きい！）
 
 `0.20`|段組みの改ページ（改カラム）位置を指定したい（p要素のうち画面サイズ超過する箇所）
 
 `0.20`|段組み領域を1画面サイズにしたい（`column-width:`, `width`, `height`, `column-gap`, `column-rule-width`, `break-after: column;`）
+
+`0.21`|段組み領域を1画面サイズにしたい（widthやheightを調整すればよい。column-widthは常に100vw。column-countは不要。ただしcolumn-gap,column-rule-widthにおける余白が考慮されていない！）
+
+0.20 調査中。段組み領域を1画面サイズにしたい（widthやheightを調整すればよい。column-widthは常に100vw。column-countは不要）
 
 ``|1画面に収まる単位を算出したい
 ``|1画面ごとに1段組み化したい。すべての画面終端位置を取得し、そこに`break`を仕込んで改ページし、そこへscroll-snapすることでページ送りできるようにしたい。
