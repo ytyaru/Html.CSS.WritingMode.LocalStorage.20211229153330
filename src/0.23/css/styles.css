@@ -1,0 +1,179 @@
+@charset "utf-8";
+/* PC 13〜21インチ 1025px〜 */
+:root {
+    --min-font-size-px:10px;      /* 最小フォントサイズ（CSSピクセル単位） */
+    --standard-font-size-px:16px; /* 標準フォントサイズ（CSSピクセル単位） */
+    --min-line-height:1.5em;      /* 最小行間em */
+    --max-line-height:2.0em;      /* 最大行間em */
+    --min-letter-spacing:0.05em;  /* 最小字間em */
+    --max-letter-spacing:0.10em;  /* 最大字間em */
+    --en-char-weight:1.0; /* 英語   1字あたりの情報量（密度。重み） */
+    --jp-char-weight:2.5; /* 日本語 1字あたりの情報量（密度。重み） */
+    --jp-standard-line-of-chars:40;      /* 日本語標準字／行（CJK標準行中字数） */
+    --jp-max-standard-line-of-chars:50;  /* 日本語標準最大字／行（CJK標準行中最大字数） */
+    --en-standard-line-of-chars:80;      /* 英語標準字／行 */
+    --en-max-standard-line-of-chars:100; /* 英語標準最大字／行 */
+    --columns:1;     /* 現在段組数 localStorage || 1; // 1,2,3,... */
+    --min-columns:1; /* 最小段組数 */
+    --max-columns:1; /* 最大段組数 parseInt((line-of-px / standard-font-size-px) / jp-standard-line-of-chars); */
+    --smartphone-jp-min-line-of-chars:15; /* スマホ(7inch(320〜599px))における日本語の最小字／行 */
+    --smartphone-jp-max-line-of-chars:30; /* スマホ(7inch(320〜599px))における日本語の最大字／行 */
+    --tablet-jp-min-line-of-chars:20; /* タブレット(13inch(600〜1024px))における日本語の最小字／行 */
+    --tablet-jp-max-line-of-chars:40; /* タブレット(13inch(600〜1024px))における日本語の最大字／行 */
+    --is-full-screen:0; /* 全画面ON/OFF */
+
+    --line-of-chars:var(--jp-standard-line-of-chars);         /* 現在字／行 40 */
+    --min-line-of-chars:var(--jp-standard-line-of-chars);     /* 最小字／行 40 */
+    --max-line-of-chars:var(--jp-max-standard-line-of-chars); /* 最大字／行 50* /
+    --writing-mode:vertical-rl; /* 表記方向 */
+    --text-orientation:upright; /* 文字方向 */
+/*    --font-size-base:100vw;*/
+    --line-height:1.75;         /* 現在行間 1.5〜2.0em */
+    --letter-spacing:0.075;     /* 現在字間 0.05〜0.1em */
+
+
+    --line-of-px:1024; /* 1行の表示領域 ('vertical-rl' === writingMode) ? document.body.clientHeight : document.body.clientWidth; */
+    /*--font-size-px:16;*/ /* 現在フォントサイズ（CSSピクセル単位）JSで算出する */
+    --letter-spacing-px:calc(var(--font-size-px, var(--standard-font-size-px), 16) * var(--letter-spacing)); /* 字間（CSSピクセル単位） */
+    --all-letter-spacing-px:calc(var(--letter-spacing-px) * calc(var(--line-of-chars) - 1))
+    --font-size-px:calc((var(--line-of-px) - var(--all-letter-spacing-px)) / var(--line-of-chars)); /* 現在フォントサイズ（CSSピクセル単位）JSで算出する */
+
+    /*--column-gap-px:calc(var(--font-size-px) * 2);*/ /* 段組み余白2em */
+    --column-gap-px:32; /* 段組み余白2em(16px/字=32px) */
+    --column-gap:4vh; /*  */
+    --width-vw:100;
+    --height-vh:100;
+    --width-px:1920;
+    --height-px:1080;
+}
+/* ノートPC 13インチ 1025〜1599px （1600px = (16px * 50字) * 2段）*/
+@media screen and (max-width: 1600px) {
+:root {
+    --line-of-chars:35;
+    --min-line-of-chars:var(--tablet-jp-min-line-of-chars); /* 25 */
+    --max-line-of-chars:var(--tablet-jp-max-line-of-chars); /* 45 */
+}
+}
+/* タブレット 7〜13インチ 600〜1024px */
+@media screen and (max-width: 1024px) {
+:root {
+    --line-of-chars:30;
+    /*
+    --min-line-of-chars:15;
+    --max-line-of-chars:40;
+    */
+    --min-line-of-chars:var(--tablet-jp-min-line-of-chars); /* 20 */
+    --max-line-of-chars:var(--tablet-jp-max-line-of-chars); /* 40 */
+}
+}
+/* スマホ 4〜7インチ 1〜599px  */
+@media screen and (max-width: 599px) {
+:root {
+    --line-of-chars:20;
+    /*
+    --min-line-of-chars:10;
+    --max-line-of-chars:30;
+    */
+    --min-line-of-chars:var(--smartphone-jp-min-line-of-chars); /* 15 */
+    --max-line-of-chars:var(--smartphone-jp-max-line-of-chars); /* 30 */
+}
+}
+@font-face
+{
+    font-family: IPAex明朝;
+    src: local('IPAex明朝'), 
+         local('ipaexm.ttf') format('opentype'),
+         local('fonts-japanese-mincho.ttf') format('truetype'),
+         url('https://cdn.leafscape.be/IPAexfont/ipaexm_web.woff2') format("woff2");
+}
+* {
+    padding: 0;
+    margin: 0;
+}
+body {
+    font-family: 'IPAex明朝', sans-serif; 
+    /* font-size: calc(var(--font-size-base) / (var(--line-of-chars))); */
+    /* font-size: 16px; */ /* JSで解像度、CSS変数、スライダーをもとに計算する */
+    font-size: calc(var(--font-size-px) * 1px);
+
+    line-height: calc(var(--line-height) * 1em); /* 行間 1.5〜2.0 */
+    letter-spacing: calc(var(--letter-spacing) * 1em); /* 字間 0.05〜0.1 */
+
+    /* 縦置き／横置きでの自動サイズ調整無効化 */
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+
+    writing-mode: var(--writing-mode); /* vertical-rl, horizontal-tb */
+    text-orientation: var(--text-orientation); /* upright, sideways */
+
+    /* 縦書き時、2段にしたいなら50vh。つまり width = 100vw / 段数; (column-gapも考慮せよ) */
+    /* 横書き時、2段にしたいなら50vh。つまり height = 100vh / 段数; (column-gapも考慮せよ) */
+    /*
+    width: calc(var(--width-vw) * 1vw);
+    height: calc(var(--height-vh) * 1vh);
+    */
+    width: calc((var(--width-px) * 1px); 
+    height: calc(var(--height-px) * 1px); 
+    column-width: 100vw;
+    column-gap: 2em; /* 段組み余白 */
+    column-rule: 4px solid black; /* 段組み装飾 */
+
+    /*column-count: var(--columns);*/ /* 段組み数 */ /* ここを上記に置き換えて段組みする */
+
+    /*column-gap: 2em;*/ /* 段組み余白 */
+    column-gap: calc(var(--column-gap-px) * 1px);
+    /*
+    */
+    /*
+    column-gap: var(--column-gap);
+    */
+    /*
+    column-gap: 2em;
+    */
+    /*column-rule: thick inset black;*/ /* 段組み装飾 */
+    column-rule: 1px solid black;
+    /*
+    column-rule-width: 1px;
+    column-rule-style: solid;
+    column-rule-color: black;
+    */
+    /*
+    column-count: 2;
+    */
+}
+p {
+    text-indent: 1em;
+    /* https://tech-blog.cloud-config.jp/2020-04-16-the-outdated-css-property-width/ */
+    /* 
+       従来|現代
+       ----|----
+       top|inset-block-start
+       bottom|inset-block-end
+       left|inset-inline-start
+       right|inset-inline-end
+    */
+/*    margin-inline-start: 40px;*/
+/*    margin-block-end: 24px;*/
+    margin-block-end: 1em;
+}
+
+.upright {
+    text-combine-upright: all; /* 縦中横 */
+    letter-spacing: 0; /* 字間 */
+    text-transform: full-width; /* 全字全角 */
+}
+img.icon {
+    width: 1em;
+    height: 1em;
+}
+button, input, select, textarea {
+  font-family : inherit;
+  font-size   : 100%;
+}
+input[type="range"] {
+    vertical-align: middle;
+}
+input[type='ranger'] > label > span:first-of-type { content: attr(value); }
+
