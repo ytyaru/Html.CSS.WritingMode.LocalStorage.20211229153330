@@ -26,7 +26,7 @@ window.addEventListener("orientationchange", function () { // 画面向きに応
     setMaxLineOfChars(); // resize.js
     setFontSizePixel(document.querySelector('#writing-mode').value, document.querySelector('#line-of-chars').value, document.querySelector('#letter-spacing').value); // resize.js
 //    setLineOfChars(); // resize.js
-    calcScreenSize(document.querySelector('#writing-mode').value, value); // resize.js
+    calcScreenSize(document.querySelector('#writing-mode').value, document.querySelector('#columns').value); // resize.js
 });
 window.addEventListener("resize", function (e) { // 全画面やリサイズ時に字／行の値を再計算する
     console.log("resize");
