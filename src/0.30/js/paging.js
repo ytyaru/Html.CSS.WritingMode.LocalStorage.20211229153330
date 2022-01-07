@@ -4,34 +4,49 @@ function initPaging() { // 画面端をクリックかタップしたら１画�
 
 function nextPage() { movePageRelative(1); }
 function prevPage() { movePageRelative(-1); }
+function firstPage() { movePageAbsolute(0); }
+function lastPage() { movePageAbsolute(-1); }
+function movePage(page) { movePageAbsolute(page); }
+
 
 function movePageRelative(increment=1) { // incrementが正数なら進む。負数なら戻る。0なら何もしない。
     //const COL_GAP_EM = parseFloat(getComputedStyle(document.querySelector(':root')).getPropertyValue('--column-gap-em'));
     const IS_VERTICAL = ('vertical-rl' === document.querySelector('#writing-mode').value);
-    const PAGE_PX = parseFloat(getComputedStyle(document.querySelector('body')).getPropertyValue((IS_VERTICAL) ? 'height' : 'width')) * increment;
+    const PAGE_PX = ((IS_VERTICAL) ? window.screen.height : window.screen.width) * increment;
+//    const PAGE_PX = parseFloat(getComputedStyle(document.querySelector('body')).getPropertyValue((IS_VERTICAL) ? 'height' : 'width')) * increment;
     const X_INC = (IS_VERTICAL) ? 0 : PAGE_PX;
     const Y_INC = (IS_VERTICAL) ? PAGE_PX : 0;
     window.scrollBy(X_INC, Y_INC);
 }
 function movePageAbsolute(page=0) { // pageは整数。0を最初のページとする。負数なら最後のページから数えた値。
     const IS_VERTICAL = ('vertical-rl' === document.querySelector('#writing-mode').value);
-    const PAGE_PX = parseFloat(getComputedStyle(document.querySelector('body')).getPropertyValue((IS_VERTICAL) ? 'height' : 'width')) * page;
+//    const PAGE_PX = parseFloat(getComputedStyle(document.querySelector('body')).getPropertyValue((IS_VERTICAL) ? 'height' : 'width')) * page;
+    /*
+    const PAGE_PX = ((IS_VERTICAL) ? window.screen.height : window.screen.width) * page;
+    const X_INC = (IS_VERTICAL) ? 0 : PAGE_PX;
+    const Y_INC = (IS_VERTICAL) ? PAGE_PX : 0;
+    window.scrollTo(X_INC, Y_INC);
+    */
+    function calcPagePx() {
+        const PAGE_PX = ((IS_VERTICAL) ? window.screen.height : window.screen.width) * page;
+        if (0 <= page) { return PAGE_PX; }
+        else {
+            const [ALL_PAGE, NOW_PAGE] = calcPage();
+            const TARGET_PAGE = ALL_PAGE + page;
+            console.log(`TARGET_PAGE :${TARGET_PAGE }, PAGE_PX:${PAGE_PX}`);
+            return TARGET_PAGE * (PAGE_PX * -1);
+        }
+    }
+    const PAGE_PX = calcPagePx();
     const X_INC = (IS_VERTICAL) ? 0 : PAGE_PX;
     const Y_INC = (IS_VERTICAL) ? PAGE_PX : 0;
     window.scrollTo(X_INC, Y_INC);
 }
-function movePage(isAbsolute=false, isPrev=false, value=1) {
-    const IS_VERTICAL = ('vertical-rl' === document.querySelector('#writing-mode').value);
-    const PAGE_PX = parseFloat(getComputedStyle(document.querySelector('body')).getPropertyValue((IS_VERTICAL) ? 'height' : 'width')) * page;
-    const X_INC = (IS_VERTICAL) ? 0 : PAGE_PX;
-    const Y_INC = (IS_VERTICAL) ? PAGE_PX : 0;
-    const SCROLL = 
-    window.scrollTo(X_INC, Y_INC);
 
-}
 function calcPage() {
     const IS_VERTICAL = ('vertical-rl' === document.querySelector('#writing-mode').value);
     const PAGE_PX = parseFloat(getComputedStyle(document.querySelector('body')).getPropertyValue((IS_VERTICAL) ? 'height' : 'width'));
+//    const PAGE_PX = ((IS_VERTICAL) ? window.screen.height : window.screen.width) * page;
     const ALL_PX = (IS_VERTICAL) ? document.body.scrollHeight : document.body.scrollWidth;
 //    const PAGE_PX = (IS_VERTICAL) ? window.screen.availHeight : window.screen.availWidth;
 //    const ALL_PX = (IS_VERTICAL) ? document.body.clientHeight : document.body.clientWidth;
@@ -75,4 +90,11 @@ window.addEventListener('click', (event) => {
 });
 window.addEventListener('touchstart', (event) => {
 
+});
+window.addEventListener("keypress", event => {
+  if (event.key === 'n') {nextPage();}
+  else if (event.key === 'p') {prevPage();}
+  else if (event.key === 'f') {firstPage();}
+  else if (event.key === 'l') {lastPage();}
+  else {}
 });
