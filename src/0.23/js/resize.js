@@ -9,12 +9,23 @@ function calcFontSizePixel(writingMode, lineOfChars, letterSpacing) { // フォ�
     console.log(`${fontSizePx}。フォントサイズpx算出（writingMode:${writingMode}, lineOfChars:${lineOfChars}, letterSpacing:${letterSpacing}）。(１行の表示領域 - 全字間サイズ) / １行の字数\n＝((clientHeight or clientWidth) - ((字間なし字の１字あたりのフォントサイズpx * 字間em) * (１行の字数 - 1)) / １行の字数\n＝(${LINE_OF_PX} - ${ALL_LETTER_SPACING}) / ${lineOfChars}`);
     return fontSizePx;
     */
+
+    const IS_VERTICAL = ('vertical-rl' === writingMode);
+    /*
+    if (IS_VERTICAL) {
+        if (document.body.clientHeight < window.screen.availHeight) { return; }
+    } else {
+        if (document.body.clientWidth < window.screen.availWidth) { return; }
+    }
+    */
+
     // 段組みがある場合
-    const LINE_OF_PX = ('vertical-rl' === writingMode) ? document.body.clientHeight : document.body.clientWidth; // １行の表示領域
+    const LINE_OF_PX = (IS_VERTICAL) ? document.body.clientHeight : document.body.clientWidth; // １行の表示領域
     const F = LINE_OF_PX / lineOfChars; // 字間なし時の１字あたりのフォントサイズ
     const L = F * letterSpacing; // 字間サイズ（emからpxに変換）
     const ALL_LETTER_SPACING = L * (lineOfChars - 1); // 全字間サイズ（px）
-    const COL_GAP_PX = getComputedStyle(document.querySelector(':root')).getPropertyValue('--column-gap-px') || (FontSizePx * 2);
+//    const COL_GAP_PX = getComputedStyle(document.querySelector(':root')).getPropertyValue('--column-gap-px') || (FontSizePx * 2);
+    const COL_GAP_PX = F * 2; // em(--column-gap-em)
 //    const COLUMNS = document.querySelector('#columns').value;
     const COLUMNS = getComputedStyle(document.querySelector(':root')).getPropertyValue('--columns');
     const fontSizePx = (LINE_OF_PX - ALL_LETTER_SPACING - COL_GAP_PX) / (lineOfChars * COLUMNS); // 入力した字／行と字間からピクセル単位でフォントサイズを算出する
@@ -55,28 +66,50 @@ function calcScreenSize(writingMode, columns) { // 画面比率を変える（wr
     const IS_VERTICAL = ('vertical-rl' === writingMode);
     const FULL_ID = (IS_VERTICAL) ? '--width-px' : '--height-px' ;
     const SPLIT_ID = (IS_VERTICAL) ? '--height-px' : '--width-px' ;
-    const WIDTH = Math.min(window.screen.availWidth, document.body.clientWidth); // 画面サイズまたはスクロール含むサイズ
-    const HEIGHT = Math.min(window.screen.availHeight, document.body.clientHeight);
+    console.log(`writingMode:${writingMode}, FULL_ID:${FULL_ID}, SPLIT_ID:${SPLIT_ID}`);
+
+    // ブラウザを中途半端に小さくしたとき用にclientWidth,clientHeightも考慮したかったが、この値はHTML要素サイズになることがあるため画面サイズより小さくなってしまうことがあるっぽい。それは困るため画面サイズを取得するようにした。そのせいでウインドウを縮小したとき、それに合わせてくれなくなってしまう。
+//    const WIDTH = Math.min(window.screen.availWidth, document.body.clientWidth); // 画面サイズまたはスクロール含むサイズ
+//    const HEIGHT = Math.min(window.screen.availHeight, document.body.clientHeight);
+    const WIDTH = window.screen.availWidth; // 画面サイズまたはスクロール含むサイズ
+    const HEIGHT = window.screen.availHeight;
+    console.log(`client W:${document.body.clientWidth} H:${document.body.clientHeight}\nscreen W:${window.screen.availWidth} H:${window.screen.availHeight}\n`);
 
     const FULL_EDGE_PX = (IS_VERTICAL) ? WIDTH : HEIGHT;
     const SPLIT_EDGE_PX = (IS_VERTICAL) ? HEIGHT : WIDTH;
 //    const SPLIT_EDGE_PX = (IS_VERTICAL) ? WIDTH : HEIGHT;
 //    const FULL_EDGE_PX = (IS_VERTICAL) ? HEIGHT : WIDTH;
+    console.log(`FULL_EDGE_PX:${FULL_EDGE_PX}, SPLIT_EDGE_PX:${SPLIT_EDGE_PX}`)
 
-    const LINE_OF_PX = ('vertical-rl' === writingMode) ? HEIGHT : WIDTH; // １行の表示領域
-//    const F = LINE_OF_PX / lineOfChars; // 字間なし時の１字あたりのフォントサイズ
+    const LINE_OF_PX = (IS_VERTICAL) ? HEIGHT : WIDTH; // １行の表示領域
+    const lineOfChars = document.querySelector('#line-of-chars').value;
+    const letterSpacing = document.querySelector('#letter-spacing').value;
+    const F = LINE_OF_PX / lineOfChars; // 字間なし時の１字あたりのフォントサイズ
     const L = F * letterSpacing; // 字間サイズ（emからpxに変換）
     const ALL_LETTER_SPACING = L * (lineOfChars - 1); // 全字間サイズ（px）
 
 //    document.querySelector(':root').style.setProperty('--column-gap', `5v${(IS_VERTICAL) ? 'h' : 'w'}`);
 //    const COL_GAP = parseFloat(getComputedStyle(document.querySelector(':root')).getPropertyValue('--column-gap')) * 1.5;
-    const COL_GAP_PX = parseFloat(getComputedStyle(document.querySelector(':root')).getPropertyValue('--column-gap-px'));
+//    const COL_GAP_PX = parseFloat(getComputedStyle(document.querySelector(':root')).getPropertyValue('--column-gap-px'));
+    const COL_GAP_PX = F * 2; // em
     const ALL_COL_GAP_PX = COL_GAP_PX * (columns - 1);
 //    const ALL_COL_GAP = COL_GAP * (columns - 0);
 //    const ALL_COL_GAP = COL_GAP * (columns - 1);
+
+    // 段組数で分割した1段あたりのサイズ
+//    const SPLIT_PX = (SPLIT_EDGE_PX - ALL_COL_GAP_PX) / columns;
+//    const SPLIT_COL_PX = (SPLIT_EDGE_PX - ALL_LETTER_SPACING - ALL_COL_GAP_PX) / columns;
+    const SPLIT_COL_PX = (SPLIT_EDGE_PX / columns) - COL_GAP_PX;
+    console.log(`SPLIT_COL_PX:${SPLIT_COL_PX}`);
+
     document.querySelector(':root').style.setProperty(FULL_ID, FULL_EDGE_PX);
-    document.querySelector(':root').style.setProperty(SPLIT_ID, (SPLIT_EDGE_PX - ALL_COL_GAP_PX) / columns); // 段組み数で割る
-    document.querySelector(':root').style.setProperty(SPLIT_ID, (SPLIT_EDGE_PX - ALL_LETTER_SPACING - ALL_COL_GAP_PX) / columns); // 段組み数で割る
+    document.querySelector(':root').style.setProperty(SPLIT_ID, SPLIT_COL_PX);
+//    document.querySelector('body').style.setProperty(FULL_ID, `${FULL_EDGE_PX}px`);
+//    document.querySelector('body').style.setProperty(SPLIT_ID, `${SPLIT_COL_PX}px`);
+
+//    getComputedStyle(document.querySelector('body')).setProperty((IS_VERTICAL) ? 'width' : 'height', FULL_EDGE_PX);
+//    getComputedStyle(document.querySelector('body')).setProperty((IS_VERTICAL) ? 'height' : 'width', SPLIT_COL_PX);
+
 
 //    getComputedStyle(document.querySelector('body')).setProperty('column-width', `${WIDTH}px`)
 //    document.querySelector('body').style.setProperty('column-width', `${WIDTH}px`)
@@ -84,10 +117,26 @@ function calcScreenSize(writingMode, columns) { // 画面比率を変える（wr
 //    document.querySelector('body').style.setProperty('column-width', `${FULL_EDGE_PX}px`)
 
     console.log(`COL_GAP_PX:${COL_GAP_PX}`)
-    console.log(`:${(SPLIT_EDGE_PX - ALL_COL_GAP_PX) / columns}`)
-    console.log(`:${getComputedStyle(document.querySelector('body')).getPropertyValue('width')}`)
-    console.log(`:${getComputedStyle(document.querySelector('body')).getPropertyValue('height')}`)
-    console.log(`:${FULL_ID}=${FULL_EDGE_PX},${SPLIT_ID}=${SPLIT_EDGE_PX},${WIDTH},${HEIGHT},,,${ALL_COL_GAP_PX},${columns}`)
+    console.log(`分割px:${SPLIT_COL_PX}`)
+    console.log(`body w:${getComputedStyle(document.querySelector('body')).getPropertyValue('width')}`)
+    console.log(`body h:${getComputedStyle(document.querySelector('body')).getPropertyValue('height')}`)
+    console.log(`:root w:${getComputedStyle(document.querySelector(':root')).getPropertyValue('--width-px')}`)
+    console.log(`:root h:${getComputedStyle(document.querySelector(':root')).getPropertyValue('--height-px')}`)
+    console.log(`:${FULL_ID}=${FULL_EDGE_PX},${SPLIT_ID}=${SPLIT_EDGE_PX},${WIDTH},${HEIGHT},,,${ALL_COL_GAP_PX},${columns},${SPLIT_COL_PX}`)
+//    console.log(`body w:${getComputedStyle(document.querySelector('body')).getPropertyValue('width')}`)
+//    console.log(`body h:${getComputedStyle(document.querySelector('body')).getPropertyValue('height')}`)
+//    console.log(`body column-width:${getComputedStyle(document.querySelector('body')).getPropertyValue('column-width')}`)
+
+    document.querySelector('body').style.setProperty('column-width', `${WIDTH}px`)
+//    document.querySelector('body').style.setProperty('column-width', `${(SPLIT_EDGE_PX - ALL_LETTER_SPACING - ALL_COL_GAP_PX) / columns}px`)
+    console.log(`body column-width:${getComputedStyle(document.querySelector('body')).getPropertyValue('column-width')}`)
+
+    // 再描画（これでいいんだっけ？）
+//    document.querySelector('body').style.display = (IS_VERTICAL) ? 'inline' : 'inline-block';
+
+
+
+
 
     // colmun-gapをem基準にしてみる
 
