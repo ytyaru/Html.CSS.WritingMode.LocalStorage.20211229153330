@@ -6,94 +6,7 @@
 <meta name="description" content="">
 <meta name="author" content="ytyaru">
 <link rel="license" href="https://creativecommons.org/licenses/by-sa/4.0/deed.ja">
-<!--
-<link rel="icon" href="assets/image/avator.png">
-<link rel="stylesheet" href="css/styles.css">
-<link rel="stylesheet" href="test_v_break_after_column.css">
--->
 <style>
-@charset "utf-8";
-/* PC 13〜21インチ 1025px〜 */
-:root {
-    --min-font-size-px:10px;      /* 最小フォントサイズ（CSSピクセル単位） */
-    --standard-font-size-px:16px; /* 標準フォントサイズ（CSSピクセル単位） */
-    --min-line-height:1.5em;      /* 最小行間em */
-    --max-line-height:2.0em;      /* 最大行間em */
-    --min-letter-spacing:0.05em;  /* 最小字間em */
-    --max-letter-spacing:0.10em;  /* 最大字間em */
-    --en-char-weight:1.0; /* 英語   1字あたりの情報量（密度。重み） */
-    --jp-char-weight:2.5; /* 日本語 1字あたりの情報量（密度。重み） */
-    --jp-standard-line-of-chars:40;      /* 日本語標準字／行（CJK標準行中字数） */
-    --jp-max-standard-line-of-chars:50;  /* 日本語標準最大字／行（CJK標準行中最大字数） */
-    --en-standard-line-of-chars:80;      /* 英語標準字／行 */
-    --en-max-standard-line-of-chars:100; /* 英語標準最大字／行 */
-    --columns:1;     /* 現在段組数 localStorage || 1; // 1,2,3,... */
-    --min-columns:1; /* 最小段組数 */
-    --max-columns:1; /* 最大段組数 parseInt((line-of-px / standard-font-size-px) / jp-standard-line-of-chars); */
-    --smartphone-jp-min-line-of-chars:15; /* スマホ(7inch(320〜599px))における日本語の最小字／行 */
-    --smartphone-jp-max-line-of-chars:30; /* スマホ(7inch(320〜599px))における日本語の最大字／行 */
-    --tablet-jp-min-line-of-chars:20; /* タブレット(13inch(600〜1024px))における日本語の最小字／行 */
-    --tablet-jp-max-line-of-chars:40; /* タブレット(13inch(600〜1024px))における日本語の最大字／行 */
-    --is-full-screen:0; /* 全画面ON/OFF */
-
-    --line-of-chars:var(--jp-standard-line-of-chars);         /* 現在字／行 40 */
-    --min-line-of-chars:var(--jp-standard-line-of-chars);     /* 最小字／行 40 */
-    --max-line-of-chars:var(--jp-max-standard-line-of-chars); /* 最大字／行 50* /
-    --writing-mode:vertical-rl; /* 表記方向 */
-    --text-orientation:upright; /* 文字方向 */
-/*    --font-size-base:100vw;*/
-    --line-height:1.75;         /* 現在行間 1.5〜2.0em */
-    --letter-spacing:0.075;     /* 現在字間 0.05〜0.1em */
-
-
-    --line-of-px:1024; /* 1行の表示領域 ('vertical-rl' === writingMode) ? document.body.clientHeight : document.body.clientWidth; */
-    /*--font-size-px:16;*/ /* 現在フォントサイズ（CSSピクセル単位）JSで算出する */
-    --letter-spacing-px:calc(var(--font-size-px, var(--standard-font-size-px), 16) * var(--letter-spacing)); /* 字間（CSSピクセル単位） */
-    --all-letter-spacing-px:calc(var(--letter-spacing-px) * calc(var(--line-of-chars) - 1))
-    --font-size-px:calc((var(--line-of-px) - var(--all-letter-spacing-px)) / var(--line-of-chars)); /* 現在フォントサイズ（CSSピクセル単位）JSで算出する */
-
-    /*--column-gap-px:calc(var(--font-size-px) * 2);*/ /* 段組み余白2em */
-    --column-gap-px:32; /* 段組み余白2em(16px/字=32px) */
-
-    /*
-    --client-width:1920;
-    --client-height:1080;
-    */
-    --screen-avail-width:1920;
-    --screen-avail-height:1080;
-}
-/* ノートPC 13インチ 1025〜1599px （1600px = (16px * 50字) * 2段）*/
-@media screen and (max-width: 1600px) {
-:root {
-    --line-of-chars:35;
-    --min-line-of-chars:var(--tablet-jp-min-line-of-chars); /* 25 */
-    --max-line-of-chars:var(--tablet-jp-max-line-of-chars); /* 45 */
-}
-}
-/* タブレット 7〜13インチ 600〜1024px */
-@media screen and (max-width: 1024px) {
-:root {
-    --line-of-chars:30;
-    /*
-    --min-line-of-chars:15;
-    --max-line-of-chars:40;
-    */
-    --min-line-of-chars:var(--tablet-jp-min-line-of-chars); /* 20 */
-    --max-line-of-chars:var(--tablet-jp-max-line-of-chars); /* 40 */
-}
-}
-/* スマホ 4〜7インチ 1〜599px  */
-@media screen and (max-width: 599px) {
-:root {
-    --line-of-chars:20;
-    /*
-    --min-line-of-chars:10;
-    --max-line-of-chars:30;
-    */
-    --min-line-of-chars:var(--smartphone-jp-min-line-of-chars); /* 15 */
-    --max-line-of-chars:var(--smartphone-jp-max-line-of-chars); /* 30 */
-}
-}
 @font-face
 {
     font-family: IPAex明朝;
@@ -108,10 +21,7 @@
 }
 body {
     font-family: 'IPAex明朝', sans-serif; 
-    font-size: calc(var(--font-size-px) * 1px);
-    
-    line-height: calc(var(--line-height) * 1em); /* 行間 1.5〜2.0 */
-    letter-spacing: calc(var(--letter-spacing) * 1em); /* 字間 0.05〜0.1 */
+    font-size: 20px;
 
     /* 縦置き／横置きでの自動サイズ調整無効化 */
     -webkit-text-size-adjust: 100%;
@@ -119,121 +29,32 @@ body {
     -ms-text-size-adjust: 100%;
     text-size-adjust: 100%;
 
-    /*writing-mode: var(--writing-mode);*/ /* vertical-rl, horizontal-tb */
     writing-mode: vertical-rl; /* vertical-rl, horizontal-tb */
-    text-orientation: var(--text-orientation); /* upright, sideways */
+    text-orientation: upright; /* upright, sideways */
 
-    /*
-    width: calc(var(--screen-avail-width)*1px);
-    height: calc(var(--screen-avail-height)*1px);
-    column-width: calc(var(--screen-avail-width)*1px);
-    */
     width: 1920px;
     height: 1080px;
     column-width: 1920px;
-    /*
-    column-width: auto;
-    */
-    /*
-    */
-    /*
-    */
-
-    /*column-count: var(--columns);*/ /* 段組み数 */
-    /*
-    width: var(--client-width);
-    height: var(--client-height);
-    column-width: calc((var(--client-width))*1px);
-    */
-    /*column-gap: 2em;*/ /* 段組み余白 */
-    column-gap: calc(var(--column-gap-px) * 1px);
+    column-gap: 2em; /* 段組み余白 */
     column-rule: thick inset black; /* 段組み装飾 */
-    /*
-    column-count: 2;
-    */
 }
 main {
-    /*
-    width: 500px;
-    height: 1080px;
-    column-width: 500px;
-    column-count: var(--columns);
-    */
-
-    /* 1画面(ページ)もcolumn単位で分割しているし、段組みもcolumn単位で分割しているため、両者の区別がつかなくなってしまっている！ */
-    /* break-after:columnを要素に仕込んでも、body{}とmain{}の両方に適用されてしまうはず！ */
-    /* bodyは画面単位でbreakしたいし、mainは段組みを指定数にしたい。 */
-    /*
-    column-count: 2;
-    column-gap: calc(var(--column-gap-px) * 1px);
-    column-rule: thick inset black;
-    */
-    column-count: var(--columns);
-    column-gap: calc(var(--column-gap-px) * 1px);
-    column-rule: thick inset black;
+/*    column-count: 1;*/
 }
 p {
     text-indent: 1em;
-    /* https://tech-blog.cloud-config.jp/2020-04-16-the-outdated-css-property-width/ */
-    /* 
-       従来|現代
-       ----|----
-       top|inset-block-start
-       bottom|inset-block-end
-       left|inset-inline-start
-       right|inset-inline-end
-    */
-/*    margin-inline-start: 40px;*/
-/*    margin-block-end: 24px;*/
     margin-block-end: 1em;
 }
-
 .upright {
     text-combine-upright: all; /* 縦中横 */
     letter-spacing: 0; /* 字間 */
     text-transform: full-width; /* 全字全角 */
 }
-img.icon {
-    width: 1em;
-    height: 1em;
-}
-button, input, select, textarea {
-  font-family : inherit;
-  font-size   : 100%;
-}
-input[type="range"] {
-    vertical-align: middle;
-}
-input[type='ranger'] > label > span:first-of-type { content: attr(value); }
-
 </style>
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=0">
-<!--
-<script src="js/full-screen.js"></script>
-<script src="js/columns.js"></script>
-<script src="js/writing-mode.js"></script>
-<script src="js/resize.js"></script>
-<script src="js/line-of-chars.js"></script>
-<script src="js/line-height.js"></script>
-<script src="js/letter-spacing.js"></script>
-<script src="js/main.js"></script>
-<script src="test_v_break_after_column.js"></script>
--->
 </head>
 <body>
-    <!--
-    <header>
-    <form id="viewer-setting">
-        <button type="button" id="full-screen" name="full-screen" value="0" title="フルスクリーンON/OFF">全</button>
-        <button type="button" id="writing-mode" name="writing-mode" value="vertical-rl" title="縦書き／横書き">縦</button>
-        <input type="range" id="columns" name="columns" min="1" max="3"><label for="columns"><span id="columns-label" class="upright"></span><span class="upright">段</span></label>
-        <br>
-        <input type="range" id="line-of-chars" name="line-of-chars" min="10" max="50"><label for="line-of-chars"><span id="line-of-chars-label" class="upright"></span><span class="upright">字／行</span></label>
-        <input type="range" id="line-height" name="line-height" min="1.5" max="2.0" step="0.05"><label for="line-height"><span id="line-height-label" class="upright"></span><span class="upright">％字</span><span class="upright">行間</span></label>
-        <input type="range" id="letter-spacing" name="letter-spacing" min="0.05" max="0.1" step="0.005"><label for="letter-spacing"><span id="letter-spacing-label" class="upright"></span><span class="upright">％字</span><span class="upright">字間</span></label>
-    </form>
-    </header>
-    -->
+    <p>main要素内がすべて消失してしまう！</p>
     <main style="box-sizing:border-box;">
     <p>１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０</p>
     <p>令和3年12月31日。</p>

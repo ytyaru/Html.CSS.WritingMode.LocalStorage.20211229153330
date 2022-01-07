@@ -26,7 +26,6 @@ function setFontSizePixel(writingMode, lineOfChars, letterSpacing) { // フォ�
     document.querySelector(':root').style.setProperty('--font-size-px', `${px}`);
 }
 function calcLineOfChars(writingMode) { // 字数／行を算出する（writingMode,フォントサイズpx,行間emから。縦横ボタン押下時）
-    // 段組みがない場合
     // １行あたりの字数＝(LINE_OF_PX - LetterSpacingPx) / (FontSizePx + LetterSpacingPx)
     // console.log(document.querySelector('body').style);
     const FontSizePx = parseFloat(getComputedStyle(document.querySelector(':root')).getPropertyValue('--font-size-px'));
@@ -64,6 +63,11 @@ function calcScreenSize(writingMode, columns) { // 画面比率を変える（wr
 //    const SPLIT_EDGE_PX = (IS_VERTICAL) ? WIDTH : HEIGHT;
 //    const FULL_EDGE_PX = (IS_VERTICAL) ? HEIGHT : WIDTH;
 
+    const LINE_OF_PX = ('vertical-rl' === writingMode) ? HEIGHT : WIDTH; // １行の表示領域
+//    const F = LINE_OF_PX / lineOfChars; // 字間なし時の１字あたりのフォントサイズ
+    const L = F * letterSpacing; // 字間サイズ（emからpxに変換）
+    const ALL_LETTER_SPACING = L * (lineOfChars - 1); // 全字間サイズ（px）
+
 //    document.querySelector(':root').style.setProperty('--column-gap', `5v${(IS_VERTICAL) ? 'h' : 'w'}`);
 //    const COL_GAP = parseFloat(getComputedStyle(document.querySelector(':root')).getPropertyValue('--column-gap')) * 1.5;
     const COL_GAP_PX = parseFloat(getComputedStyle(document.querySelector(':root')).getPropertyValue('--column-gap-px'));
@@ -72,6 +76,7 @@ function calcScreenSize(writingMode, columns) { // 画面比率を変える（wr
 //    const ALL_COL_GAP = COL_GAP * (columns - 1);
     document.querySelector(':root').style.setProperty(FULL_ID, FULL_EDGE_PX);
     document.querySelector(':root').style.setProperty(SPLIT_ID, (SPLIT_EDGE_PX - ALL_COL_GAP_PX) / columns); // 段組み数で割る
+    document.querySelector(':root').style.setProperty(SPLIT_ID, (SPLIT_EDGE_PX - ALL_LETTER_SPACING - ALL_COL_GAP_PX) / columns); // 段組み数で割る
 
 //    getComputedStyle(document.querySelector('body')).setProperty('column-width', `${WIDTH}px`)
 //    document.querySelector('body').style.setProperty('column-width', `${WIDTH}px`)
