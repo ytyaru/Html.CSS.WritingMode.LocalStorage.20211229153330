@@ -51,67 +51,55 @@ function getWindowScrollPosition() {
 window.addEventListener('touchstart', (event) => {
     console.log('touchstart', event);
     const IS_VERTICAL = ('vertical-rl' === document.querySelector('#writing-mode').value);
-    movePagePositionalDevice((IS_VERTICAL) ? event.touches[0].Y : event.touches[0].X);
+    movePagePositionalDevice(event.touches[0].X);
+//    movePagePositionalDevice((IS_VERTICAL) ? event.touches[0].Y : event.touches[0].X);
 });
 
 const POS_NONE = 0;
 const POS_PREV = 1;
 const POS_NEXT = 2;
-const POS_MENU = 3;
-function PagingPosition(POS) {
+const POS_MENU = 3; // index, setting, tools(bookmark, timer)
+function PagingPosition(POS) { // ページめくるための画面端領域を算出する
+    /*
     const IS_VERTICAL = ('vertical-rl' === document.querySelector('#writing-mode').value);
     const SCREEN_SIZE = (IS_VERTICAL) ? document.body.clientHeight : document.body.clientWidth; // 画面サイズ
     const CLICK_SIZE = SCREEN_SIZE * 0.1; // クリック領域サイズ
     if (POS <= CLICK_SIZE) { return POS_PREV; }
     else if ((SCREEN_SIZE  - CLICK_SIZE) < POS) { return POS_NEXT; }
     else { return POS_NONE; }
+    */
+    const IS_VERTICAL = ('vertical-rl' === document.querySelector('#writing-mode').value);
+    const SCREEN_SIZE = document.body.clientWidth; // 画面サイズ
+    const CLICK_SIZE = SCREEN_SIZE * 0.1; // クリック領域サイズ
+    if (POS <= CLICK_SIZE) { return (IS_VERTICAL) ? POS_NEXT : POS_PREV; } // 左端
+    else if ((SCREEN_SIZE  - CLICK_SIZE) < POS) { return (IS_VERTICAL) ? POS_PREV : POS_NEXT; } // 右端
+    else { return POS_NONE; }
 }
 function movePagePositionalDevice(POS) { // マウスかタップで次前ページ遷移
     switch (PagingPosition(POS)) {
-        case POS_PREV: 
-            prevPage();
-            break;
-        case POS_NEXT:
-            nextPage();
-            break;
+        case POS_PREV: return prevPage();
+        case POS_NEXT: return nextPage();
     }
-    /*
-    const IS_VERTICAL = ('vertical-rl' === document.querySelector('#writing-mode').value);
-    const SCREEN_SIZE = (IS_VERTICAL) ? document.body.clientHeight : document.body.clientWidth; // 画面サイズ
-    const CLICK_SIZE = SCREEN_SIZE * 0.1; // クリック領域サイズ
-    console.log(`POS:${POS}, SCREEN_SIZE:${SCREEN_SIZE}, CLICK_SIZE:${CLICK_SIZE}`);
-    if (POS <= CLICK_SIZE) { prevPage(); }
-    else if ((SCREEN_SIZE  - CLICK_SIZE) < POS) { nextPage(); }
-//    else if ((SCREEN_SIZE  - CLICK_SIZE) < POS && POS < SCREEN_SIZE) { nextPage(); }
-    else {} // 何もしない
-    */
 }
 window.addEventListener('click', (event) => {
     const IS_VERTICAL = ('vertical-rl' === document.querySelector('#writing-mode').value);
-    movePagePositionalDevice((IS_VERTICAL) ? event.clientY : event.clientX);
+    movePagePositionalDevice(event.clientX);
+//    movePagePositionalDevice((IS_VERTICAL) ? event.clientY : event.clientX);
 });
 window.addEventListener('mousemove', (event) => {
-    /*
-    const IS_VERTICAL = ('vertical-rl' === document.querySelector('#writing-mode').value);
-    const POS = (IS_VERTICAL) ? event.clientY : event.clientX; // 現在マウス位置
-    const SCREEN_SIZE = (IS_VERTICAL) ? document.body.clientHeight : document.body.clientWidth; // 画面サイズ
-    const CLICK_SIZE = SCREEN_SIZE * 0.1; // クリック領域サイズ
-    console.log(`POS:${POS}, SCREEN_SIZE:${SCREEN_SIZE}, CLICK_SIZE:${CLICK_SIZE}`);
-    if (POS <= CLICK_SIZE) { document.body.style.cursor = (IS_VERTICAL) ? 'n-resize' : 'w-resize'; }
-    else if ((SCREEN_SIZE  - CLICK_SIZE) < POS && POS < SCREEN_SIZE) { document.body.style.cursor = (IS_VERTICAL) ? 's-resize' : 'e-resize'; }
-    else {document.body.style.cursor = 'auto'; }
-    */
     function getCursor() {
         const IS_VERTICAL = ('vertical-rl' === document.querySelector('#writing-mode').value);
-        const POS = (IS_VERTICAL) ? event.clientY : event.clientX;
+        const POS = event.clientX;
+//        const POS = (IS_VERTICAL) ? event.clientY : event.clientX;
         switch (PagingPosition(POS)) {
-            case POS_PREV: return (IS_VERTICAL) ? 'n-resize' : 'w-resize';
-            case POS_NEXT: return (IS_VERTICAL) ? 's-resize' : 'e-resize';
+//            case POS_PREV: return (IS_VERTICAL) ? 'n-resize' : 'w-resize';
+//            case POS_NEXT: return (IS_VERTICAL) ? 's-resize' : 'e-resize';
+            case POS_PREV: return (IS_VERTICAL) ? 'e-resize' : 'w-resize';
+            case POS_NEXT: return (IS_VERTICAL) ? 'w-resize' : 'e-resize';
             case POS_NONE: return 'auto';
         }
     }
     document.body.style.cursor = getCursor();
-
 });
 window.addEventListener("keydown", event => {
     const IS_VERTICAL = ('vertical-rl' === document.querySelector('#writing-mode').value);
