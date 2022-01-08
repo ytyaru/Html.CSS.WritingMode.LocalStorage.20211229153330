@@ -104,10 +104,14 @@ window.addEventListener('mousemove', (event) => {
 window.addEventListener("keydown", event => {
     const IS_VERTICAL = ('vertical-rl' === document.querySelector('#writing-mode').value);
     console.log(`keydown event.key:${event.key}, Shift:${event.shiftKey}`)
+    /*
          if (event.key === 'ArrowUp') {if (IS_VERTICAL) { prevPage(); } event.preventDefault();  }
     else if (event.key === 'ArrowDown') {if (IS_VERTICAL) { nextPage(); } event.preventDefault();  }
     else if (event.key === 'ArrowLeft') {if (!IS_VERTICAL) { prevPage(); } event.preventDefault();  }
     else if (event.key === 'ArrowRight') {if (!IS_VERTICAL) { nextPage(); } event.preventDefault();  }
+    */
+         if (event.key === 'ArrowLeft') {(IS_VERTICAL) ? nextPage() : prevPage(); event.preventDefault();  }
+    else if (event.key === 'ArrowRight') {(IS_VERTICAL) ? prevPage() : nextPage(); event.preventDefault();  }
     else if (event.key === 'PageUp') {prevPage();event.preventDefault();}
     else if (event.key === 'PageDown') {nextPage();event.preventDefault();}
     else if (event.key === 'Home') {firstPage();event.preventDefault();}
