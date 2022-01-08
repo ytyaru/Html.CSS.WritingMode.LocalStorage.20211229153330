@@ -1,8 +1,8 @@
-function nextPage() { movePageRelative(1); }
-function prevPage() { movePageRelative(-1); }
-function firstPage() { movePageAbsolute(0); }
-function lastPage() { movePageAbsolute(-1); }
-function movePage(page) { movePageAbsolute(page); }
+function nextPage() { movePageRelative(1); calcPage(); }
+function prevPage() { movePageRelative(-1); calcPage();  }
+function firstPage() { movePageAbsolute(0); calcPage();  }
+function lastPage() { movePageAbsolute(-1); calcPage();  }
+function movePage(page) { movePageAbsolute(page); calcPage();  }
 function movePageRelative(increment=1) { // incrementが正数なら進む。負数なら戻る。0なら何もしない。
     const IS_VERTICAL = ('vertical-rl' === document.querySelector('#writing-mode').value);
     const PAGE_PX = ((IS_VERTICAL) ? window.screen.height : window.screen.width) * increment;
@@ -13,13 +13,14 @@ function movePageRelative(increment=1) { // incrementが正数なら進む。負
 function movePageAbsolute(page=0) { // pageは整数。0を最初のページとする。負数なら最後のページから数えた値。
     const IS_VERTICAL = ('vertical-rl' === document.querySelector('#writing-mode').value);
     function calcPagePx() {
-        const PAGE_PX = ((IS_VERTICAL) ? window.screen.height : window.screen.width) * page;
-        if (0 <= page) { return PAGE_PX; }
+        const PAGE_PX = ((IS_VERTICAL) ? window.screen.height : window.screen.width);
+        if (0 <= page) { return PAGE_PX * page; }
         else {
             const [ALL_PAGE, NOW_PAGE] = calcPage();
             const TARGET_PAGE = ALL_PAGE + page;
-            console.log(`TARGET_PAGE :${TARGET_PAGE }, PAGE_PX:${PAGE_PX}`);
-            return TARGET_PAGE * (PAGE_PX * -1);
+            const TARGET_POS_PX = TARGET_PAGE * PAGE_PX;
+            console.log(`TARGET_PAGE :${TARGET_PAGE }, PAGE_PX:${PAGE_PX}, TARGET_POS_PX:${TARGET_POS_PX}`);
+            return TARGET_POS_PX;
         }
     }
     const PAGE_PX = calcPagePx();
@@ -34,7 +35,7 @@ function calcPage() {
     const ALL_PAGE = ALL_PX / PAGE_PX;
     const pos = getWindowScrollPosition();
     const NOW_PX = (IS_VERTICAL) ? pos.y : pos.x;
-    const NOW_PAGE = (0 === NOW_PX) ? 0 : ALL_PX / NOW_PX;
+    const NOW_PAGE = (0 === NOW_PX) ? 0 : ALL_PAGE * (NOW_PX / ALL_PX);
     console.log(`ALL_PAGE:${ALL_PAGE}, NOW_PAGE:${NOW_PAGE}`);
     console.log(`ALL_PX:${ALL_PX}, PAGE_PX:${PAGE_PX}, NOW_PX:${NOW_PX}`);
     console.log(`scrollWidth:${document.body.scrollWidth}`);
@@ -54,7 +55,6 @@ window.addEventListener('touchstart', (event) => {
 });
 function movePagePositionalDevice(POS) { // マウスかタップで次前ページ遷移
     const IS_VERTICAL = ('vertical-rl' === document.querySelector('#writing-mode').value);
-//    const POS = (IS_VERTICAL) ? event.clientY : event.clientX; // 現在マウス位置
     const SCREEN_SIZE = (IS_VERTICAL) ? document.body.clientHeight : document.body.clientWidth; // 画面サイズ
     const CLICK_SIZE = SCREEN_SIZE * 0.1; // クリック領域サイズ
     console.log(`POS:${POS}, SCREEN_SIZE:${SCREEN_SIZE}, CLICK_SIZE:${CLICK_SIZE}`);
@@ -102,5 +102,16 @@ window.addEventListener("keypress", event => {
     else if (event.key === 'p') {prevPage();}
     else if (event.key === 'f') {firstPage();}
     else if (event.key === 'l') {lastPage();}
+
+    // 'u' undo 前の移動を取り消す
+    // 'm' move 移動するページを絶対値で指定する
+    else if (event.key === 'm') {
+        const [ALL_PAGE, NOW_PAGE] = calcPage();
+        const page = window.prompt('何ページ目に移動しますか？', `${NOW_PAGE}`)
+        movePage(parseInt(page));
+    }
+    // 'h' here 現在ここは何ページ目かを表示する
+    // 't' time 現在時刻。経過時刻。指定時間、指定時刻までの残り時間を表示する
+    // 'i' index 作品名,編,章,ページ数,著者名(著者他作品リンクへ)
     else {}
 }, {passive: false});
