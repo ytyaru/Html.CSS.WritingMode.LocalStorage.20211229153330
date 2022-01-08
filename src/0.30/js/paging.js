@@ -86,15 +86,87 @@ var getWindowScrollPosition = function() {
     };
 };
 window.addEventListener('click', (event) => {
+    const IS_VERTICAL = ('vertical-rl' === document.querySelector('#writing-mode').value);
+    /*
+    if (IS_VERTICAL) {
+        const POS = event.screenY;
+        const SIZE = window.screen.height * 0.1; // 10%分の高さ
+        if (POS <= SIZE) { prevPage(); }
+        else if ((window.screen.height - SIZE) < POS && POS < window.screen.height) { nextPage(); }
+        else {} // 何もしない
+    } else {
+        const POS = event.screenX;
+        const SIZE = window.screen.width * 0.1; // 10%分の幅
+        if (POS <= SIZE) { prevPage(); }
+        else if ((window.screen.width - SIZE) < POS && POS < window.screen.width) { nextPage(); }
+        else {} // 何もしない
+    }
+    */
+//    const POS = (IS_VERTICAL) ? event.screenY : event.screenX; // 現在マウス位置
+    const POS = (IS_VERTICAL) ? event.clientY : event.clientX; // 現在マウス位置
+//    const SCREEN_SIZE = (IS_VERTICAL) ? window.screen.height : window.screen.width; // 画面サイズ
+//    const SCREEN_SIZE = (IS_VERTICAL) ? window.screen.availHeight : window.screen.availWidth; // 画面サイズ
+    const SCREEN_SIZE = (IS_VERTICAL) ? document.body.clientHeight : document.body.clientWidth; // 画面サイズ
+    const CLICK_SIZE = SCREEN_SIZE * 0.1; // クリック領域サイズ
+    console.log(`POS:${POS}, SCREEN_SIZE:${SCREEN_SIZE}, CLICK_SIZE:${CLICK_SIZE}`);
+    if (POS <= CLICK_SIZE) { prevPage(); }
+    else if ((SCREEN_SIZE  - CLICK_SIZE) < POS && POS < SCREEN_SIZE) { nextPage(); }
+    else {} // 何もしない
 
 });
+window.addEventListener('mousemove', (event) => {
+    const IS_VERTICAL = ('vertical-rl' === document.querySelector('#writing-mode').value);
+    const POS = (IS_VERTICAL) ? event.clientY : event.clientX; // 現在マウス位置
+    const SCREEN_SIZE = (IS_VERTICAL) ? document.body.clientHeight : document.body.clientWidth; // 画面サイズ
+    const CLICK_SIZE = SCREEN_SIZE * 0.1; // クリック領域サイズ
+    console.log(`POS:${POS}, SCREEN_SIZE:${SCREEN_SIZE}, CLICK_SIZE:${CLICK_SIZE}`);
+    if (POS <= CLICK_SIZE) { document.body.style.cursor = (IS_VERTICAL) ? 'n-resize' : 'w-resize'; }
+    else if ((SCREEN_SIZE  - CLICK_SIZE) < POS && POS < SCREEN_SIZE) { document.body.style.cursor = (IS_VERTICAL) ? 's-resize' : 'e-resize'; }
+    else {document.body.style.cursor = 'auto'; }
+});
+
 window.addEventListener('touchstart', (event) => {
 
 });
+window.addEventListener("keydown", event => {
+    const IS_VERTICAL = ('vertical-rl' === document.querySelector('#writing-mode').value);
+    console.log(`keydown event.key:${event.key}, Shift:${event.shiftKey}`)
+         if (event.key === 'ArrowUp') {if (IS_VERTICAL) { prevPage(); } event.preventDefault();  }
+    else if (event.key === 'ArrowDown') {if (IS_VERTICAL) { nextPage(); } event.preventDefault();  }
+    else if (event.key === 'ArrowLeft') {if (!IS_VERTICAL) { prevPage(); } event.preventDefault();  }
+    else if (event.key === 'ArrowRight') {if (!IS_VERTICAL) { nextPage(); } event.preventDefault();  }
+    else if (event.key === 'PageUp') {prevPage();event.preventDefault();}
+    else if (event.key === 'PageDown') {nextPage();event.preventDefault();}
+    else if (event.key === 'Home') {firstPage();event.preventDefault();}
+    else if (event.key === 'End') {lastPage();event.preventDefault();}
+    else if (!event.shiftKey && event.key === ' ') {nextPage();event.preventDefault();}
+    else if (event.shiftKey && event.key === ' ') {prevPage();event.preventDefault();}
+    else if (!event.shiftKey && event.key === 'Enter') {nextPage();event.preventDefault();}
+    else if (event.shiftKey && event.key === 'Enter') {prevPage();event.preventDefault();}
+    else if (event.key === 'Backspace') {prevPage();event.preventDefault();}
+    else {}
+}, {passive: false});
 window.addEventListener("keypress", event => {
-  if (event.key === 'n') {nextPage();}
-  else if (event.key === 'p') {prevPage();}
-  else if (event.key === 'f') {firstPage();}
-  else if (event.key === 'l') {lastPage();}
-  else {}
-});
+    const IS_VERTICAL = ('vertical-rl' === document.querySelector('#writing-mode').value);
+    console.log(`keypress event.key:${event.key}`)
+    if (event.key === 'n') {nextPage();}
+    else if (event.key === 'p') {prevPage();}
+    else if (event.key === 'f') {firstPage();}
+    else if (event.key === 'l') {lastPage();}
+    /* なぜか以下はkeypressだと捕捉できない！
+    else if (event.key === 'ArrowUp') {if (IS_VERTICAL) { prevPage(); } event.preventDefault();  }
+    else if (event.key === 'ArrowDown') {if (IS_VERTICAL) { nextPage(); } event.preventDefault();  }
+    else if (event.key === 'ArrowLeft') {console.log('------------');if (!IS_VERTICAL) { prevPage(); console.log('=============='); } event.preventDefault();  }
+    else if (event.key === 'ArrowRight') {if (!IS_VERTICAL) { nextPage(); } event.preventDefault();  }
+    else if (event.key === 'PageUp') {event.preventDefault();prevPage();}
+    else if (event.key === 'PageDown') {event.preventDefault();nextPage();}
+    else if (event.key === 'Home') {event.preventDefault();firstPage();}
+    else if (event.key === 'End') {event.preventDefault();lastPage();}
+    else if (!event.shiftKey && event.key === ' ') {event.preventDefault();nextPage();}
+    else if (event.shiftKey && event.key === ' ') {event.preventDefault();nextPage();}
+    else if (!event.shiftKey && event.key === 'Enter') {event.preventDefault();nextPage();}
+    else if (event.shiftKey && event.key === 'Enter') {event.preventDefault();prevPage();}
+    else if (event.key === 'Backspace') {event.preventDefault();lastPage();}
+    */
+    else {}
+}, {passive: false});

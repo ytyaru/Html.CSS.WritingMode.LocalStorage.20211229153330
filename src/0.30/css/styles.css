@@ -106,9 +106,9 @@ body {
     column-rule-style: solid;
     column-rule-color: black;
 
-    /*
     overflow-x:hidden;
     overflow-y:hidden;
+    /*
     */
 }
 p {

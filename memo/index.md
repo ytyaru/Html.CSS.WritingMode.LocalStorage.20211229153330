@@ -29,13 +29,11 @@
 `0.21`|段組み領域を1画面サイズにしたい（widthやheightを調整すればよい。column-widthは常に100vw。column-countは不要。ただしcolumn-gap,column-rule-widthにおける余白が考慮されていないため1画面よりわずかに大きい！）
 `0.22`|0.22 段組み領域を1画面サイズにしたい（widthやheightを調整すればよい。column-widthは常に100vw。column-countは不要。余白(column-gap)をvw,vh単位で計算した（ピクセル単位で計算するとなぜかバグる。でもフォントサイズは余白もピクセル単位で計算しているので合わせたい））
 
+``|ページ数表示領域の作成（ディスプレイ表示時は画面固定要素で。印刷時はHTML要素を挿入。）
 
 `0.20`|段組みの改ページ（改カラム）位置を指定したい（p要素のうち画面サイズ超過する箇所）
-
 `0.20`|段組み領域を1画面サイズにしたい（`column-width:`, `width`, `height`, `column-gap`, `column-rule-width`, `break-after: column;`）
-
 `0.21`|段組み領域を1画面サイズにしたい（widthやheightを調整すればよい。column-widthは常に100vw。column-countは不要。ただしcolumn-gap,column-rule-widthにおける余白が考慮されていない！）
-
 0.20 調査中。段組み領域を1画面サイズにしたい（widthやheightを調整すればよい。column-widthは常に100vw。column-countは不要）
 
 ``|1画面に収まる単位を算出したい
