@@ -52,7 +52,6 @@ window.addEventListener('touchstart', (event) => {
     console.log('touchstart', event);
     const IS_VERTICAL = ('vertical-rl' === document.querySelector('#writing-mode').value);
     movePagePositionalDevice(event.touches[0].X);
-//    movePagePositionalDevice((IS_VERTICAL) ? event.touches[0].Y : event.touches[0].X);
 });
 
 const POS_NONE = 0;
@@ -60,14 +59,6 @@ const POS_PREV = 1;
 const POS_NEXT = 2;
 const POS_MENU = 3; // index, setting, tools(bookmark, timer)
 function PagingPosition(POS) { // ページめくるための画面端領域を算出する
-    /*
-    const IS_VERTICAL = ('vertical-rl' === document.querySelector('#writing-mode').value);
-    const SCREEN_SIZE = (IS_VERTICAL) ? document.body.clientHeight : document.body.clientWidth; // 画面サイズ
-    const CLICK_SIZE = SCREEN_SIZE * 0.1; // クリック領域サイズ
-    if (POS <= CLICK_SIZE) { return POS_PREV; }
-    else if ((SCREEN_SIZE  - CLICK_SIZE) < POS) { return POS_NEXT; }
-    else { return POS_NONE; }
-    */
     const IS_VERTICAL = ('vertical-rl' === document.querySelector('#writing-mode').value);
     const SCREEN_SIZE = document.body.clientWidth; // 画面サイズ
     const CLICK_SIZE = SCREEN_SIZE * 0.1; // クリック領域サイズ
@@ -84,16 +75,12 @@ function movePagePositionalDevice(POS) { // マウスかタップで次前ペー
 window.addEventListener('click', (event) => {
     const IS_VERTICAL = ('vertical-rl' === document.querySelector('#writing-mode').value);
     movePagePositionalDevice(event.clientX);
-//    movePagePositionalDevice((IS_VERTICAL) ? event.clientY : event.clientX);
 });
 window.addEventListener('mousemove', (event) => {
     function getCursor() {
         const IS_VERTICAL = ('vertical-rl' === document.querySelector('#writing-mode').value);
         const POS = event.clientX;
-//        const POS = (IS_VERTICAL) ? event.clientY : event.clientX;
         switch (PagingPosition(POS)) {
-//            case POS_PREV: return (IS_VERTICAL) ? 'n-resize' : 'w-resize';
-//            case POS_NEXT: return (IS_VERTICAL) ? 's-resize' : 'e-resize';
             case POS_PREV: return (IS_VERTICAL) ? 'e-resize' : 'w-resize';
             case POS_NEXT: return (IS_VERTICAL) ? 'w-resize' : 'e-resize';
             case POS_NONE: return 'auto';
@@ -104,13 +91,9 @@ window.addEventListener('mousemove', (event) => {
 window.addEventListener("keydown", event => {
     const IS_VERTICAL = ('vertical-rl' === document.querySelector('#writing-mode').value);
     console.log(`keydown event.key:${event.key}, Shift:${event.shiftKey}`)
-    /*
-         if (event.key === 'ArrowUp') {if (IS_VERTICAL) { prevPage(); } event.preventDefault();  }
-    else if (event.key === 'ArrowDown') {if (IS_VERTICAL) { nextPage(); } event.preventDefault();  }
-    else if (event.key === 'ArrowLeft') {if (!IS_VERTICAL) { prevPage(); } event.preventDefault();  }
-    else if (event.key === 'ArrowRight') {if (!IS_VERTICAL) { nextPage(); } event.preventDefault();  }
-    */
-         if (event.key === 'ArrowLeft') {(IS_VERTICAL) ? nextPage() : prevPage(); event.preventDefault();  }
+         if (event.key === 'ArrowUp') { event.preventDefault();  }   // menu(index,setting,tools)表示予定
+    else if (event.key === 'ArrowDown') { event.preventDefault();  } // menu(index,setting,tools)表示予定
+    else if (event.key === 'ArrowLeft') {(IS_VERTICAL) ? nextPage() : prevPage(); event.preventDefault();  }
     else if (event.key === 'ArrowRight') {(IS_VERTICAL) ? prevPage() : nextPage(); event.preventDefault();  }
     else if (event.key === 'PageUp') {prevPage();event.preventDefault();}
     else if (event.key === 'PageDown') {nextPage();event.preventDefault();}
@@ -121,6 +104,7 @@ window.addEventListener("keydown", event => {
     else if (!event.shiftKey && event.key === 'Enter') {nextPage();event.preventDefault();}
     else if (event.shiftKey && event.key === 'Enter') {prevPage();event.preventDefault();}
     else if (event.key === 'Backspace') {prevPage();event.preventDefault();}
+    else if (event.key === 'Escape') {;event.preventDefault();} // 本を閉じる予定（本棚に戻る）
     else {}
 }, {passive: false});
 window.addEventListener("keypress", event => {
