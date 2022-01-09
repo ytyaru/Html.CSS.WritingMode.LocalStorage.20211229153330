@@ -22,7 +22,7 @@ function getCursorScreenAreaRole(x, y) { // 画面エリアの役割に応じた
     switch (getScreenAreaRole(x, y)) {
         case ROLE_PAGING_FORWARD: return (IS_VERTICAL) ? 'w-resize' : 'e-resize';
         case ROLE_PAGING_BACK: return (IS_VERTICAL) ? 'e-resize' : 'w-resize';
-        case ROLE_TOGGLE_MENU_SETTING: return 'url("https://ytyaru.github.io/Html.CSS.WritingMode.LocalStorage.20211229153330/assets/image/setting.svg"),auto';
+        case ROLE_TOGGLE_MENU_SETTING: return 'url("https://ytyaru.github.io/Html.CSS.WritingMode.LocalStorage.20211229153330/assets/image/setting_16x16.png"),auto';
         /*
         case ROLE_PAGING_FIRST: return ; 
         case ROLE_PAGING_LAST: return ; 
