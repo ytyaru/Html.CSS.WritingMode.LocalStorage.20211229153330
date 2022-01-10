@@ -4,14 +4,16 @@ function firstPage() { movePageAbsolute(0); calcPage();  }
 function lastPage() { movePageAbsolute(-1); calcPage();  }
 function movePage(page) { movePageAbsolute(page); calcPage();  }
 function movePageRelative(increment=1) { // incrementが正数なら進む。負数なら戻る。0なら何もしない。
+    const [ALL_PAGE, NOW_PAGE] = calcPage();
+    if (increment < 1 && 0 === NOW_PAGE) { return; } // 先頭ページ以上は進まない（微妙な余白があるが移動させない）
+    if (0 < increment && (ALL_PAGE - 1) === NOW_PAGE) { return; } // 末尾ページ以上は進まない（微妙な余白があるが移動させない）
+    function cssF(key,q=':root') { return parseFloat(getComputedStyle(document.querySelector(q)).getPropertyValue(key)); }
     const IS_VERTICAL = ('vertical-rl' === document.querySelector('#writing-mode').value);
-    const COL_GAP_EM = parseFloat(getComputedStyle(document.querySelector(':root')).getPropertyValue('--column-gap-em'));
-    const FONT_SIZE_PX = parseFloat(getComputedStyle(document.querySelector(':root')).getPropertyValue('--font-size-px'));
+    const COL_GAP_EM = cssF('--column-gap-em');
+    const FONT_SIZE_PX = cssF('--font-size-px');
     const COL_GAP_PX = FONT_SIZE_PX * COL_GAP_EM;
-    const COL_RULE_WIDTH_PX = parseFloat(getComputedStyle(document.querySelector(':root')).getPropertyValue('--column-rule-width-px'));
-//    const PAGE_PX = (parseFloat(getComputedStyle(document.querySelector('body')).getPropertyValue((IS_VERTICAL) ? 'height' : 'width')) + COL_GAP_PX + (COL_RULE_WIDTH_PX * (0<increment) ? 1 : -1) + ((0<increment) ? 0 : 1)) * increment;
-    const PAGE_PX = (parseFloat(getComputedStyle(document.querySelector('body')).getPropertyValue((IS_VERTICAL) ? 'height' : 'width')) + COL_GAP_PX + (COL_RULE_WIDTH_PX * (0<increment) ? 1 : -1) + ((COL_RULE_WIDTH_PX/2)*((0<increment) ? -1 : 1 ))) * increment;
-//    const PAGE_PX = (parseFloat(getComputedStyle(document.querySelector('body')).getPropertyValue((IS_VERTICAL) ? 'height' : 'width')) + COL_GAP_PX + (COL_RULE_WIDTH_PX * (0<increment) ? 1 : -1) + ((COL_RULE_WIDTH_PX)*((0<increment) ? -1 : 1 ))) * increment;
+    const COL_RULE_WIDTH_PX = cssF('--column-rule-width-px');
+    const PAGE_PX = (cssF(((IS_VERTICAL) ? 'height' : 'width'), 'body') + COL_GAP_PX + (COL_RULE_WIDTH_PX * (0<increment) ? 1 : -1) + ((COL_RULE_WIDTH_PX/2)*((0<increment) ? -1 : 1 ))) * increment;
     console.log(window.screen.height, document.body.clientHeight);
     const X_INC = (IS_VERTICAL) ? 0 : PAGE_PX;
     const Y_INC = (IS_VERTICAL) ? PAGE_PX : 0;
@@ -43,7 +45,17 @@ function movePageAbsolute(page=0) { // pageは整数。0を最初のページと
 }
 function calcPage() {
     const IS_VERTICAL = ('vertical-rl' === document.querySelector('#writing-mode').value);
-    const PAGE_PX = parseFloat(getComputedStyle(document.querySelector('body')).getPropertyValue((IS_VERTICAL) ? 'height' : 'width'));
+//    const PAGE_PX = parseFloat(getComputedStyle(document.querySelector('body')).getPropertyValue((IS_VERTICAL) ? 'height' : 'width'));
+    function cssF(key,q=':root') { return parseFloat(getComputedStyle(document.querySelector(q)).getPropertyValue(key)); }
+    const COL_GAP_EM = cssF('--column-gap-em');
+    const FONT_SIZE_PX = cssF('--font-size-px');
+    const COL_GAP_PX = FONT_SIZE_PX * COL_GAP_EM;
+//    const COL_RULE_WIDTH_PX = cssF('--column-rule-width-px');
+    const PAGE_PX = (cssF(((IS_VERTICAL) ? 'height' : 'width'), 'body')) + (COL_GAP_PX / 2);
+//    const COLUMNS = cssF('--columns');
+//    const PAGE_PX = (cssF(((IS_VERTICAL) ? 'height' : 'width'), 'body')) + ((COL_GAP_PX / 2)*COLUMNS);
+//    const PAGE_PX = (cssF(((IS_VERTICAL) ? 'height' : 'width'), 'body'));
+
     const ALL_PX = (IS_VERTICAL) ? document.body.scrollHeight : document.body.scrollWidth;
     const ALL_PAGE = ALL_PX / PAGE_PX;
     const pos = getWindowScrollPosition();
