@@ -203,6 +203,13 @@ body {
 
     margin-block-start: calc(var(--margin-block-start-em) * 1em);  
     margin-block-end: calc(var(--margin-block-end-em) * 1em);
+    /*
+    */
+    /*
+    padding-block-start: calc(var(--margin-block-start-em) * 1em);  
+    padding-block-end: calc(var(--margin-block-end-em) * 1em);
+    */
+
     /* 文字方向へのマージンは col-gapがある。こいつとの兼ね合いでどう計算すればいいかわからん。p要素にinline-start,endをセットすればいいのかな？
     margin-inline-start: calc(var(--margin-inline-start-em) * 1em);
     margin-inline-end: calc(var(--margin-inline-start-em) * 1em);

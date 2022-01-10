@@ -13,7 +13,10 @@ function movePageRelative(increment=1) { // incrementが正数なら進む。負
     const FONT_SIZE_PX = cssF('--font-size-px');
     const COL_GAP_PX = FONT_SIZE_PX * COL_GAP_EM;
     const COL_RULE_WIDTH_PX = cssF('--column-rule-width-px');
-    const PAGE_PX = (cssF(((IS_VERTICAL) ? 'height' : 'width'), 'body') + COL_GAP_PX + (COL_RULE_WIDTH_PX * (0<increment) ? 1 : -1) + ((COL_RULE_WIDTH_PX/2)*((0<increment) ? -1 : 1 ))) * increment;
+    const COLUMNS = cssF('--columns');
+//    const PAGE_PX = (cssF(((IS_VERTICAL) ? 'height' : 'width'), 'body') + COL_GAP_PX + (COL_RULE_WIDTH_PX * (0<increment) ? 1 : -1) + ((COL_RULE_WIDTH_PX/2)*((0<increment) ? -1 : 1 ))) * increment;
+    const PAGE_PX = (cssF(((IS_VERTICAL) ? 'height' : 'width'), 'body') + COL_GAP_PX + (COL_RULE_WIDTH_PX * (0<increment) ? 1 : -1) + ((COL_RULE_WIDTH_PX/2)*((0<increment) ? -1 : 1 ))) * increment * COLUMNS;
+//    const PAGE_PX = (cssF(((IS_VERTICAL) ? 'height' : 'width'), 'body') + COL_GAP_PX) * increment * COLUMNS;
     console.log(window.screen.height, document.body.clientHeight);
     const X_INC = (IS_VERTICAL) ? 0 : PAGE_PX;
     const Y_INC = (IS_VERTICAL) ? PAGE_PX : 0;
@@ -21,24 +24,27 @@ function movePageRelative(increment=1) { // incrementが正数なら進む。負
 }
 function movePageAbsolute(page=0) { // pageは整数。0を最初のページとする。負数なら最後のページから数えた値。
     const IS_VERTICAL = ('vertical-rl' === document.querySelector('#writing-mode').value);
+    function cssF(key,q=':root') { return parseFloat(getComputedStyle(document.querySelector(q)).getPropertyValue(key)); }
     function calcPagePx() {
         const PAGE_PX = parseFloat(getComputedStyle(document.querySelector('body')).getPropertyValue((IS_VERTICAL) ? 'height' : 'width'));
         const COL_GAP_EM = parseFloat(getComputedStyle(document.querySelector(':root')).getPropertyValue('--column-gap-em'));
         const FONT_SIZE_PX = parseFloat(getComputedStyle(document.querySelector(':root')).getPropertyValue('--font-size-px'));
         const COL_GAP_PX = FONT_SIZE_PX * COL_GAP_EM;
         const COL_RULE_WIDTH_PX = parseFloat(getComputedStyle(document.querySelector(':root')).getPropertyValue('--column-rule-width-px'));
+        const COLUMNS = cssF('--columns');
         const [ALL_PAGE, NOW_PAGE] = calcPage();
         if (0 <= page) {
             const increment = NOW_PAGE - page;
-            return (PAGE_PX + COL_GAP_PX + (COL_RULE_WIDTH_PX * (0<increment) ? 1 : -1) + ((0<increment) ? 0 : 1)) * page;
+            return (PAGE_PX + COL_GAP_PX + (COL_RULE_WIDTH_PX * (0<increment) ? 1 : -1) + ((0<increment) ? 0 : 1)) * page * COLUMNS;
         }
         else {
             const TARGET_PAGE = ALL_PAGE + page;
             const increment = TARGET_PAGE - NOW_PAGE;
-            return (PAGE_PX + COL_GAP_PX + (COL_RULE_WIDTH_PX * (0<increment) ? 1 : -1) + ((0<increment) ? 0 : 1)) * TARGET_PAGE;
+            return (PAGE_PX + COL_GAP_PX + (COL_RULE_WIDTH_PX * (0<increment) ? 1 : -1) + ((0<increment) ? 0 : 1)) * (TARGET_PAGE * COLUMNS);
         }
     }
     const PAGE_PX = calcPagePx();
+    console.log(`*********PAGE_PX:${PAGE_PX}`)
     const X_INC = (IS_VERTICAL) ? 0 : PAGE_PX;
     const Y_INC = (IS_VERTICAL) ? PAGE_PX : 0;
     window.scrollTo(X_INC, Y_INC);
@@ -51,10 +57,15 @@ function calcPage() {
     const FONT_SIZE_PX = cssF('--font-size-px');
     const COL_GAP_PX = FONT_SIZE_PX * COL_GAP_EM;
 //    const COL_RULE_WIDTH_PX = cssF('--column-rule-width-px');
-    const PAGE_PX = (cssF(((IS_VERTICAL) ? 'height' : 'width'), 'body')) + (COL_GAP_PX / 2);
+//    const PAGE_PX = (cssF(((IS_VERTICAL) ? 'height' : 'width'), 'body')) + (COL_GAP_PX / 2);
 //    const COLUMNS = cssF('--columns');
 //    const PAGE_PX = (cssF(((IS_VERTICAL) ? 'height' : 'width'), 'body')) + ((COL_GAP_PX / 2)*COLUMNS);
 //    const PAGE_PX = (cssF(((IS_VERTICAL) ? 'height' : 'width'), 'body'));
+    const COLUMNS = cssF('--columns');
+//    const PAGE_PX = ((cssF(((IS_VERTICAL) ? 'height' : 'width'), 'body')) + (COL_GAP_PX / 2) ) * COLUMNS;
+//    const PAGE_PX = ((cssF(((IS_VERTICAL) ? 'height' : 'width'), 'body')) + (COL_GAP_PX / (COLUMNS+1)) ) * COLUMNS;
+//    const PAGE_PX = (cssF(((IS_VERTICAL) ? 'height' : 'width'), 'body') * COLUMNS) + (COL_GAP_PX * (COLUMNS - 1)) ;
+    const PAGE_PX = (cssF(((IS_VERTICAL) ? 'height' : 'width'), 'body') * COLUMNS) + (COL_GAP_PX * (COLUMNS - 1)) ;
 
     const ALL_PX = (IS_VERTICAL) ? document.body.scrollHeight : document.body.scrollWidth;
     const ALL_PAGE = ALL_PX / PAGE_PX;
@@ -64,8 +75,9 @@ function calcPage() {
     console.log(`ALL_PAGE:${ALL_PAGE}, NOW_PAGE:${NOW_PAGE}`);
     console.log(`ALL_PX:${ALL_PX}, PAGE_PX:${PAGE_PX}, NOW_PX:${NOW_PX}`);
     console.log(`scrollWidth:${document.body.scrollWidth}`);
-    console.log(`ALL_PAGE:${parseInt(ALL_PAGE)}, NOW_PAGE:${parseInt(NOW_PAGE)}`)
-    return [parseInt(ALL_PAGE), parseInt(NOW_PAGE)];
+    console.log(`ALL_PAGE:${parseInt(Math.ceil(ALL_PAGE))}, NOW_PAGE:${parseInt(NOW_PAGE)}`)
+//    return [parseInt(ALL_PAGE), parseInt(NOW_PAGE)];
+    return [parseInt(Math.ceil(ALL_PAGE)), parseInt(NOW_PAGE)];
 }
 function getWindowScrollPosition() {
     return {
@@ -76,22 +88,23 @@ function getWindowScrollPosition() {
 
 function initPaging() {
     // window -> document.body に変更することで dialog.showModal() 時にイベント発火抑制できるかと思ったが、できなかった。
-    document.body.addEventListener('touchstart', (event) => {
+    window.addEventListener('touchstart', (event) => {
         console.log('touchstart', event);
         const setting = document.querySelector('#setting');
         if (setting.open) { if(!event.target.closest('#setting > form[method="dialog"]')) {setting.close();} return; }
         runScreenAreaRole(event.touches[0].X, event.touches[0].Y);
     });
-    document.body.addEventListener('click', (event) => {
+    window.addEventListener('click', (event) => {
         const setting = document.querySelector('#setting');
         if (setting.open) { if(!event.target.closest('#setting > form[method="dialog"]')) {setting.close();} return; }
         runScreenAreaRole(event.clientX, event.clientY);
     });
-    document.body.addEventListener('mousemove', (event) => {
+    window.addEventListener('mousemove', (event) => {
         if (document.querySelector('#setting').open) { return; }
+        // body内に要素がない領域は反応しない！　末尾ページは下端までない箇所では反応しない！
         document.body.style.cursor = getCursorScreenAreaRole(event.clientX, event.clientY);
     });
-    document.body.addEventListener("keydown", event => {
+    window.addEventListener("keydown", event => {
         if (document.querySelector('#setting').open) { return; }
         const IS_VERTICAL = ('vertical-rl' === document.querySelector('#writing-mode').value);
         console.log(`keydown event.key:${event.key}, Shift:${event.shiftKey}`)
@@ -116,7 +129,7 @@ function initPaging() {
         else if (event.key === 'Escape') {;event.preventDefault();} // 本を閉じる予定（本棚に戻る）
         else {}
     }, {passive: false});
-    document.body.addEventListener("keypress", event => {
+    window.addEventListener("keypress", event => {
         console.log(`keypress event.key:${event.key}`)
         if (document.querySelector('#setting').open) { if (event.key === 'Escape') {document.querySelector('#setting').close(); event.preventDefault();} return; }
         const IS_VERTICAL = ('vertical-rl' === document.querySelector('#writing-mode').value);
