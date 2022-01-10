@@ -1,8 +1,12 @@
 function calcFontSizePixel(writingMode, lineOfChars, letterSpacing) { // フォントサイズをピクセル単位で算出する
+    function cssF(key) { return parseFloat(getComputedStyle(document.querySelector(':root')).getPropertyValue(key)); }
     const IS_VERTICAL = ('vertical-rl' === writingMode);
     const LINE_OF_PX = (IS_VERTICAL) ? document.body.clientHeight : document.body.clientWidth; // １行の表示領域
-    const COL_GAP_EM = parseFloat(getComputedStyle(document.querySelector(':root')).getPropertyValue('--column-gap-em'));
-    const fontSizePx = LINE_OF_PX / ((lineOfChars * (1 + letterSpacing)) + (COL_GAP_EM / 2));
+//    const COL_GAP_EM = parseFloat(getComputedStyle(document.querySelector(':root')).getPropertyValue('--column-gap-em'));
+    const COL_GAP_EM = cssF('--column-gap-em');
+    const MARGIN_EM = cssF('--margin-inline-start-em') + cssF('--margin-inline-end-em');
+    const fontSizePx = LINE_OF_PX / ((lineOfChars * (1 + letterSpacing)) + (COL_GAP_EM / 2) + MARGIN_EM);
+//    const fontSizePx = LINE_OF_PX / ((lineOfChars * (1 + letterSpacing)) + (COL_GAP_EM / 2));
     console.log(`フォントサイズ:${fontSizePx}px`);
     console.log(`LINE_OF_PX:${LINE_OF_PX}px`);
     console.log(`letterSpacing:${letterSpacing}em`);

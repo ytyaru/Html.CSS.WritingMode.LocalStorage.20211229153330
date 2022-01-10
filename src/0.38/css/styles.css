@@ -46,6 +46,9 @@
     --margin-block-end-em:1;
     --margin-inline-start-em:1;
     --margin-inline-end-em:1;
+
+    --p-margin-block-end-em:1;
+
     /*
     --scroll-bar-px-w:0;
     --scroll-bar-px-h:0;
@@ -191,16 +194,19 @@ body {
     block-size: var(--block-size-base);
     inline-size: var(--inline-size-base);
     */
+    /* 余白分をサイズから引いたら小さくなってしまった。
     block-size: calc(var(--block-size-base) - calc(var(--margin-block-start-em) * 1em) - calc(var(--margin-block-end-em) * 1em));
     inline-size: calc(var(--inline-size-base) - calc(var(--column-gap-em) * 1em) - calc(var(--margin-inline-start-em) * 1em) - calc(var(--margin-inline-end-em) * 1em));
-
-    --block-column-gap-em:0;  /* column-gapは表記方向に付与されるはず */
-    --inline-column-gap-em:1; /* column-gapは表記方向に付与されるはず */
+    */
+    block-size: calc(var(--block-size-base) - calc(var(--margin-block-start-em) * 1em) - calc(var(--margin-block-end-em) * 1em) - calc(var(--p-margin-block-end-em) * 1em));
+    inline-size: calc(var(--inline-size-base));
 
     margin-block-start: calc(var(--margin-block-start-em) * 1em);  
     margin-block-end: calc(var(--margin-block-end-em) * 1em);
+    /* 文字方向へのマージンは col-gapがある。こいつとの兼ね合いでどう計算すればいいかわからん。p要素にinline-start,endをセットすればいいのかな？
     margin-inline-start: calc(var(--margin-inline-start-em) * 1em);
     margin-inline-end: calc(var(--margin-inline-start-em) * 1em);
+    */
 
     column-width: 100vw;
     column-gap: calc(var(--column-gap-em) * 1em); /* 段組み余白 */
@@ -226,7 +232,14 @@ p {
     */
 /*    margin-inline-start: 40px;*/
 /*    margin-block-end: 24px;*/
+    /*
     margin-block-end: 1em;
+    */
+    margin-block-end: calc(var(--p-margin-block-end-em) * 1em);
+
+    /* 画面全体におけるマージンのinline方向版。bodyにセットしてもうまくいかないのでbody直下の要素に対してセットする。 */
+    margin-inline-start: calc(var(--margin-inline-start-em) * 1em);
+    margin-inline-end: calc(var(--margin-inline-start-em) * 1em);
 }
 
 .upright {
