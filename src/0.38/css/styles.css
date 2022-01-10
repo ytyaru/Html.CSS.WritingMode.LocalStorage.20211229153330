@@ -45,7 +45,7 @@
     --margin-block-start-em:1;
     --margin-block-end-em:1;
     --margin-inline-start-em:1;
-    --margin-inline-start-em:1;
+    --margin-inline-end-em:1;
     /*
     --scroll-bar-px-w:0;
     --scroll-bar-px-h:0;
@@ -57,12 +57,15 @@
     --inline-size-base:100vw; /* holizontal-tb:100vw, vertical-rl:100vh */
 
     /* calc() は二項演算しかできなかった！のでやむなく複数変数に分けて定義した */
+    /* 違った。単にCSS変数名が間違っていただけだった。--margin-inline-end-emにすべきところ--margin-inline-start-emだった（コピペ修正忘れ） */
+    /*
     --block-margin-em: calc(var(--margin-block-start-em) + var(--margin-block-end-em));
     --inline-margin-em: calc(var(--margin-inline-start-em) + var(--margin-inline-end-em));
     --block-margin-col-gap-em: calc(var(--block-margin-em) + var(--column-gap-em-w));
     --inline-margin-col-gap-em: calc(var(--inline-margin-em) + var(--column-gap-em-w));
     --block-margin-col-gap: calc(var(--block-margin-col-gap-em) * 1em);
     --inline-margin-col-gap: calc(var(--inline-margin-col-gap-em) * 1em);
+    */
 }
 /* ノートPC 13インチ 1025〜1599px （1600px = (16px * 50字) * 2段）*/
 @media screen and (max-width: 1600px) {
@@ -188,8 +191,8 @@ body {
     block-size: var(--block-size-base);
     inline-size: var(--inline-size-base);
     */
-    block-size: calc(var(--block-size-base));
-    inline-size: calc(var(--inline-size-base) - calc(var(--column-gap-em) * 1em));
+    block-size: calc(var(--block-size-base) - calc(var(--margin-block-start-em) * 1em) - calc(var(--margin-block-end-em) * 1em));
+    inline-size: calc(var(--inline-size-base) - calc(var(--column-gap-em) * 1em) - calc(var(--margin-inline-start-em) * 1em) - calc(var(--margin-inline-end-em) * 1em));
 
     --block-column-gap-em:0;  /* column-gapは表記方向に付与されるはず */
     --inline-column-gap-em:1; /* column-gapは表記方向に付与されるはず */
