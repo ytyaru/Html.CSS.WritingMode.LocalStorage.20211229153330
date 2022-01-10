@@ -75,9 +75,11 @@ function calcPage() {
     console.log(`ALL_PAGE:${ALL_PAGE}, NOW_PAGE:${NOW_PAGE}`);
     console.log(`ALL_PX:${ALL_PX}, PAGE_PX:${PAGE_PX}, NOW_PX:${NOW_PX}`);
     console.log(`scrollWidth:${document.body.scrollWidth}`);
-    console.log(`ALL_PAGE:${parseInt(Math.ceil(ALL_PAGE))}, NOW_PAGE:${parseInt(NOW_PAGE)}`)
-//    return [parseInt(ALL_PAGE), parseInt(NOW_PAGE)];
-    return [parseInt(Math.ceil(ALL_PAGE)), parseInt(NOW_PAGE)];
+    console.log(`ALL_PAGE:${parseInt(ALL_PAGE)}, NOW_PAGE:${parseInt(NOW_PAGE)}`)
+//    console.log(`ALL_PAGE:${parseInt(Math.ceil(ALL_PAGE))}, NOW_PAGE:${parseInt(Math.ceil(NOW_PAGE))}`)
+    return [parseInt(ALL_PAGE), parseInt(NOW_PAGE)];
+//    return [parseInt(Math.ceil(ALL_PAGE)), parseInt(NOW_PAGE)];
+//    return [parseInt(Math.ceil(ALL_PAGE)), parseInt(Math.ceil(NOW_PAGE))];
 }
 function getWindowScrollPosition() {
     return {
