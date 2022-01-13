@@ -1,0 +1,188 @@
+@charset "utf-8";
+/* PC 13〜21インチ 1025px〜 */
+:root {
+    --min-font-size-px:10px;      /* 最小フォントサイズ（CSSピクセル単位） */
+    --standard-font-size-px:16px; /* 標準フォントサイズ（CSSピクセル単位） */
+    --min-line-height:1.5em;      /* 最小行間em */
+    --max-line-height:2.0em;      /* 最大行間em */
+    --min-letter-spacing:0.05em;  /* 最小字間em */
+    --max-letter-spacing:0.10em;  /* 最大字間em */
+    --en-char-weight:1.0; /* 英語   1字あたりの情報量（密度。重み） */
+    --ja-char-weight:2.5; /* 日本語 1字あたりの情報量（密度。重み） */
+    --ja-standard-line-of-chars:40;      /* 日本語標準字／行（CJK標準行中字数） */
+    --ja-max-standard-line-of-chars:50;  /* 日本語標準最大字／行（CJK標準行中最大字数） */
+    --en-standard-line-of-chars:80;      /* 英語標準字／行 */
+    --en-max-standard-line-of-chars:100; /* 英語標準最大字／行 */
+    /*--columns:1;*/     /* 現在段組数 localStorage || 1; // 1,2,3,... */
+    --column-count:1;/* 現在段組数 localStorage || 1; // 1,2,3,... */
+    /*--min-columns:1;*/ /* 最小段組数 */
+    /*--max-columns:1;*/ /* 最大段組数 parseInt((line-of-px / standard-font-size-px) / ja-standard-line-of-chars); */
+    --column-count-min:1;/* 最小段組数 localStorage || 1; // 1,2,3,... */
+    --column-count-max:1;/* 最大段組数 localStorage || 1; // 1,2,3,... */
+    --smartphone-ja-min-line-of-chars:15; /* スマホ(7inch(320〜599px))における日本語の最小字／行 */
+    --smartphone-ja-max-line-of-chars:30; /* スマホ(7inch(320〜599px))における日本語の最大字／行 */
+    --tablet-ja-min-line-of-chars:20; /* タブレット(13inch(600〜1024px))における日本語の最小字／行 */
+    --tablet-ja-max-line-of-chars:40; /* タブレット(13inch(600〜1024px))における日本語の最大字／行 */
+    --is-full-screen:0; /* 全画面ON/OFF */
+
+    --line-of-chars:var(--ja-standard-line-of-chars);         /* 現在字／行 40 */
+    --min-line-of-chars:var(--ja-standard-line-of-chars);     /* 最小字／行 40 */
+    --max-line-of-chars:var(--ja-max-standard-line-of-chars); /* 最大字／行 50* /
+    --writing-mode:vertical-rl; /* 表記方向 */
+    --text-orientation:upright; /* 文字方向 */
+    --line-height:1.75;         /* 現在行間 1.5〜2.0em */
+    --letter-spacing:0.075;     /* 現在字間 0.05〜0.1em */
+
+
+    --line-of-px:1024; /* 1行の表示領域
+    --letter-spacing-px:calc(var(--font-size-px, var(--standard-font-size-px), 16) * var(--letter-spacing)); /* 字間 */
+    --all-letter-spacing-px:calc(var(--letter-spacing-px) * calc(var(--line-of-chars) - 1))
+    --font-size-px:calc((var(--line-of-px) - var(--all-letter-spacing-px)) / var(--line-of-chars)); /* 現在フォントサイズ（CSSピクセル単位）JSで算出する */
+
+    --column-gap-em:1;
+    --column-gap-em-w:var(--column-gap-em);
+    --column-gap-em-h:var(--column-gap-em);
+    /*--block-column-gap-em:0;*/  /* column-gapは表記方向に付与されるはず */
+    /*--inline-column-gap-em:1;*/ /* column-gapは表記方向に付与されるはず */
+    --column-rule-width-px:1;
+    --margin-block-start-em:1;
+    --margin-block-end-em:1;
+    --margin-inline-start-em:1;
+    --margin-inline-end-em:1;
+
+    --p-margin-block-end-em:1;
+
+    /*
+    --scroll-bar-px-w:0;
+    --scroll-bar-px-h:0;
+    */
+    --width-vw:100;
+    --height-vh:100;
+
+    --block-size-base:100vh; /* holizontal-tb:100vh, vertical-rl:100vw */
+    --inline-size-base:100vw; /* holizontal-tb:100vw, vertical-rl:100vh */
+
+    /* calc() は二項演算しかできなかった！のでやむなく複数変数に分けて定義した */
+    /* 違った。単にCSS変数名が間違っていただけだった。--margin-inline-end-emにすべきところ--margin-inline-start-emだった（コピペ修正忘れ） */
+    /*
+    --block-margin-em: calc(var(--margin-block-start-em) + var(--margin-block-end-em));
+    --inline-margin-em: calc(var(--margin-inline-start-em) + var(--margin-inline-end-em));
+    --block-margin-col-gap-em: calc(var(--block-margin-em) + var(--column-gap-em-w));
+    --inline-margin-col-gap-em: calc(var(--inline-margin-em) + var(--column-gap-em-w));
+    --block-margin-col-gap: calc(var(--block-margin-col-gap-em) * 1em);
+    --inline-margin-col-gap: calc(var(--inline-margin-col-gap-em) * 1em);
+    */
+
+    --padding-left-em:4;
+    --padding-right-em:4;
+    --padding-top-em:4;
+    --padding-bottom-em:4;
+}
+/* ノートPC 13インチ 1025〜1599px （1600px = (16px * 50字) * 2段）*/
+@media screen and (max-width: 1600px) {
+:root {
+    --line-of-chars:35;
+    --min-line-of-chars:var(--tablet-ja-min-line-of-chars); /* 25 */
+    --max-line-of-chars:var(--tablet-ja-max-line-of-chars); /* 45 */
+}
+}
+/* タブレット 7〜13インチ 600〜1024px */
+@media screen and (max-width: 1024px) {
+:root {
+    --line-of-chars:30;
+    --min-line-of-chars:var(--tablet-ja-min-line-of-chars); /* 20 */
+    --max-line-of-chars:var(--tablet-ja-max-line-of-chars); /* 40 */
+}
+}
+/* スマホ 4〜7インチ 1〜599px  */
+@media screen and (max-width: 599px) {
+:root {
+    --line-of-chars:20;
+    --min-line-of-chars:var(--smartphone-ja-min-line-of-chars); /* 15 */
+    --max-line-of-chars:var(--smartphone-ja-max-line-of-chars); /* 30 */
+}
+}
+@font-face
+{
+    font-family: IPAex明朝;
+    src: local('IPAex明朝'), 
+         local('ipaexm.ttf') format('opentype'),
+         local('fonts-japanese-mincho.ttf') format('truetype'),
+         url('https://cdn.leafscape.be/IPAexfont/ipaexm_web.woff2') format("woff2");
+}
+* {
+    padding: 0;
+    margin: 0;
+}
+body {
+    font-family: 'IPAex明朝', sans-serif; 
+    font-size: calc(var(--font-size-px) * 1px);
+    line-height: calc(var(--line-height) * 1em); /* 行間 1.5〜2.0 */
+    letter-spacing: calc(var(--letter-spacing-px) * 1px); /* 字間 0.05〜0.1 */
+
+    /* 縦置き／横置きでの自動サイズ調整無効化 */
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+
+    writing-mode: var(--writing-mode); /* vertical-rl, horizontal-tb */
+    text-orientation: var(--text-orientation); /* upright, sideways */
+
+    width: calc(100vw - calc(var(--padding-left-em)*1em) - calc(var(--padding-right-em)*1em));
+    height: calc(100vh - calc(var(--padding-top-em)*1em) - calc(var(--padding-bottom-em)*1em));
+    padding-top: calc(var(--padding-top-em) * 1em);
+    padding-bottom: calc(var(--padding-bottom-em) * 1em);
+    padding-left: calc(var(--padding-left-em) * 1em);
+    padding-right: calc(var(--padding-right-em) * 1em);
+}
+main {
+    width: 100%;
+    height: 100%;
+    column-count: var(--column-count);
+    overflow-x:scroll;
+    overflow-y:scroll;
+}
+p {
+/*    text-indent: 1em;*/ /* 字下げは文字でやる仕様にしたい。 */
+    /* https://tech-blog.cloud-config.jp/2020-04-16-the-outdated-css-property-width/ */
+    /* 
+       従来|現代
+       ----|----
+       top|inset-block-start
+       bottom|inset-block-end
+       left|inset-inline-start
+       right|inset-inline-end
+    */
+/*    margin-inline-start: 40px;*/
+/*    margin-block-end: 24px;*/
+    /*
+    margin-block-end: 1em;
+    */
+    margin-block-end: calc(var(--p-margin-block-end-em) * 1em);
+
+    /* 画面全体におけるマージンのinline方向版。bodyにセットしてもうまくいかないのでbody直下の要素に対してセットする。 */
+    /*
+    margin-inline-start: calc(var(--margin-inline-start-em) * 1em);
+    margin-inline-end: calc(var(--margin-inline-start-em) * 1em);
+    */
+}
+
+.upright {
+    text-combine-upright: all; /* 縦中横 */
+    letter-spacing: 0; /* 字間 */
+    text-transform: full-width; /* 全字全角 */
+}
+img.icon {
+    width: 1em;
+    height: 1em;
+}
+button, input, select, textarea {
+  font-family : inherit;
+  font-size   : 100%;
+}
+input[type="range"] {
+    vertical-align: middle;
+}
+input[type='ranger'] > label > span:first-of-type { content: attr(value); }
+
