@@ -5,6 +5,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
     initLineOfChars();
     initLineHeight();
     initLetterSpacing();
+    //calcPage(); // paging.js
     initPaging();
 
     breakPage();
