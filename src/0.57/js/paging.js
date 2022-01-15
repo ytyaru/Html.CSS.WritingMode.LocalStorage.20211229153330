@@ -1,7 +1,7 @@
-function nextPage() { movePageRelative(1);}
-function prevPage() { movePageRelative(-1);}
-function firstPage() { movePageAbsolute(1);}
-function lastPage() { movePageAbsolute(-1);}
+function nextPage() { movePageRelative(1); }
+function prevPage() { movePageRelative(-1); }
+function firstPage() { movePageAbsolute(1); }
+function lastPage() { movePageAbsolute(-1); }
 function movePage(page) { movePageAbsolute(page); }
 function movePageRelative(increment=1) { // incrementが正数なら進む。負数なら戻る。0なら何もしない。
     function cssI(key) { return parseInt(getComputedStyle(document.querySelector(':root')).getPropertyValue(key)); }

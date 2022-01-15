@@ -39,13 +39,14 @@
     --column-rule-width-px:10;
     --p-margin-block-end-em:1;
 
-    --padding-left-em:4;
-    --padding-right-em:4;
-    --padding-top-em:4;
-    --padding-bottom-em:4;
+    --padding-left-em:2;
+    --padding-right-em:2;
+    --padding-top-em:2;
+    --padding-bottom-em:2;
 
     --page-length:1;
     --page-index:1;
+    --heading:見出し;
 }
 /* ノートPC 13インチ 1025〜1599px （1600px = (16px * 50字) * 2段）*/
 @media screen and (max-width: 1600px) {
@@ -72,16 +73,14 @@
 }
 }
 /* fc-list | grep 'IPAex明朝' */
-@font-face
-{
+@font-face {
     font-family: IPAex明朝;
     src: local('IPAex明朝'), 
          local('ipaexm.ttf') format('opentype'),
          local('fonts-japanese-mincho.ttf') format('truetype'),
          url('https://cdn.leafscape.be/IPAexfont/ipaexm_web.woff2') format("woff2");
 }
-@font-face
-{
+@font-face {
     font-family: IPAexゴシック;
     src: local('IPAexゴシック'), 
          local('IPAexGothic'), 
@@ -116,11 +115,7 @@ body {
     padding-left: calc(var(--padding-left-em) * 1em);
     padding-right: calc(var(--padding-right-em) * 1em);
 
-    /*counter-reset: section;*/
-    /*counter-reset: page 999;*/
-    /*counter-reset: page 999;*/
-    /*counter-reset: page var(--page-index);*/
-    counter-reset: section page var(--page-index);
+    counter-reset: section page var(--page-index) heading var(--heading);
 }
 main {
     width: 100%;
@@ -145,18 +140,7 @@ p {
        left|inset-inline-start
        right|inset-inline-end
     */
-/*    margin-inline-start: 40px;*/
-/*    margin-block-end: 24px;*/
-    /*
-    margin-block-end: 1em;
-    */
     margin-block-end: calc(var(--p-margin-block-end-em) * 1em);
-
-    /* 画面全体におけるマージンのinline方向版。bodyにセットしてもうまくいかないのでbody直下の要素に対してセットする。 */
-    /*
-    margin-inline-start: calc(var(--margin-inline-start-em) * 1em);
-    margin-inline-end: calc(var(--margin-inline-start-em) * 1em);
-    */
 }
 
 .upright {
@@ -176,11 +160,19 @@ input[type="range"] {
     vertical-align: middle;
 }
 input[type='ranger'] > label > span:first-of-type { content: attr(value); }
+
+/*
+section {
+    break-before: column;
+}*/
 h1,h2,h3,h4,h5,h6 {
-    break-before: all; /* ページ、段組 */
+    /*break-before: column;*/ /* ページ、段組  always, all, page, column */
+    font-family: 'IPAexゴシック', sans-serif; 
     font-feature-settings: "palt"; /* カーニング */
     letter-spacing: 0px;
-    font-family: 'IPAexゴシック', sans-serif; 
+}
+h1::not(:first-child) {
+    break-before: column; /* ページ、段組  always, all, page, column */
 }
 h1 {
     font-size: 2em;
@@ -193,33 +185,29 @@ h1::before {
     counter-increment: section;
     content: '第' counter(section) '章 ';
 }
-#page-number { /* ノンブル */
+/* #page-footer, #page-side-left, #page-side-right */
+#page-number, #page-header {
     font-family: 'IPAexゴシック', sans-serif; 
     font-size: minmax(var(--min-font-size-px), 0.75em);
     font-feature-settings: "palt"; /* カーニング */
-    text-align: center;
-    /*content: var(--page-index);*/
-
-    content: counter(page);
 
     writing-mode: horizontal-tb;
     position: fixed;
-    bottom: 0;
     width: 100%;
 }
-#page-number > span::before {
+#page-header { /* 柱 */
+    text-align: start; /* start,end,center,justify */
+    top:0;
+    left:0;
+}
+#page-number{ /* ノンブル */
+    text-align: center;
+    bottom: 0;
+}
+#page-number::before {
     content: counter(page);
 }
-/*
-#page-number::first-child {
-    content: var(--page-index) 'ページ';
+#page-header::before  {
+    content: attr(heading);
 }
-#page-number > span::before {
-    content: var(--page-index);
-}
-#page-number:before {
-    content: var(--page-index);
-}
-*/
-
 
