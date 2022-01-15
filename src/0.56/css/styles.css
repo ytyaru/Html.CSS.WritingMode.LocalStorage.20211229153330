@@ -116,7 +116,11 @@ body {
     padding-left: calc(var(--padding-left-em) * 1em);
     padding-right: calc(var(--padding-right-em) * 1em);
 
-    counter-reset: section;
+    /*counter-reset: section;*/
+    /*counter-reset: page 999;*/
+    /*counter-reset: page 999;*/
+    /*counter-reset: page var(--page-index);*/
+    counter-reset: section page var(--page-index);
 }
 main {
     width: 100%;
@@ -193,5 +197,29 @@ h1::before {
     font-family: 'IPAexゴシック', sans-serif; 
     font-size: minmax(var(--min-font-size-px), 0.75rem);
     font-feature-settings: "palt"; /* カーニング */
+    text-align: center;
+    /*content: var(--page-index);*/
+
+    content: counter(page);
+
+    writing-mode: horizontal-tb;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
+#page-number > span::before {
+    content: counter(page);
+}
+/*
+#page-number::first-child {
+    content: var(--page-index) 'ページ';
+}
+#page-number > span::before {
     content: var(--page-index);
 }
+#page-number:before {
+    content: var(--page-index);
+}
+*/
+
+
