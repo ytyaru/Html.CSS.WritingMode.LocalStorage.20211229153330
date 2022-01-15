@@ -1,4 +1,4 @@
-let observer = null;
+//let observer = null;
 window.addEventListener('DOMContentLoaded', (event) => {
     initFullScreen();
     initWritingMode();
@@ -9,7 +9,8 @@ window.addEventListener('DOMContentLoaded', (event) => {
     initPaging();
 
     breakPage();
-    observer = setPageHeader();
+//    observer = setPageHeader();
+    setPageHeader();
 
     console.log("DOMContentLoaded");
     console.log(`devicePixelRatio = ${window.devicePixelRatio}`);
