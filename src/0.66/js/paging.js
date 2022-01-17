@@ -17,7 +17,8 @@ function movePageRelative(increment=1) { // incrementが正数なら進む。負
     if (TARGET) {
         TARGET.scrollIntoView({block: "start", inline: "start", behavior: "auto"}); // 遷移アニメbehavior: auto/smooth。
         document.querySelector(':root').style.setProperty('--page-index', TARGET_PAGE);
-        setPageHeader(); // page-header.js
+//        setPageHeader(); // page-header.js
+        setNowSectionHeading();
         calcReadRate(); // remaining-pages.js
     }
 }
@@ -35,7 +36,8 @@ function movePageAbsolute(page=1) { // pageは整数。1を最初のページと
     if (TARGET) {
         TARGET.scrollIntoView({block: "start", inline: "start", behavior: "auto"}); // 遷移アニメbehavior: auto/smooth。
         document.querySelector(':root').style.setProperty('--page-index', TARGET_PAGE);
-        setPageHeader(); // page-header.js
+//        setPageHeader(); // page-header.js
+        setNowSectionHeading();
         calcReadRate(); // remaining-pages.js
     }
 }

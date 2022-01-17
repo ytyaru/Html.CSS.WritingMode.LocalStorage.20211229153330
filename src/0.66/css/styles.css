@@ -46,7 +46,15 @@
 
     --page-length:1;
     --page-index:1;
+ 
+     /* page-header */
     --heading:見出し;
+    --clock-order:1;
+    --clock-text-align:start;
+    --now-section-heading-order:3;
+    --now-section-heading-text-align:end;
+  
+   /* page-footer */ 
     --read-rate:0; /* JSで実行する。CSSではできなかった。content要素にはvar()値をセットできない。counterなら可能だがpage-index / page-lengthをcalcで除算した結果は浮動少数型である。round()で丸めたがダメだった。 */
     --remaining-pages:calc(var(--page-length) - var(--page-index));
     --remaining-pages-order:1;
@@ -188,7 +196,7 @@ h1::before {
     content: '第' counter(section) '章 ';
 }
 /* #page-footer, #page-side-left, #page-side-right */
-#page-footer, #page-header {
+#page-header, #page-footer {
     font-family: 'Noto Sans JP', 'IPAexゴシック', sans-serif; 
     font-size: calc(var(--font-size-px) * 1px * 0.7);
     font-feature-settings: "palt"; /* カーニング */
@@ -198,11 +206,11 @@ h1::before {
     width: 100%;
     left:0;
 }
-#page-header { /* 柱 */
+#page-header, #clock, #elapsed-time, #now-section-heading { /* 柱 */
     text-align: start; /* start,end,center,justify */
     top:0;
 }
-#page-footer {
+#page-header, #page-footer {
     display:grid;
     grid-template-columns: repeat(3, 1fr);
 }
@@ -210,6 +218,22 @@ h1::before {
     bottom:0;
     left:0;
     right:0;
+}
+#clock { /* 現在時刻 */
+    background-color:#FFFFAA;
+    text-align: var(--clock-text-align);
+    order: var(--clock-order);
+}
+#elapsed-time { /* 経過時間 */
+    background-color:#FFAAFF;
+    text-align: center;
+    order: 2;
+}
+#now-section-heading { /* 柱 */
+    background-color:#AAFFFF;
+    text-align: end;
+    text-align: var(--now-section-heading-text-align);
+    order: var(--now-section-heading-order);
 }
 #read-rate { /* 読了率 */
     order: var(--read-rate-order);
@@ -237,8 +261,12 @@ h1::before {
 #remaining-pages::before {
     content: 'あと ' counter(remaining-pages);
 }
-#page-header::before  {
+#now-section-heading::before  {
     /*content: '第' counter(section) '章 ' attr(heading);*/
     content: attr(heading);
 }
-
+/*
+#page-header::before  {
+    content: attr(heading);
+}
+*/

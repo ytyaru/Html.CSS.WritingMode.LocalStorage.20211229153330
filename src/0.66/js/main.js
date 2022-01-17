@@ -7,10 +7,12 @@ window.addEventListener('DOMContentLoaded', (event) => {
     initLetterSpacing();
     initPaging();
     breakPage();
-    setPageHeader();
+//    setPageHeader();
+    setNowSectionHeading();
     setPageHeaderPosition();
     setPosPageFooter();
     calcReadRate();
+    initClock();
     console.log("DOMContentLoaded");
     console.log(`devicePixelRatio = ${window.devicePixelRatio}`);
 });
@@ -25,6 +27,7 @@ window.addEventListener('beforeunload', (event) => {
     saveLineOfChars();
     saveLineHeight();
     saveLetterSpacing();
+    removeClock();
 });
 window.addEventListener("orientationchange", function () { // 画面向きに応じて最大字数／行を変更する
     console.log("orientationchange");

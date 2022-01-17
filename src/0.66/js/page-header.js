@@ -1,4 +1,5 @@
 function setPageHeaderPosition() { // 柱（ページヘッダ）を左寄せ／右寄せする（縦書き：左、横書き：右）
+    /*
     const IS_VERTICAL = ('vertical-rl' === document.querySelector('#writing-mode').value);
     const PAGE_HEADER = document.querySelector('#page-header');
     if (IS_VERTICAL) {
@@ -10,7 +11,28 @@ function setPageHeaderPosition() { // 柱（ページヘッダ）を左寄せ／
         PAGE_HEADER.style.setProperty('right', 0); 
         PAGE_HEADER.style.removeProperty('left'); 
     }
+    */
+    const IS_VERTICAL = ('vertical-rl' === document.querySelector('#writing-mode').value);
+    const ROOT = document.querySelector(':root');
+    const HEADING = document.getElementById('now-section-heading');
+    const ELAPSED = document.getElementById('elapsed-time');
+    const CLOCK = document.getElementById('clock');
+    /*
+    // text-align
+    getComputedStyle(CLOCK).setProperty('text-align', (IS_VERTICAL) ? 'start' : 'end');
+    getComputedStyle(HEADING).setProperty('text-align', (IS_VERTICAL) ? 'end' : 'start');
+    // order
+    getComputedStyle(CLOCK).setProperty('text-align', (IS_VERTICAL) ? 1 : 3);
+    getComputedStyle(HEADING).setProperty('text-align', (IS_VERTICAL) ? 3 : 1);
+    */
+    // text-align
+    ROOT.style.setProperty('--now-section-heading-text-align', (IS_VERTICAL) ? 'end' : 'start');
+    ROOT.style.setProperty('--clock-text-align', (IS_VERTICAL) ? 'start' : 'end');
+    // order
+    ROOT.style.setProperty('--now-section-heading-order', (IS_VERTICAL) ? 3 : 1);
+    ROOT.style.setProperty('--clock-order', (IS_VERTICAL) ? 1 : 3);
 }
+/*
 function setPageHeader() { // 柱（ページヘッダ）に現在表示中の章名（h1のinnerHTML）をセットする
     function getTarget() { // 監視対象要素（現在ページの先頭からみて最初にみつかったh1）を返す
         function cssI(key) { return parseInt(getComputedStyle(document.querySelector(':root')).getPropertyValue(key)); }
@@ -31,4 +53,4 @@ function setPageHeader() { // 柱（ページヘッダ）に現在表示中の�
     const TARGET = getTarget();
     document.querySelector('#page-header').setAttribute('heading', TARGET.innerHTML);
 }
-
+*/
