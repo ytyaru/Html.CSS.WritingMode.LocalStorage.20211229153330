@@ -61,7 +61,13 @@
     --read-rate-order:3;
     --read-rate-text-align:end;
     --remaining-pages-text-align:start;
+    --color-scheme: light; /* dark,light */
+    --background-color: white;
+    --color: black;
+    --a-color: blue;
+    --sub-font-color: #666666;
 }
+
 /* ノートPC 13インチ 1025〜1599px （1600px = (16px * 50字) * 2段）*/
 @media screen and (max-width: 1600px) {
 :root {
@@ -86,6 +92,24 @@
     --max-line-of-chars:var(--smartphone-ja-max-line-of-chars); /* 30 */
 }
 }
+/* Lightモード */
+@media (prefers-color-scheme: light) {
+:root {
+    --background-color: white;
+    --color: black;
+    --a-color: blue;
+    --sub-font-color: #666666;
+}
+}
+/* Darkモード */
+@media (prefers-color-scheme: dark) {
+:root {
+    --background-color: black;
+    --color: white;
+    --a-color: yellow;
+    --sub-font-color: #CCCCCC;
+}
+}
 /* fc-list | grep 'IPAex明朝' */
 @font-face {
     font-family: IPAex明朝;
@@ -108,6 +132,8 @@
     margin: 0;
 }
 body {
+    transition: background-color 2s linear;
+
     font-family: 'Noto Serif JP', 'IPAex明朝', serif; 
     font-size: calc(var(--font-size-px) * 1px);
     line-height: calc(var(--line-height) * 1em); /* 行間 1.5〜2.0 */
@@ -132,6 +158,8 @@ body {
     counter-reset: section page var(--page-index) heading var(--heading) remaining-pages var(--remaining-pages);
     /*counter-reset: section page var(--page-index) heading var(--heading);*/
     /*counter-reset: section page var(--page-index) heading var(--heading) read-rate var(--read-rate);*/
+    background-color: var(--background-color);
+    color: var(--color);
 }
 main {
     width: 100%;
@@ -158,7 +186,7 @@ p {
     */
     margin-block-end: calc(var(--p-margin-block-end-em) * 1em);
 }
-
+a { color: var(--a-color); }
 .upright {
     text-combine-upright: all; /* 縦中横 */
     letter-spacing: 0; /* 字間 */
@@ -200,7 +228,7 @@ h1::before {
     font-family: 'Noto Sans JP', 'IPAexゴシック', sans-serif; 
     font-size: calc(var(--font-size-px) * 1px * 0.7);
     font-feature-settings: "palt"; /* カーニング */
-    color: #666666;
+    color: var(--sub-font-color);
 
     writing-mode: horizontal-tb;
     position: fixed;
@@ -266,4 +294,16 @@ h1::before {
     /*content: '第' counter(section) '章 ' attr(heading);*/
     content: attr(heading);
 }
-
+/* コードが散在・重複してダサい。でもJSで動的に変更できないので仕方ない。クソ仕様。 */
+/*
+#color-scheme:checked {
+    --background-color: black;
+    --color: white;
+    --a-color: yellow;
+}
+#color-scheme:not(:checked) {
+    --background-color: white;
+    --color: black;
+    --a-color: blue;
+}
+*/

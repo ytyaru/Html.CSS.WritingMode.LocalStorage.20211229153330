@@ -1,6 +1,7 @@
 window.addEventListener('DOMContentLoaded', (event) => {
     initFullScreen();
     initWritingMode();
+    initColorScheme();
     initColumns();
     initLineOfChars();
     initLineHeight();
@@ -41,5 +42,12 @@ window.addEventListener("resize", function (e) { // 全画面やリサイズ時�
     setMaxLineOfChars(); // resize.js
     setFontSizePixel(document.querySelector('#writing-mode').value, parseInt(document.querySelector('#line-of-chars').value), parseFloat(document.querySelector('#letter-spacing').value)); // resize.js
     breakPage();
+});
+// OSのダークモード変更に合わせる
+window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
+    const COLOR_SCHEME = document.getElementById('color-scheme');
+    COLOR_SCHEME.value = event.matches ? 'dark' : 'light';
+    COLOR_SCHEME.innerText = event.matches ? '🌙' : '☀';
+    document.querySelector(':root').style.setProperty('--color-scheme', COLOR_SCHEME.value)
 });
 
