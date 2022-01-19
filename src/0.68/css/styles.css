@@ -66,6 +66,9 @@
     --color: black;
     --a-color: blue;
     --sub-font-color: #666666;
+
+    --cursor-x:0;
+    --cursor-y:0;
 }
 
 /* ノートPC 13インチ 1025〜1599px （1600px = (16px * 50字) * 2段）*/
@@ -130,8 +133,10 @@
 * {
     padding: 0;
     margin: 0;
+    cursor:none;
 }
 body {
+    cursor:none;
     transition: background-color 2s linear;
 
     font-family: 'Noto Serif JP', 'IPAex明朝', serif; 
@@ -316,3 +321,77 @@ dialog {
     --a-color: blue;
 }
 */
+
+#cursor, #cursor-follower {
+    /*border-radius: 50%;*/
+    position: absolute;
+    top: calc(var(--cursor-y) * 1px);
+    left: calc(var(--cursor-x) * 1px); 
+    cursor: none;
+    posinter-events: none;
+}
+#cursor {
+    width: 2em;
+    height: 2em;
+    /*background-color: var(--color);*/
+    z-index: 1001;
+}
+#cursor-follower {
+    width: 40px;
+    height: 40px;
+    background-color: #fdfe00;
+    z-indes: 1000; //カーソルの次に上になるようにする
+}
+.arrow-clippath {
+    position: relative;
+    display: inline-block;
+    width: 48px;
+    height: 48px;
+    background-color: #1E88E5;
+    clip-path: polygon(0 33%, 50% 33%, 50% 15%, 100% 50%, 50% 85%, 50% 67%, 0 67%);
+}
+.arrow-clippath-2 {
+    position: relative;
+    display: inline-block;
+    width: 48px;
+    height: 48px;
+    background-color: #1E88E5;
+    clip-path: polygon(0 33%, 50% 33%, 50% 15%, 100% 50%, 50% 85%, 50% 67%, 0 67%);
+    /*clip-path: path('M452.422,155.809c-36.6-36.713-87.875-59.612-143.837-59.578h-73.337V84.847V8.939L46.711,162.247 L235.248,315.57v-78.228v-8.269h73.337c19.694,0.033,36.924,7.799,49.906,20.658c12.868,12.99,20.634,30.212,20.667,49.914 c-0.033,19.702-7.8,36.924-20.667,49.897c-12.982,12.876-30.212,20.642-49.906,20.676H0v132.842h308.585  c55.962,0.033,107.237-22.866,143.837-59.578c36.698-36.6,59.612-87.875,59.578-143.837 C512.033,243.684,489.12,192.408,452.422,155.809z');*/
+    /*clip-path: path('M0.5,1 C0.5,1,0,0.7,0,0.3 A0.25,0.25,1,1,1,0.5,0.3 A0.25,0.25,1,1,1,1,0.3 C1,0.7,0.5,1,0.5,1 Z');*/
+    transform: rotate(180deg);
+}
+.arrow{
+    position: relative;
+    display: inline-block;
+    padding: 0 0 0 16px;
+    color: #000;
+    vertical-align: middle;
+    text-decoration: none;
+    font-size: 15px;
+}
+.arrow::before,
+.arrow::after{
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    margin: auto;
+    content: "";
+    vertical-align: middle;
+}
+.sample1-1::before{
+    left: 4px;
+    width: 5px;
+    height: 1px;
+    background: #7a0;
+}
+.sample1-1::after{
+    left: 4px;
+    width: 4px;
+    height: 4px;
+    border-top: 1px solid #7a0;
+    border-right: 1px solid #7a0;
+    -webkit-transform: rotate(45deg);
+    transform: rotate(45deg);
+}
