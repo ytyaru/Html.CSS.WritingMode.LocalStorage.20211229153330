@@ -15,7 +15,9 @@ function setClockAndElapsedTime() {
     // 経過時間
     const ELAPSED_TIME = Math.abs(NOW.getTime() - STARTUP_TIME.getTime());
     const EH = Math.floor(ELAPSED_TIME / (60*60*1000));
-    const EM = Math.floor(ELAPSED_TIME / (60*1000));
+//    const EM = Math.floor(ELAPSED_TIME / (60*1000)); // EHの時間分を引いてない！
+    const EM = Math.floor((ELAPSED_TIME % (60*60*1000)) / (60*1000));
+//    const EM = Math.floor((ELAPSED_TIME - (EH*60*60*1000)) / (60*1000));
     const EHS = (0 < EH) ? `${EH}h ` : '';
     document.getElementById("elapsed-time").innerHTML = `${EHS}${EM}m`;
     //console.log(EH, EM, STARTUP_TIME, NOW, ELAPSED_TIME, ELAPSED_TIME / (60*60*1000));
