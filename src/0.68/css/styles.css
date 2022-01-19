@@ -223,6 +223,15 @@ h1::before {
     counter-increment: section;
     content: '第' counter(section) '章 ';
 }
+dialog {
+    transition: background-color 2s linear;
+    background-color: var(--background-color);
+    color: var(--color);
+
+    font-family: 'Noto Sans JP', 'IPAexゴシック', sans-serif; 
+    font-size: var(--font-size-px);
+    font-feature-settings: "palt"; /* カーニング */
+}
 /* #page-footer, #page-side-left, #page-side-right */
 #page-header, #page-footer {
     font-family: 'Noto Sans JP', 'IPAexゴシック', sans-serif; 
