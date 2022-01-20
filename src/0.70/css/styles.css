@@ -201,8 +201,10 @@ img.icon {
     height: 1em;
 }
 button, input, select, textarea {
-  font-family : inherit;
-  font-size   : 100%;
+    font-family : inherit;
+    font-size   : 100%;
+    background-color: inherit;
+    color: inherit;
 }
 input[type="range"] {
     vertical-align: middle;
@@ -235,6 +237,9 @@ dialog {
     font-family: 'Noto Sans JP', 'IPAexゴシック', sans-serif; 
     font-size: var(--font-size-px);
     font-feature-settings: "palt"; /* カーニング */
+}
+button {
+
 }
 /* #page-footer, #page-side-left, #page-side-right */
 #page-header, #page-footer {
