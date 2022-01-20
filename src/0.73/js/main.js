@@ -6,6 +6,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
     initLineOfChars();
     initLineHeight();
     initLetterSpacing();
+    initMargin();
     initPaging();
     breakPage();
     setNowSectionHeading();
@@ -26,6 +27,7 @@ window.addEventListener('beforeunload', (event) => {
     saveWritingMode();
     saveLineOfChars();
     saveLineHeight();
+    saveMargin();
     saveLetterSpacing();
     removeClock();
 });
