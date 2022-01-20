@@ -229,6 +229,8 @@ h1::before {
     content: '第' counter(section) '章 ';
 }
 dialog {
+/*    z-indes: 900; // カーソルの下になるようにする*/
+/*    cursor: auto;*/
     transition: background-color 2s linear;
     background-color: var(--background-color);
     color: var(--color);
