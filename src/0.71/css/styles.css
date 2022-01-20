@@ -1,0 +1,455 @@
+@charset "utf-8";
+/* PC 13〜21インチ 1025px〜 */
+:root {
+    --min-font-size-px:10px;      /* 最小フォントサイズ（CSSピクセル単位） */
+    --standard-font-size-px:16px; /* 標準フォントサイズ（CSSピクセル単位） */
+    --min-line-height:1.5em;      /* 最小行間em */
+    --max-line-height:2.0em;      /* 最大行間em */
+    --min-letter-spacing:0.05em;  /* 最小字間em */
+    --max-letter-spacing:0.10em;  /* 最大字間em */
+    --en-char-weight:1.0; /* 英語   1字あたりの情報量（密度。重み） */
+    --ja-char-weight:2.5; /* 日本語 1字あたりの情報量（密度。重み） */
+    --ja-standard-line-of-chars:40;      /* 日本語標準字／行（CJK標準行中字数） */
+    --ja-max-standard-line-of-chars:50;  /* 日本語標準最大字／行（CJK標準行中最大字数） */
+    --en-standard-line-of-chars:80;      /* 英語標準字／行 */
+    --en-max-standard-line-of-chars:100; /* 英語標準最大字／行 */
+    --column-count:1;/* 現在段組数 localStorage || 1; // 1,2,3,... */
+    --column-count-min:1;/* 最小段組数 localStorage || 1; // 1,2,3,... */
+    --column-count-max:1;/* 最大段組数 localStorage || 1; // 1,2,3,... */
+    --smartphone-ja-min-line-of-chars:15; /* スマホ(7inch(320〜599px))における日本語の最小字／行 */
+    --smartphone-ja-max-line-of-chars:30; /* スマホ(7inch(320〜599px))における日本語の最大字／行 */
+    --tablet-ja-min-line-of-chars:20; /* タブレット(13inch(600〜1024px))における日本語の最小字／行 */
+    --tablet-ja-max-line-of-chars:40; /* タブレット(13inch(600〜1024px))における日本語の最大字／行 */
+    --is-full-screen:0; /* 全画面ON/OFF */
+
+    --line-of-chars:var(--ja-standard-line-of-chars);         /* 現在字／行 40 */
+    --min-line-of-chars:var(--ja-standard-line-of-chars);     /* 最小字／行 40 */
+    --max-line-of-chars:var(--ja-max-standard-line-of-chars); /* 最大字／行 50 */
+    --writing-mode:vertical-rl; /* 表記方向 */
+    --text-orientation:upright; /* 文字方向 */
+    --line-height:1.75;         /* 現在行間 1.5〜2.0em */
+    --letter-spacing:0.075;     /* 現在字間 0.05〜0.1em */
+
+    --line-of-px:1024; /* 1行の表示領域 */
+    --letter-spacing-px:calc(var(--font-size-px, var(--standard-font-size-px), 16) * var(--letter-spacing)); /* 字間 */
+    --all-letter-spacing-px:calc(var(--letter-spacing-px) * calc(var(--line-of-chars) - 1))
+    --font-size-px:calc((var(--line-of-px) - var(--all-letter-spacing-px)) / var(--line-of-chars)); /* 現在フォントサイズ（CSSピクセル単位）JSで算出する */
+
+    --column-gap-em:1;
+    --column-rule-width-px:1;
+    --p-margin-block-end-em:1;
+
+    --padding-left-em:2.5;
+    --padding-right-em:2.5;
+    --padding-top-em:2.5;
+    --padding-bottom-em:2.5;
+
+    --page-length:1;
+    --page-index:1;
+ 
+     /* page-header */
+    --heading:見出し;
+    --clock-order:1;
+    --clock-text-align:start;
+    --now-section-heading-order:3;
+    --now-section-heading-text-align:end;
+  
+   /* page-footer */ 
+    --read-rate:0; /* JSで実行する。CSSではできなかった。content要素にはvar()値をセットできない。counterなら可能だがpage-index / page-lengthをcalcで除算した結果は浮動少数型である。round()で丸めたがダメだった。 */
+    --remaining-pages:calc(var(--page-length) - var(--page-index));
+    --remaining-pages-order:1;
+    --read-rate-order:3;
+    --read-rate-text-align:end;
+    --remaining-pages-text-align:start;
+    --color-scheme: light; /* dark,light */
+    --background-color: white;
+    --color: black;
+    --a-color: blue;
+    --sub-font-color: #666666;
+    /*
+    --cursor-x:0;
+    --cursor-y:0;
+    */
+}
+
+/* ノートPC 13インチ 1025〜1599px （1600px = (16px * 50字) * 2段）*/
+@media screen and (max-width: 1600px) {
+:root {
+    --line-of-chars:35;
+    --min-line-of-chars:var(--tablet-ja-min-line-of-chars); /* 25 */
+    --max-line-of-chars:var(--tablet-ja-max-line-of-chars); /* 45 */
+}
+}
+/* タブレット 7〜13インチ 600〜1024px */
+@media screen and (max-width: 1024px) {
+:root {
+    --line-of-chars:30;
+    --min-line-of-chars:var(--tablet-ja-min-line-of-chars); /* 20 */
+    --max-line-of-chars:var(--tablet-ja-max-line-of-chars); /* 40 */
+}
+}
+/* スマホ 4〜7インチ 1〜599px  */
+@media screen and (max-width: 599px) {
+:root {
+    --line-of-chars:20;
+    --min-line-of-chars:var(--smartphone-ja-min-line-of-chars); /* 15 */
+    --max-line-of-chars:var(--smartphone-ja-max-line-of-chars); /* 30 */
+}
+}
+/* Lightモード */
+@media (prefers-color-scheme: light) {
+:root {
+    --background-color: white;
+    --color: black;
+    --a-color: blue;
+    --sub-font-color: #666666;
+}
+}
+/* Darkモード */
+@media (prefers-color-scheme: dark) {
+:root {
+    --background-color: black;
+    --color: white;
+    --a-color: yellow;
+    --sub-font-color: #CCCCCC;
+}
+}
+/* fc-list | grep 'IPAex明朝' */
+@font-face {
+    font-family: IPAex明朝;
+    src: local('IPAex明朝'), 
+         local('ipaexm.ttf') format('opentype'),
+         local('fonts-japanese-mincho.ttf') format('truetype'),
+         url('https://cdn.leafscape.be/IPAexfont/ipaexm_web.woff2') format("woff2");
+}
+@font-face {
+    font-family: IPAexゴシック;
+    src: local('IPAexゴシック'), 
+         local('IPAexGothic'), 
+         local('ipaexg.ttf') format('truetype'),
+         local('fonts-japanese-gothic.ttf') format('truetype'),
+         local('fonts-japanese-mincho.ttf') format('truetype'),
+         url('https://cdn.leafscape.be/IPAexfont/ipaexg_web.woff2') format("woff2");
+}
+* {
+    padding: 0;
+    margin: 0;
+}
+body {
+    transition: background-color 2s linear;
+
+    font-family: 'Noto Serif JP', 'IPAex明朝', serif; 
+    font-size: calc(var(--font-size-px) * 1px);
+    line-height: calc(var(--line-height) * 1em); /* 行間 1.5〜2.0 */
+    letter-spacing: calc(var(--letter-spacing-px) * 1px); /* 字間 0.05〜0.1 */
+
+    /* 縦置き／横置きでの自動サイズ調整無効化 */
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+
+    writing-mode: var(--writing-mode); /* vertical-rl, horizontal-tb */
+    text-orientation: var(--text-orientation); /* upright, sideways */
+
+    width: calc(100vw - calc(var(--padding-left-em)*1em) - calc(var(--padding-right-em)*1em));
+    height: calc(100vh - calc(var(--padding-top-em)*1em) - calc(var(--padding-bottom-em)*1em));
+    padding-top: calc(var(--padding-top-em) * 1em);
+    padding-bottom: calc(var(--padding-bottom-em) * 1em);
+    padding-left: calc(var(--padding-left-em) * 1em);
+    padding-right: calc(var(--padding-right-em) * 1em);
+
+    counter-reset: section page var(--page-index) heading var(--heading) remaining-pages var(--remaining-pages);
+    /*counter-reset: section page var(--page-index) heading var(--heading);*/
+    /*counter-reset: section page var(--page-index) heading var(--heading) read-rate var(--read-rate);*/
+    background-color: var(--background-color);
+    color: var(--color);
+}
+main {
+    width: 100%;
+    height: 100%;
+    column-count: var(--column-count);
+    column-span: none;
+    column-gap: calc(var(--column-gap-em) * 1em);
+    column-rule-width: calc(var(--column-rule-width-px) * 1px);
+    column-rule-style: solid;
+    column-rule-color: var(--sub-font-color);
+    overflow-x:hidden;
+    overflow-y:hidden;
+}
+p {
+/*    text-indent: 1em;*/ /* 字下げは文字でやる仕様にしたい。 */
+    /* https://tech-blog.cloud-config.jp/2020-04-16-the-outdated-css-property-width/ */
+    /* 
+       従来|現代
+       ----|----
+       top|inset-block-start
+       bottom|inset-block-end
+       left|inset-inline-start
+       right|inset-inline-end
+    */
+    margin-block-end: calc(var(--p-margin-block-end-em) * 1em);
+}
+a { color: var(--a-color); }
+.upright {
+    text-combine-upright: all; /* 縦中横 */
+    letter-spacing: 0; /* 字間 */
+    text-transform: full-width; /* 全字全角 */
+}
+img.icon {
+    width: 1em;
+    height: 1em;
+}
+button, input, select, textarea {
+    font-family : inherit;
+    font-size   : 100%;
+    background-color: inherit;
+    color: inherit;
+}
+input[type="range"] {
+    vertical-align: middle;
+}
+input[type='ranger'] > label > span:first-of-type { content: attr(value); }
+h1,h2,h3,h4,h5,h6 {
+    font-family: 'IPAexゴシック', sans-serif; 
+    font-feature-settings: "palt"; /* カーニング */
+    letter-spacing: 0px;
+}
+h1:not(:first-child) {
+    break-before: column; /* ページ、段組  always, all, page, column */
+}
+h1 {
+    font-size: calc(var(--font-size-px) * 1px * 2);
+    border-style: inset; /* none,hidden,dotted,dashed,solid,double,groove,ridge,inset,outset */
+    border-width: calc(var(--font-size-px) * 1px * 0.5);
+    padding: 0.5em;
+    margin-block-end: calc(var(--font-size-px) * 1px);
+}
+h1::before {
+    counter-increment: section;
+    content: '第' counter(section) '章 ';
+}
+dialog {
+    writing-mode: horizontal-tb;
+
+    /*transition: background-color 2s linear;*/
+    background-color: var(--background-color);
+    color: var(--color);
+
+    font-family: 'Noto Sans JP', 'IPAexゴシック', sans-serif; 
+    font-size: var(--font-size-px);
+    font-feature-settings: "palt"; /* カーニング */
+
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.5s, background-color 2s linear;
+
+    display: block;
+    /*                
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    */
+    /*
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    */
+    /*
+    top: 50%;
+    left: 50%;
+    */
+    top:var(--dialog-top);
+    left:var(--dialog-left);
+}
+dialog[open] {
+    opacity: 1;
+    pointer-events: inherit;
+    top:var(--dialog-top);
+    left:var(--dialog-left);
+    display: block;
+}
+/*
+dialog[close] {
+    display: block;
+    top:var(--dialog-top);
+    left:var(--dialog-left);
+}
+*/
+/*
+dialog[open]{
+    animation: fade 1s ease 0s 1 normal;
+}
+*/
+/*
+
+dialog::backdrop {
+    background-color: rgba(0,0,255, 0.2);
+}
+*/
+button {
+
+}
+/* #page-footer, #page-side-left, #page-side-right */
+#page-header, #page-footer {
+    font-family: 'Noto Sans JP', 'IPAexゴシック', sans-serif; 
+    font-size: calc(var(--font-size-px) * 1px * 0.7);
+    font-feature-settings: "palt"; /* カーニング */
+    color: var(--sub-font-color);
+
+    writing-mode: horizontal-tb;
+    position: fixed;
+    width: 100%;
+    left:0;
+}
+#page-header, #clock, #elapsed-time, #now-section-heading { /* 柱 */
+    text-align: start; /* start,end,center,justify */
+    top:0;
+}
+#page-header, #page-footer {
+    display:grid;
+    grid-template-columns: repeat(3, 1fr);
+}
+#page-footer, #read-rate, #page-number, #remaining-pages {
+    bottom:0;
+    left:0;
+    right:0;
+}
+#clock { /* 現在時刻 */
+    /*background-color:#FFFFAA;*/
+    text-align: var(--clock-text-align);
+    order: var(--clock-order);
+}
+#elapsed-time { /* 経過時間 */
+    /*background-color:#FFAAFF;*/
+    text-align: center;
+    order: 2;
+}
+#now-section-heading { /* 柱 */
+    /*background-color:#AAFFFF;*/
+    text-align: end;
+    text-align: var(--now-section-heading-text-align);
+    order: var(--now-section-heading-order);
+}
+#read-rate { /* 読了率 */
+    order: var(--read-rate-order);
+    text-align: var(--read-rate-text-align);
+    /*background-color:#AAAAFF;*/
+}
+#page-number { /* ノンブル */
+    order: 2;
+    text-align: center;
+    /*background-color:#FFAAAA;*/
+}
+#remaining-pages { /* 残りページ数 */
+    order: var(--remaining-pages-order);
+    text-align: var(--remaining-pages-text-align);
+    /*background-color:#AAFFAA;*/
+}
+/*
+#read-rate::before {
+    content: counter(read-rate) '%';
+}
+*/
+#page-number::before {
+    content: counter(page);
+}
+#remaining-pages::before {
+    content: 'あと ' counter(remaining-pages);
+}
+#now-section-heading::before  {
+    /*content: '第' counter(section) '章 ' attr(heading);*/
+    content: attr(heading);
+}
+/* コードが散在・重複してダサい。でもJSで動的に変更できないので仕方ない。クソ仕様。 */
+/*
+#color-scheme:checked {
+    --background-color: black;
+    --color: white;
+    --a-color: yellow;
+}
+#color-scheme:not(:checked) {
+    --background-color: white;
+    --color: black;
+    --a-color: blue;
+}
+*/
+
+#full-screen {
+    /*
+    width: 1em;
+    height: 1em;
+    */
+    background-image: url(var(--screen-mode-icon-url));
+}
+#full-screen > img {
+    width: 1em;
+    height: 1em;
+}
+
+.arrow-left {
+    position: relative;
+    display: inline-block;
+    width: 4em;
+    height: 4em;
+    /*background-color: var(--a-color);*/
+    clip-path: polygon(0 33%, 50% 33%, 50% 15%, 100% 50%, 50% 85%, 50% 67%, 0 67%);
+}
+.arrow-right {
+    position: relative;
+    display: inline-block;
+    width: 4em;
+    height: 4em;
+    /*background-color: var(--a-color);*/
+    clip-path: polygon(0 33%, 50% 33%, 50% 15%, 100% 50%, 50% 85%, 50% 67%, 0 67%);
+    transform: rotate(180deg);
+}
+.arrow-clippath-2 {
+    position: relative;
+    display: inline-block;
+    width: 48px;
+    height: 48px;
+    background-color: #1E88E5;
+    clip-path: polygon(0 33%, 50% 33%, 50% 15%, 100% 50%, 50% 85%, 50% 67%, 0 67%);
+    /*clip-path: path('M452.422,155.809c-36.6-36.713-87.875-59.612-143.837-59.578h-73.337V84.847V8.939L46.711,162.247 L235.248,315.57v-78.228v-8.269h73.337c19.694,0.033,36.924,7.799,49.906,20.658c12.868,12.99,20.634,30.212,20.667,49.914 c-0.033,19.702-7.8,36.924-20.667,49.897c-12.982,12.876-30.212,20.642-49.906,20.676H0v132.842h308.585  c55.962,0.033,107.237-22.866,143.837-59.578c36.698-36.6,59.612-87.875,59.578-143.837 C512.033,243.684,489.12,192.408,452.422,155.809z');*/
+    /*clip-path: path('M0.5,1 C0.5,1,0,0.7,0,0.3 A0.25,0.25,1,1,1,0.5,0.3 A0.25,0.25,1,1,1,1,0.3 C1,0.7,0.5,1,0.5,1 Z');*/
+    transform: rotate(180deg);
+}
+/*
+.arrow{
+    position: relative;
+    display: inline-block;
+    padding: 0 0 0 16px;
+    color: #000;
+    vertical-align: middle;
+    text-decoration: none;
+    font-size: 15px;
+}
+.arrow::before,
+.arrow::after{
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    margin: auto;
+    content: "";
+    vertical-align: middle;
+}
+.sample1-1::before{
+    left: 4px;
+    width: 5px;
+    height: 1px;
+    background: #7a0;
+}
+.sample1-1::after{
+    left: 4px;
+    width: 4px;
+    height: 4px;
+    border-top: 1px solid #7a0;
+    border-right: 1px solid #7a0;
+    -webkit-transform: rotate(45deg);
+    transform: rotate(45deg);
+}
+*/
