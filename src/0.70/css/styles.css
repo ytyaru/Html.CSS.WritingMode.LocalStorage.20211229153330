@@ -173,7 +173,7 @@ main {
     column-gap: calc(var(--column-gap-em) * 1em);
     column-rule-width: calc(var(--column-rule-width-px) * 1px);
     column-rule-style: solid;
-    column-rule-color: black;
+    column-rule-color: var(--sub-font-color);
     overflow-x:hidden;
     overflow-y:hidden;
 }
