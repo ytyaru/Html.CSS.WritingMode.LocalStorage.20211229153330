@@ -325,6 +325,19 @@ button {
     --a-color: blue;
 }
 */
+
+#full-screen {
+    /*
+    width: 1em;
+    height: 1em;
+    */
+    background-image: url(var(--screen-mode-icon-url));
+}
+#full-screen > img {
+    width: 1em;
+    height: 1em;
+}
+
 .arrow-left {
     position: relative;
     display: inline-block;
