@@ -74,6 +74,9 @@
     --read-rate-visibility:visible;
     --page-number-visibility:visible;
     --remaining-pages-visibility:visible;
+
+    /* light/darkをボタンで変更したときinvertされていないのを修正する。 */
+    --svg-invert:0;
 }
 
 /* ノートPC 13インチ 1025〜1599px （1600px = (16px * 50字) * 2段）*/
@@ -345,4 +348,5 @@ dialog {
 #full-screen > img, #writing-mode > img {
     width: 1em;
     height: 1em;
+    filter: invert(var(--svg-invert));
 }

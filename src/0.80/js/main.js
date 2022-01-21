@@ -49,9 +49,13 @@ window.addEventListener("resize", function (e) { // 全画面やリサイズ時�
 });
 // OSのダークモード変更に合わせる
 window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
+    /*
     const COLOR_SCHEME = document.getElementById('color-scheme');
     COLOR_SCHEME.value = event.matches ? 'dark' : 'light';
     COLOR_SCHEME.innerText = event.matches ? '🌙' : '☀';
-    document.querySelector(':root').style.setProperty('--color-scheme', COLOR_SCHEME.value)
+    document.querySelector(':root').style.setProperty('--color-scheme', COLOR_SCHEME.value);
+//    document.querySelector(':root').style.setProperty('--svg-invert', ('light' === COLOR_SCHEME.value) ? '0' : '1');
+    */
+    setColorScheme((!event.matches) ? 'dark' : 'light')
 });
 
