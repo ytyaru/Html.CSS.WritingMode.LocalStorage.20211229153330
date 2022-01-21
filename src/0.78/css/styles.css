@@ -116,6 +116,8 @@
     --a-color: blue;
     --sub-font-color: #666666;
 }
+body { transition: background-color 2s linear; }
+#full-screen > img { filter: invert(0); }
 }
 /* Darkモード */
 @media (prefers-color-scheme: dark) {
@@ -125,6 +127,8 @@
     --a-color: yellow;
     --sub-font-color: #CCCCCC;
 }
+body { transition: background-color 2s linear; }
+#full-screen > img { filter: invert(1); }
 }
 /* fc-list | grep 'IPAex明朝' */
 @font-face {
@@ -250,6 +254,8 @@ dialog {
     font-feature-settings: "palt"; /* カーニング */
 
     padding: 1em;
+
+    z-index: 99999;
 }
 /* #page-footer, #page-side-left, #page-side-right */
 #page-header, #page-footer { 
@@ -350,4 +356,7 @@ dialog {
     /*content: '第' counter(section) '章 ' attr(heading);*/
     content: attr(heading);
 }
-
+#full-screen > img {
+    width: 1em;
+    height: 1em;
+}
