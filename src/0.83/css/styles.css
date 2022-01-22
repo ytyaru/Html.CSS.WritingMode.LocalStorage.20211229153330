@@ -49,8 +49,8 @@
     /*
     --font-size-px:calc(((var(--line-of-px) / var(--column-count)) - (var(--column-rule-width-px) * (var(--column-count) - 1))) / (((var(--line-of-chars) + 1) )));
     */
-    /* なぜか1字分ズレる。22,23でさらに1字ズレる。この誤差は何？ */
-    --font-size-px:calc(((var(--line-of-px) / var(--column-count)) - (var(--column-rule-width-px) * (var(--column-count) - 1))) / (((var(--line-of-chars) * (1 + var(--letter-spacing))) )));
+    /* なぜか表示された文字は設定より1字分少ないときがある */
+    --font-size-px:calc(((var(--line-of-px) / var(--column-count)) - (var(--column-rule-width-px) * (var(--column-count) - 1))) / (((var(--line-of-chars) * (1 + var(--letter-spacing))) ) + (var(--column-gap-em) * (var(--column-count) - 1))) );
     /*
     --font-size-px:calc(((var(--line-of-px) / var(--column-count)) - (var(--column-rule-width-px) * (var(--column-count) - 1))) / (((var(--line-of-chars) ) )));
     --font-size-px:calc(((var(--line-of-px) / var(--column-count)) - (var(--column-rule-width-px) * (var(--column-count) - 1))) / (((var(--line-of-chars) * (1 + var(--letter-spacing))) + (var(--column-gap-em) / 2))));
