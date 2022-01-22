@@ -46,6 +46,10 @@
        なぜか表示された文字は設定より1字分少ないときがある。
     */
     --font-size-px:calc(((var(--line-of-px) / var(--column-count)) - (var(--column-rule-width-px) * (var(--column-count) - 1))) / (((var(--line-of-chars) * (1 + var(--letter-spacing))) ) + (var(--column-gap-em) * (var(--column-count) - 1))) );
+    /*
+    --inline-margin-px:0;
+    --font-size-px:calc(((var(--line-of-px) / var(--column-count)) - var(--inline-margin-px) - (var(--column-rule-width-px) * (var(--column-count) - 1))) / (((var(--line-of-chars) * (1 + var(--letter-spacing))) ) + (var(--column-gap-em) * (var(--column-count) - 1))) );
+    */
 
     --page-length:1;
     --page-index:1;

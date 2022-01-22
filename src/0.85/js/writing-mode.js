@@ -37,7 +37,8 @@ function initWritingMode() { // UI操作でフォントサイズを変更する
         toggleWritingModeToHtml(e);
         setMaxColumns(); // columns.js
         setMaxLineOfChars(); // MinFontSize.js
-        setFontSizePixel(e.target.value, parseInt(document.querySelector('#line-of-chars').value), parseFloat(document.querySelector('#letter-spacing').value));
+        // フォントサイズ再計算
+        setFontSizePixel();
         // 変更後にページ再計算
         breakPage();
         // 柱を左寄せ／右寄せする

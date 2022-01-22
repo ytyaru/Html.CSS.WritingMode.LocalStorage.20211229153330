@@ -2,8 +2,7 @@ function calcFontSizePixel() { // フォントサイズをピクセル単位で�
     function css(key, q=':root') { return getComputedStyle(document.querySelector(q)).getPropertyValue(key); }
     function cssF(key, q=':root') { return parseFloat(getComputedStyle(document.querySelector(q)).getPropertyValue(key)); }
     function setCss(key, value, q=':root') {document.querySelector(':root').style.setProperty(key, value);}
-    // １行の表示領域
-    setCss('--line-of-px', cssF('inline-size', 'main:not([hidden])'));
+    setCss('--line-of-px', cssF('inline-size', 'main:not([hidden])'));// １行の表示領域
     console.log(`font-size:${css('--font-size-px')}`)
     console.log(`font-size:${css('font-size', 'body')}`)
     console.log(`--line-of-px:${cssF('--line-of-px')}`)
