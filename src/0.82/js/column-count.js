@@ -53,6 +53,8 @@ function calcMaxColumns() { // 解像度と画面の向きから最小フォン�
 //    const LINE_OF_PX = ('vertical-rl' === writingMode) ? document.body.clientHeight : document.body.clientWidth;
     const MAIN = document.querySelector('main:not([hidden])');
 //    const LINE_OF_PX = ('vertical-rl' === writingMode) ? MAIN.clientHeight : MAIN.clientWidth;
+//    const W = cssF('width', 'main');
+//    const H = cssF('height', 'main');
     const W = cssF('width', 'main:not([hidden])');
     const H = cssF('height', 'main:not([hidden])');
     const LINE_OF_PX = ('vertical-rl' === writingMode) ? H : W;
