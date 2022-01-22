@@ -60,8 +60,6 @@ function calcMaxColumns() { // 解像度と画面の向きから最小フォン�
     const MAX_COLUMNS = parseInt((LINE_OF_PX / MIN_FONT_SIZE_PX) / JP_MAX_STANDARD_LINE_OF_CHARS);
     console.log(`最大段組数:${MAX_COLUMNS} ((１行あたりのサイズ/16px)/50字)=((${LINE_OF_PX}/${MIN_FONT_SIZE_PX})/${JP_MAX_STANDARD_LINE_OF_CHARS})=${LINE_OF_PX/MIN_FONT_SIZE_PX}/${JP_MAX_STANDARD_LINE_OF_CHARS}=${(LINE_OF_PX/MIN_FONT_SIZE_PX)/JP_MAX_STANDARD_LINE_OF_CHARS}`);
 
-//    console.log(`:${getComputedStyle(document.querySelector('main')).getPropertyValue('width')}`)
-//    console.log(`:${getComputedStyle(document.querySelector('main')).getPropertyValue('height')}`)
     console.log(`W:${W}, H:${H}, writingMode:${writingMode}, css('--writing-mode'):${css('--writing-mode')}`)
     return Math.max(1, MAX_COLUMNS);
 

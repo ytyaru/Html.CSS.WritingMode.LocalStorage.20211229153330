@@ -11,11 +11,8 @@ function initWritingMode() { // UI操作でフォントサイズを変更する
     function getFontSizeBaseValue(value) { return `100v${(isVartical(value)) ? 'h' : 'w'}`; }
     function switchWritingModeValue(value) { return ((isVartical(value)) ? 'horizontal-tb' : 'vertical-rl');}
     function getTextOrientationValue(writingMode) { return ((isVartical(writingMode)) ? 'upright' : 'sideways'); }
-    function setValues(e, value) {
-        e.value = value; // なぜかeだとvalueが更新されないのでwritingModeで更新した
+    function setValues(value) { // ボタン状態やCSS変数を現状にあわせてセットする
         writingMode.value = value;
-//        e.innerHTML = getButtonText(value);
-//        const URL = getAssetsUrl(`images/icons/writing-mode-${value}.svg`);
         const SWITCHED_MODE_VALUE = switchWritingModeValue(value);
         const URL = getAssetsUrl(`images/icons/writing-mode-${SWITCHED_MODE_VALUE}.svg`);
         const IMG = document.querySelector('#writing-mode > img');
@@ -25,17 +22,15 @@ function initWritingMode() { // UI操作でフォントサイズを変更する
         root.style.setProperty('--text-orientation', getTextOrientationValue(value));
         root.style.setProperty('--block-size-base', '100v' + ((isVartical(value)) ? 'w' : 'h'));
         root.style.setProperty('--inline-size-base', '100v' + ((isVartical(value)) ? 'h' : 'w'));
-        console.log(`表記方向:${getButtonText(value)}, e.value:${e.value}, SWITCHED_MODE_VALUE:${SWITCHED_MODE_VALUE }`);
+        console.log(`表記方向:${getButtonText(value)}`);
     }
     function loadWritingMode() {
         const loadedValue = localStorage.getItem('WritingMode') || getComputedStyle(root).getPropertyValue('--writing-mode');
-        setValues(writingMode, loadedValue );
+        setValues(loadedValue );
     }
     loadWritingMode();
-    function toggleWritingModeToHtml(e) { // CSSの変数をHTMLにセットする
-//        const switchedWritingMode = switchWritingModeValue(getComputedStyle(root).getPropertyValue('--writing-mode'));
-//        setValues(e.target, switchedWritingMode);
-        setValues(e.target, switchWritingModeValue(e.target.value));
+    function toggleWritingModeToHtml(e) {
+        setValues(switchWritingModeValue(e.target.value));
     }
     writingMode.addEventListener('click', e => {
         // writing-mode 変更処理
