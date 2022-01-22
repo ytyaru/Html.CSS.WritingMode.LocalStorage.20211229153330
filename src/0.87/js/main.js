@@ -22,7 +22,9 @@ window.addEventListener('load', (event) => {
     console.log("load");
     document.querySelector(':root').style.setProperty('--content-visibility', 'auto');
     // ページ計算が狂う。content-visibility:auto;にしたら非同期（バックグラウド）でbreakPage()を実行したい。それが完了するまでページ遷移させない。そうでないとページ計算が狂う。
-//    breakPage();
+    //breakPage();
+    // ページ移動も狂う。補足情報を表示しない状態で最初のページから移動すると２ページ飛ぶ。そして戻ろうとすると最初のページには戻れない。
+    // ノンブル表示も0。
 });
 window.addEventListener('beforeunload', (event) => {
     console.log("beforeunload");
