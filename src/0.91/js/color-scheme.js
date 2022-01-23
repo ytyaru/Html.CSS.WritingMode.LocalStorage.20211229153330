@@ -2,12 +2,19 @@ function setColorScheme(value) {
     function css(key) { return getComputedStyle(document.querySelector(':root')).getPropertyValue(key); }
     const STYLE = document.querySelector(':root').style;
     const IS_LIGHT = ('light' === value);
+    const FC = (IS_LIGHT) ? 'black' : 'white';
+    const BC = (IS_LIGHT) ? 'white' : 'black';
     STYLE.setProperty('--color-scheme', (IS_LIGHT) ? 'dark' : 'light');
-    STYLE.setProperty('--background-color', (IS_LIGHT) ? 'black' : 'white');
-    STYLE.setProperty('--color', (IS_LIGHT) ? 'white' : 'black');
+//    STYLE.setProperty('--background-color', (IS_LIGHT) ? 'black' : 'white');
+    STYLE.setProperty('--background-color', BC);
+//    STYLE.setProperty('--color', (IS_LIGHT) ? 'white' : 'black');
+    STYLE.setProperty('--color', FC);
     STYLE.setProperty('--a-color', (IS_LIGHT) ? 'yellow' : 'blue');
     STYLE.setProperty('--sub-font-color', (IS_LIGHT) ? '#CCCCCC' : '#666666');
     STYLE.setProperty('--svg-invert', (IS_LIGHT) ? '1' : '0');
+    STYLE.setProperty('--selected-background-color', (IS_LIGHT) ? 'lightcyan' : '#665500'); // saddlebrown
+    STYLE.setProperty('--selected-color', FC);
+    STYLE.setProperty('--disabled-color', (IS_LIGHT) ? '#AAAAAA' : '#AAAAAA');
 
     console.log(css('--svg-invert'));
     console.log(css('--background-color'));
@@ -15,6 +22,9 @@ function setColorScheme(value) {
     const COLOR_SCHEME = document.getElementById('color-scheme');
     COLOR_SCHEME.value = (IS_LIGHT) ? 'dark' : 'light';
     COLOR_SCHEME.innerText = (IS_LIGHT) ? '🌙' : '☀';
+
+    // 補足情報の色切替
+    for (const INPUT of getSettingSubInfoElements()) { setSettingSubInfoColor(INPUT); }
     /*
     if ('light' === value) {
         STYLE.setProperty('--color-scheme', 'dark')

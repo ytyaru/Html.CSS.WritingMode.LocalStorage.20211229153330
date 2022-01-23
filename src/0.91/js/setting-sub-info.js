@@ -7,9 +7,20 @@ function getSettingSubInfoElements() {
     const REMAINING_PAGES = document.getElementById('remaining-pages-visibility');
     return [CLOCK, ELAPSED_TIME, NOW_SECTION_HEADING, READ_RATE, PAGE_NUMBER, REMAINING_PAGES];
 }
+function setSettingSubInfoColor(INPUT) {
+    const SUB = document.getElementById('sub-info-disabled');
+    Css.Root.set('background-color', 
+                 (INPUT.checked) ? Css.Root.get('--selected-background-color') :  Css.Root.get('--background-color') , 
+                 `#${INPUT.id}-label`);
+    let color = Css.Root.get('--color');
+    if (INPUT.checked) { color = Css.Root.get('--selected-color'); }
+    if (!SUB.checked) { color = Css.Root.get('--disabled-color'); }
+    Css.Root.set('color', color, `#${INPUT.id}-label`);
+}
 function initSettingSubInfo() { // 補足情報（ページヘッダ、フッタ）の表示ON/OFF
 //    function css(key) { return STYLE.getPropertyValue(key); }
 //    function setCss(key, value) { return ROOT.style.setProperty(key, value); }
+    const SUB = document.getElementById('sub-info-disabled');
     function loadFromStorage(INPUT) {
         const VALUE = ('0' === localStorage.getItem(`${INPUT.id}`)) ? 'hidden' : 'visible';
         document.querySelector(':root').style.setProperty(`--${INPUT.id}`, VALUE);
@@ -40,14 +51,26 @@ function initSettingSubInfo() { // 補足情報（ページヘッダ、フッタ
             document.querySelector(':root').style.setProperty(`--${e.target.id}`, (e.target.checked) ? 'visible' : 'hidden');
 //            document.querySelector(':root').style.setProperty(`--${e.target.id}-background-color`, (e.target.checked) ? 'visible' : 'hidden');
 //            document.querySelector(':root').style.setProperty(`--${e.target.id}-color`, (e.target.checked) ? 'visible' : 'hidden');
+//            Css.Root.set(`--${e.target.id}-background-color`, (e.target.checked) ? 'visible' : 'hidden');
+//            Css.Root.set(`--${e.target.id}-color`, (e.target.checked) ? 'visible' : 'hidden');
+//            Css.Root.set('background-color', 
+//                         (e.target.checked) ? Css.Root.get('--selected-background-color') :  Css.Root.get('--background-color') , 
+//                         `#${e.target.id}-label`);
+//            Css.Root.set('color', 
+//                         (e.target.checked) ? Css.Root.get('--selected-color') : Css.Root.get('--color'), 
+//                         `#${e.target.id}-label`);
+
+//            setColor(e.target);
+            setSettingSubInfoColor(e.target);
             establishMargin();
         });
     }
     for (const INPUT of getSettingSubInfoElements()) {
         loadFromStorage(INPUT);
         addEvent(INPUT);
+//        setColor(INPUT);
+        setSettingSubInfoColor(INPUT);
     }
-    const SUB = document.getElementById('sub-info-disabled');
     SUB.addEventListener('change', (e)=>{
         document.querySelector('#sub-info-fieldset').disabled = !e.target.checked;
         const ROOT = document.querySelector(':root');
@@ -61,6 +84,9 @@ function initSettingSubInfo() { // 補足情報（ページヘッダ、フッタ
             ROOT.style.setProperty(name, getMarginValue(e.target.checked));
         }
         setFontSizePixel();
+        // 補足情報のグレーアウト表示切替
+        for (const INPUT of getSettingSubInfoElements()) { setSettingSubInfoColor(INPUT); }
+        Css.Root.set('color', (e.target.checked) ? Css.Root.get('--color') : Css.Root.get('--disabled-color'), `#margin ~ label`);
     });
     SUB.checked = ('1' === localStorage.getItem(`${SUB.id}`));
 //    SUB.dispatchEvent(new Event('change'));

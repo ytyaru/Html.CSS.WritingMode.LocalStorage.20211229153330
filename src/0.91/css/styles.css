@@ -65,7 +65,7 @@
     --color: black;
     --a-color: blue;
     --sub-font-color: #666666;
-    --selected-background-color: skyblue; /* 選択中。有効化中。checked,selected,hover,active。--colorと--backgorun-colorを反転する。 */
+    --selected-background-color: lightcyan; /* 選択中。有効化中。checked,selected,hover,active。--colorと--backgorun-colorを反転する。 */
     --selected-color: var(--color); /* 選択中。有効化中。checked,selected,hover,active。 */
     --disabled-color: #AAAAAA; /* 操作不能。--colorと--backgorun-colorの中間色にする。 */
 
@@ -114,6 +114,9 @@
     --color: black;
     --a-color: blue;
     --sub-font-color: #666666;
+    --selected-background-color: lightcyan;
+    --selected-color: var(--color);
+    --disabled-color: #AAAAAA;
 }
 body { transition: background-color 2s linear; }
 #full-screen > img { filter: invert(0); }
@@ -126,6 +129,9 @@ body { transition: background-color 2s linear; }
     --color: white;
     --a-color: yellow;
     --sub-font-color: #CCCCCC;
+    --selected-background-color: saddlebrown;
+    --selected-color: var(--color);
+    --disabled-color: #AAAAAA;
 }
 body { transition: background-color 2s linear; }
 #full-screen > img { filter: invert(1); }
@@ -296,6 +302,11 @@ dialog {
     border-color: var(--color);
     border-style: solid;
     border-width: 1px;
+    /*
+    background-color: var(--selected-background-color);
+    color: var(--selected-color);
+    */
+    transition: background-color 2s linear;
 }
 :is(#clock-visibility-label, #elapsed-time-visibility-label, #now-section-heading-visibility-label,#read-rate-visibility-label, #page-number-visibility-label, #remaining-pages-visibility-label):hover {
     background-color: var(--color);

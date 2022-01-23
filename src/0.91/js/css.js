@@ -13,7 +13,11 @@ const _Css = function() {
         const STYLE = (isNotComputed) ? this._element.style : this._style;
         return STYLE.getPropertyValue(key); 
     }
-    _Root.prototype.set = function(key, value) { this._element.style.setProperty(key, value); }
+    _Root.prototype.set = function(key, value, q=null) {
+        const ELEMENT = (q) ? document.querySelector(q) : this._element;
+        ELEMENT.style.setProperty(key, value);
+//        this._element.style.setProperty(key, value);
+    }
     this._root = new _Root();
 }
 const Css = new _Css();
