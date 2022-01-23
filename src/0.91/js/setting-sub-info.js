@@ -8,6 +8,8 @@ function getSettingSubInfoElements() {
     return [CLOCK, ELAPSED_TIME, NOW_SECTION_HEADING, READ_RATE, PAGE_NUMBER, REMAINING_PAGES];
 }
 function initSettingSubInfo() { // 補足情報（ページヘッダ、フッタ）の表示ON/OFF
+//    function css(key) { return STYLE.getPropertyValue(key); }
+//    function setCss(key, value) { return ROOT.style.setProperty(key, value); }
     function loadFromStorage(INPUT) {
         const VALUE = ('0' === localStorage.getItem(`${INPUT.id}`)) ? 'hidden' : 'visible';
         document.querySelector(':root').style.setProperty(`--${INPUT.id}`, VALUE);
@@ -36,6 +38,8 @@ function initSettingSubInfo() { // 補足情報（ページヘッダ、フッタ
     function addEvent(INPUT) { // UI操作イベントを実装する
         INPUT.addEventListener('change', (e)=>{
             document.querySelector(':root').style.setProperty(`--${e.target.id}`, (e.target.checked) ? 'visible' : 'hidden');
+//            document.querySelector(':root').style.setProperty(`--${e.target.id}-background-color`, (e.target.checked) ? 'visible' : 'hidden');
+//            document.querySelector(':root').style.setProperty(`--${e.target.id}-color`, (e.target.checked) ? 'visible' : 'hidden');
             establishMargin();
         });
     }
