@@ -223,10 +223,11 @@ img.icon {
     width: 1em;
     height: 1em;
 }
-button, input, select, textarea {
+button, input, select, textarea, label {
     transition: background-color 2s linear;
 
-    font-family : inherit;
+    font-family: 'Noto Sans JP', 'IPAexゴシック', sans-serif; 
+    /*font-family : inherit;*/
     font-size   : 100%;
     background-color: inherit;
     color: inherit;
@@ -240,7 +241,8 @@ input[type="range"] {
 }
 input[type='ranger'] > label > span:first-of-type { content: attr(value); }
 h1,h2,h3,h4,h5,h6 {
-    font-family: 'IPAexゴシック', sans-serif; 
+    font-family: 'Noto Sans JP', 'IPAexゴシック', sans-serif; 
+    /*font-family: 'IPAexゴシック', sans-serif; */
     font-feature-settings: "palt"; /* カーニング */
     letter-spacing: 0px;
 }
