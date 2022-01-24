@@ -82,7 +82,6 @@ function defineScreen() { // 画面領域・役割・クリックしたときの
     }
     const ScreenArea = new _ScreenArea();
     ScreenArea.Primary = ScreenArea.Primarys.LeftRight; // 四隅は左右だと判定する
-    //defineConst('ScreenArea', new ScreenArea());
     
     //------------------------------
     // 役割
@@ -126,7 +125,6 @@ function defineScreen() { // 画面領域・役割・クリックしたときの
         }
     }
     const ScreenAreaRole = new _ScreenAreaRole();
-//    defineConst('ScreenRole', new _ScreenRole());
 
     //------------------------------
     // 処理
@@ -163,14 +161,12 @@ function defineScreen() { // 画面領域・役割・クリックしたときの
             case self.Roles.PagingBack: return Paging.Page--;
             case self.Roles.PagingFirst: return Paging.Page = 1; 
             case self.Roles.PagingLast: return Paging.Page = -1;
-            case self.Roles.ToggleMenuSetting: return toggleDialog(Html.id('setting'));
-
             case self.Roles.Paging: return; 
             case self.Roles.PagingSet: return; 
             case self.Roles.PagingAuto: return; 
             case self.Roles.ToggleMenu: return; 
             case self.Roles.ToggleMenuIndex: return; 
-            case self.Roles.ToggleMenuSetting: return; 
+            case self.Roles.ToggleMenuSetting: return toggleDialog(Html.id('setting'));
             case self.Roles.ToggleMenuTools: return; 
             default: return;
         }
@@ -194,20 +190,16 @@ function defineScreen() { // 画面領域・役割・クリックしたときの
         switch (ROLE) {
             case self.Roles.PagingForward: return getCssCursor(getForwardIconUrl(), getCursorName(ROLE));
             case self.Roles.PagingBack: return getCssCursor(getBackIconUrl(), getCursorName(ROLE));
-            case self.Roles.ToggleMenuSetting: return `url("${getAssetsUrl("images/cursors/" + COLOR_SCHEME + "/setting-16x16.png")}"), auto`;
-            /*
-            case ROLE_PAGING_FIRST: return ; 
-            case ROLE_PAGING_LAST: return ; 
-            case ROLE_TOGGLE_MENU_SETTING: return;
+            case self.Roles.PagingFirst: return ; 
+            case self.Roles.PagingLast: return ; 
 
-            case ROLE_PAGING: return; 
-            case ROLE_PAGING_SET: return; 
-            case ROLE_PAGING_AUTO: return; 
-            case ROLE_TOGGLE_MENU: return; 
-            case ROLE_TOGGLE_MENU_INDEX: return; 
-            case ROLE_TOGGLE_MENU_SETTING: return; 
-            case ROLE_TOGGLE_MENU_TOOLS: return; 
-            */
+            case self.Roles.Paging: return; 
+            case self.Roles.PagingSet: return; 
+            case self.Roles.PagingAuto: return; 
+            case self.Roles.ToggleMenu: return; 
+            case self.Roles.ToggleMenuIndex: return; 
+            case self.Roles.ToggleMenuSetting: return `url("${getAssetsUrl("images/cursors/" + COLOR_SCHEME + "/setting-16x16.png")}"), auto`;
+            case self.Roles.ToggleMenuTools: return; 
             default: return 'auto';
         }
     }
