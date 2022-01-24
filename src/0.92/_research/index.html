@@ -1,0 +1,55 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title></title>
+<script>
+window.addEventListener('DOMContentLoaded', (event) => {
+    const Paging = function() {
+        this._page = 1; // 現在ページ（旧--page-index）
+        this._count = 1; // 全ページ数（旧--page-length）
+    }
+    Object.defineProperties(Paging.prototype, {
+        Page: {
+            get: function() { return this._page; },
+            set: function(v) { // 指定したページへ移動する。インクリメントやデクリメントで相対移動できる
+                console.log(`現在値:${this._page}, 新しい値:${v}`);
+                this._page = v;
+                this.break();
+            }
+        },
+    });
+    Paging.prototype.break = function() { // 画面サイズに応じてページを区切る
+        console.log(`break method メンバ変数を参照できる。:${this._page}`);
+        console.log(`break method メンバ変数を参照できる。:${this.Page}`);
+        this.method1(); // メンバメソッドを呼び出せる
+    }
+    Paging.prototype.method1 = function() { // 画面サイズに応じてページを区切る
+        console.log('method1 method')
+    }
+    const paging = new Paging();
+    console.log(paging.Page);
+    console.assert(1 === paging.Page);
+    paging.Page = 2;
+    console.log(paging.Page);
+    console.assert(2 === paging.Page);
+    paging.Page++;
+    console.assert(3 === paging.Page);
+    console.log(paging.Page);
+    paging.Page--
+    console.assert(2 === paging.Page);
+    console.log(paging.Page);
+    paging.Page += 2
+    console.assert(4 === paging.Page);
+    console.log(paging.Page);
+    paging.Page -= 2
+    console.assert(2 === paging.Page);
+    console.log(paging.Page);
+    paging.break();
+});
+</script>
+</head>
+<body>
+    <p>開発者ツールでコンソールをみてください。</p>
+</body>
+</html>
