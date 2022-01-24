@@ -137,6 +137,9 @@ window.addEventListener("keypress", event => { // キーボード
     else if (event.key === 'F') {
         setFullScreen(!(document.fullscreenElement));
     }
+    else if (event.key === 'w') {
+        document.getElementById('writing-mode').dispatchEvent(new Event('click'));
+    }
     else {}
 }, {passive: false});
 
