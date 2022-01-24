@@ -134,6 +134,9 @@ window.addEventListener("keypress", event => { // キーボード
         const COLOR_SCHEME = document.getElementById('color-scheme');
         setColorScheme(COLOR_SCHEME.value);
     }
+    else if (event.key === 'F') {
+        setFullScreen(!(document.fullscreenElement));
+    }
     else {}
 }, {passive: false});
 
