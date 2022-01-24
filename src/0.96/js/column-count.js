@@ -49,8 +49,8 @@ function setMaxColumns() {
     console.log(`最大段組数:${columns.max} 現在段組数:${columns.value}`);
 }
 function calcMaxColumns() { // 解像度と画面の向きから最小フォントサイズ（16px）字で段組みするときの最大段組数を算出する
-    function css(key, q=':root') { return getComputedStyle(document.querySelector(q)).getPropertyValue(key); }
-    function cssF(key, q=':root') { return parseFloat(getComputedStyle(document.querySelector(q)).getPropertyValue(key)); }
+//    function css(key, q=':root') { return getComputedStyle(document.querySelector(q)).getPropertyValue(key); }
+//    function cssF(key, q=':root') { return parseFloat(getComputedStyle(document.querySelector(q)).getPropertyValue(key)); }
     const MIN_FONT_SIZE_PX = 16; // px。各ブラウザによって9px,10pxだったりする。ただし段組みするときの最小フォントは16pxとする。
     const writingMode = document.querySelector('#writing-mode').value;
 //    const LINE_OF_PX = ('vertical-rl' === writingMode) ? document.body.clientHeight : document.body.clientWidth;
@@ -58,14 +58,17 @@ function calcMaxColumns() { // 解像度と画面の向きから最小フォン�
 //    const LINE_OF_PX = ('vertical-rl' === writingMode) ? MAIN.clientHeight : MAIN.clientWidth;
 //    const W = cssF('width', 'main');
 //    const H = cssF('height', 'main');
-    const W = cssF('width', 'main:not([hidden])');
-    const H = cssF('height', 'main:not([hidden])');
+//    const W = cssF('width', 'main:not([hidden])');
+//    const H = cssF('height', 'main:not([hidden])');
+    const W = parseFloat(Css.Main.get('width'));
+    const H = parseFloat(Css.Main.get('height'));
     const LINE_OF_PX = ('vertical-rl' === writingMode) ? H : W;
     const JP_MAX_STANDARD_LINE_OF_CHARS= getComputedStyle(document.querySelector(':root')).getPropertyValue('--ja-max-standard-line-of-chars');
     const MAX_COLUMNS = parseInt((LINE_OF_PX / MIN_FONT_SIZE_PX) / JP_MAX_STANDARD_LINE_OF_CHARS);
     console.log(`最大段組数:${MAX_COLUMNS} ((１行あたりのサイズ/16px)/50字)=((${LINE_OF_PX}/${MIN_FONT_SIZE_PX})/${JP_MAX_STANDARD_LINE_OF_CHARS})=${LINE_OF_PX/MIN_FONT_SIZE_PX}/${JP_MAX_STANDARD_LINE_OF_CHARS}=${(LINE_OF_PX/MIN_FONT_SIZE_PX)/JP_MAX_STANDARD_LINE_OF_CHARS}`);
 
-    console.log(`W:${W}, H:${H}, writingMode:${writingMode}, css('--writing-mode'):${css('--writing-mode')}`)
+//    console.log(`W:${W}, H:${H}, writingMode:${writingMode}, css('--writing-mode'):${css('--writing-mode')}`)
+    console.log(`W:${W}, H:${H}, writingMode:${writingMode}`)
     return Math.max(1, MAX_COLUMNS);
 
     // 2段 = ((1600px / 16px ) / 50)。１行あたりのサイズが1600px以上でなければ段組みできない計算である。

@@ -11,7 +11,8 @@ const ROLE_TOGGLE_MENU_INDEX = 200;   // index
 const ROLE_TOGGLE_MENU_SETTING = 201; // setting
 const ROLE_TOGGLE_MENU_TOOLS = 202;   // tools
 function getScreenAreaRole(x, y) { // 画面エリアに応じた役割を返す
-    const IS_VERTICAL = ('vertical-rl' === document.querySelector('#writing-mode').value);
+    //const IS_VERTICAL = ('vertical-rl' === document.querySelector('#writing-mode').value);
+    const IS_VERTICAL = ('vertical-rl' === Html.id('writing-mode').value);
     switch(getScreenArea(x, y, vertexPattern=VP_LEFT_RIGHT)) {
         case POS_LEFT: return (IS_VERTICAL) ? ROLE_PAGING_FORWARD : ROLE_PAGING_BACK;  // 右綴じ／左綴じ
         case POS_RIGHT: return (IS_VERTICAL) ? ROLE_PAGING_BACK : ROLE_PAGING_FORWARD; // 右綴じ／左綴じ

@@ -13,8 +13,10 @@ const VP_TOP_BOTTOM = 1; // 四隅のとき上下を返す
 const VP_LEFT_RIGHT = 2; // 四隅のとき左右を返す
 function getScreenArea(x, y, vertexPattern=VP_VERTEX) {
     const CLICK_SIZE_RATIO = 0.1; // 画面サイズに対するクリック領域比
-    const WIDTH = document.body.clientWidth; // 画面サイズ
-    const HEIGHT = document.body.clientHeight; // 画面サイズ
+    //const WIDTH = document.body.clientWidth; // 画面サイズ
+    //const HEIGHT = document.body.clientHeight; // 画面サイズ
+    const WIDTH = parseFloat(Css.Body.get('width')); // 画面サイズ
+    const HEIGHT = parseFloat(Css.Body.get('height')); // 画面サイズ
     const CLICK_W = WIDTH * CLICK_SIZE_RATIO; // クリック領域サイズ
     const CLICK_H = HEIGHT * CLICK_SIZE_RATIO; // クリック領域サイズ
 

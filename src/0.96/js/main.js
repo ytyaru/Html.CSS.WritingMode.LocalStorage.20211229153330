@@ -1,4 +1,5 @@
 window.addEventListener('DOMContentLoaded', (event) => {
+    defineConst('Html', defineHtml());
     defineConst('Css', defineCss());
     initFullScreen();
     initWritingMode();
@@ -112,9 +113,13 @@ window.addEventListener("keypress", event => { // キーボード
     // 'u' undo 前の移動を取り消す
     // 'm' move 移動するページを絶対値で指定する
     else if (event.key === 'm') {
+        /*
         function cssI(key) { return parseInt(getComputedStyle(document.querySelector(':root')).getPropertyValue(key)); }
         const page = window.prompt('何ページ目に移動しますか？', `${cssI('--page-index')}`)
 //        movePage(parseInt(page));
+        Paging.Page = parseInt(page);
+        */
+        const page = window.prompt('何ページ目に移動しますか？', `${Paging.Page}`);
         Paging.Page = parseInt(page);
     }
     // 'h' here 現在ここは何ページ目かを表示する

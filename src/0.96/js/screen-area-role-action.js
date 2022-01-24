@@ -19,7 +19,8 @@ function runScreenAreaRole(x, y) { // 画面エリアに応じた役割を実行
         case ROLE_PAGING_BACK: return Paging.Page--;
         case ROLE_PAGING_FIRST: return Paging.Page = 1; 
         case ROLE_PAGING_LAST: return Paging.Page = -1;
-        case ROLE_TOGGLE_MENU_SETTING: return toggleDialog(document.querySelector('#setting'));
+        case ROLE_TOGGLE_MENU_SETTING: return toggleDialog(Html.id('setting'));
+        //case ROLE_TOGGLE_MENU_SETTING: return toggleDialog(document.querySelector('#setting'));
 
         case ROLE_PAGING: return; 
         case ROLE_PAGING_SET: return; 
@@ -32,7 +33,8 @@ function runScreenAreaRole(x, y) { // 画面エリアに応じた役割を実行
     }
 }
 function getCursorScreenAreaRole(x, y) { // 画面エリアの役割に応じたマウスカーソルを返す
-    const IS_VERTICAL = ('vertical-rl' === document.querySelector('#writing-mode').value);
+    //const IS_VERTICAL = ('vertical-rl' === document.querySelector('#writing-mode').value);
+    const IS_VERTICAL = ('vertical-rl' === Html.id('writing-mode').value);
     const COLOR_SCHEME = document.getElementById('color-scheme').value;
     function getPagingIconUrl(TYPE, DIR) { return getAssetsUrl(`images/cursors/${COLOR_SCHEME}/${TYPE}-${DIR}-16x16.png`); }
     function getForwardIconUrl() { return getPagingIconUrl('arrow', (IS_VERTICAL) ? 'left' : 'right'); }

@@ -4,11 +4,13 @@ function saveLetterSpacing() {
 }
 function initLetterSpacing() { // UI操作で行間を変更する
     function getLetterSpacingFromCss() { // CSSの変数を取得する
-        const root = document.querySelector(':root');
+//        const root = document.querySelector(':root');
+        const root = Html.Root;
         const value = ('letter-spacing' in localStorage) ? localStorage.getItem('letter-spacing') : getComputedStyle(root).getPropertyValue('--letter-spacing');
         return [root, value];
     }
-    const letterSpacing = document.querySelector('#letter-spacing');
+//    const letterSpacing = document.querySelector('#letter-spacing');
+    const letterSpacing = Html.id('letter-spacing');
     const [root, value] = getLetterSpacingFromCss();
     letterSpacing.value = value;
 
@@ -17,8 +19,10 @@ function initLetterSpacing() { // UI操作で行間を変更する
         return Math.round(value * inv) / inv;
     }
     function setLetterSpacingToHtml(value) { // CSSの変数をHTMLにセットする
-        root.style.setProperty('--letter-spacing', `${value}`);
-        document.querySelector('#letter-spacing-label').innerHTML = round(value * 100, 0.5);
+//        root.style.setProperty('--letter-spacing', `${value}`);
+        Css.Root.set('--letter-spacing', `${value}`);
+//        document.querySelector('#letter-spacing-label').innerHTML = round(value * 100, 0.5);
+        Html.id('letter-spacing-label').innerHTML = round(value * 100, 0.5);
         console.log(`${value}em字間`);
         setFontSizePixel(); // resize.js
     }
@@ -29,7 +33,8 @@ function initLetterSpacing() { // UI操作で行間を変更する
     });
     //letterSpacing.dispatchEvent(new Event('input'));
 //    setLetterSpacingToHtml(value);
-    root.style.setProperty('--letter-spacing', `${value}`);
+//    root.style.setProperty('--letter-spacing', `${value}`);
+    Css.Root.set('--letter-spacing', `${value}`)
     document.querySelector('#letter-spacing-label').innerHTML = round(value * 100, 0.5);
     return letterSpacing;
 }

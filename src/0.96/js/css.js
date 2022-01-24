@@ -2,13 +2,13 @@ function defineCss() {
     const Css = function() {
         const _Element = function(element) { // 指定した要素のCSSを取得・設定する
             this._element = element;
-            console.log(this, element)
+//            console.log(this, element)
         }
         Object.defineProperties(_Element.prototype, {
             Element: { get: function() { return this._element; } }
         });
         _Element.prototype.get = function(key, isNotComputed=false) {
-            console.log(this, this._element)
+//            console.log(this, this._element)
             const self = this;
             const STYLE = (isNotComputed) ? self._element.style : getComputedStyle(self._element);
             return STYLE.getPropertyValue(key); 
@@ -32,10 +32,10 @@ function defineCss() {
         this._root = new _Element(document.querySelector(':root'));
         this._body = new _Element(document.querySelector('body'));
         this._main = new _Element(document.querySelector('main:not([hidden])'));
+        /*
         console.log(document.querySelector(':root'));
         console.log(document.querySelector('body'));
         console.log(document.querySelector('main:not([hidden])'));
-        /*
         */
     }
     Object.defineProperties(Css.prototype, {

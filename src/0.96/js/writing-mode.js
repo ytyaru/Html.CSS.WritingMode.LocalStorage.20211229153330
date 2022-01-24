@@ -4,8 +4,10 @@ function saveWritingMode() {
 }
 function isVartical(value=null) { return ('vertical-rl' === (value || document.querySelector('#writing-mode').value)); }
 function initWritingMode() { // UI操作でフォントサイズを変更する
-    const root = document.querySelector(':root');
-    const writingMode = document.querySelector('#writing-mode');
+//    const root = document.querySelector(':root');
+    const root = Html.Root;
+//    const writingMode = document.querySelector('#writing-mode');
+    const writingMode = Html.id('writing-mode');
     function getButtonValue(value) { return ((isVartical(value)) ? 'vertical-rl' : 'horizontal-tb'); }
     function getButtonText(value) { return ((isVartical(value)) ? '縦' : '横'); }
     function getFontSizeBaseValue(value) { return `100v${(isVartical(value)) ? 'h' : 'w'}`; }
