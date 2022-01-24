@@ -1,3 +1,9 @@
+function defineScreenAreaRollAction() {
+    const ScreenAreaRollAction = function() {}
+    ScreenAreaRollAction.prototype.is = function(x, y) {// 画面エリアに応じた役割を実行する
+    return new ScreenAreaRollAction();
+}
+
 function runScreenAreaRole(x, y) { // 画面エリアに応じた役割を実行する
     function toggleDialog(dialog) {
         //centering(dialog);

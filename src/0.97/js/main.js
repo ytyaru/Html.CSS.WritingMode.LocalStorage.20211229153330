@@ -1,6 +1,7 @@
 window.addEventListener('DOMContentLoaded', (event) => {
     defineConst('Html', defineHtml());
     defineConst('Css', defineCss());
+    defineConst('Screen', defineScreen());
     initFullScreen();
     initWritingMode();
     initColorScheme();
@@ -62,17 +63,20 @@ window.addEventListener('touchstart', (event) => { // タッチ
     console.log('touchstart', event);
     const setting = document.querySelector('#setting');
     if (setting.open) { if(!event.target.closest('#setting > form[method="dialog"]')) {setting.close();} return; }
-    runScreenAreaRole(event.touches[0].X, event.touches[0].Y);
+//    runScreenAreaRole(event.touches[0].X, event.touches[0].Y);
+    Screen.on(event.touches[0].X, event.touches[0].Y);
 });
 window.addEventListener('click', (event) => { // マウス（クリック）
     const setting = document.querySelector('#setting');
     if (setting.open) { if(!event.target.closest('#setting > form[method="dialog"]')) {setting.close();} return; }
-    runScreenAreaRole(event.clientX, event.clientY);
+//    runScreenAreaRole(event.clientX, event.clientY);
+    Screen.on(event.clientX, event.clientY);
 });
 window.addEventListener('mousemove', (event) => { // マウス（移動）
     if (document.querySelector('#setting').open) { return; }
     // body内に要素がない領域は反応しない！　末尾ページは下端までない箇所では反応しない！
-    document.body.style.cursor = getCursorScreenAreaRole(event.clientX, event.clientY);
+    //document.body.style.cursor = getCursorScreenAreaRole(event.clientX, event.clientY);
+    document.body.style.cursor = Screen.cursor(event.clientX, event.clientY);
 });
 window.addEventListener("keydown", event => { // キーボード
     if (event.repeat) { return; } // 押しっぱなしによる連続入力の禁止
