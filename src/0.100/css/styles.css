@@ -199,10 +199,29 @@ body {
 
     width: calc(100vw - var(--padding-left) - var(--padding-right));
     height: calc(100vh - var(--padding-top) - var(--padding-bottom));
+    /*
+    */
+    /*
+    display: grid;
+    grid-template-rows: 1fr;
+    grid-template-columns: 1fr;
+    */
+    /*
+    width: 100%;
+    height: 100%;
+    */
     padding-top: var(--padding-top);
     padding-bottom: var(--padding-bottom);
     padding-left: var(--padding-left);
     padding-right: var(--padding-right);
+    /*
+    */
+    /*
+    margin-top: var(--padding-top);
+    margin-bottom: var(--padding-bottom);
+    margin-left: var(--padding-left);
+    margin-right: var(--padding-right);
+    */
     /*
     width: calc(100vw - calc(var(--padding-left-em)*1em) - calc(var(--padding-right-em)*1em));
     height: calc(100vh - calc(var(--padding-top-em)*1em) - calc(var(--padding-bottom-em)*1em));
