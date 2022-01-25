@@ -34,10 +34,11 @@
 
 
     --column-gap:1em;
+    --column-rule-width:1px;
     /*
     --column-gap-em:1;
-    */
     --column-rule-width-px:1;
+    */
     --p-margin-block-end-em:1;
 
     --padding-left:2.5em;
@@ -226,7 +227,8 @@ main {
     column-span: none;
     column-gap: var(--column-gap);
     /*column-gap: calc(var(--column-gap-em) * 1em);*/
-    column-rule-width: calc(var(--column-rule-width-px) * 1px);
+    /*column-rule-width: calc(var(--column-rule-width-px) * 1px);*/
+    column-rule-width: var(--column-rule-width);
     column-rule-style: solid;
     column-rule-color: var(--sub-font-color);
     overflow-x:hidden;

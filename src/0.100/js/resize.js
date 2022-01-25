@@ -9,7 +9,8 @@ function setFontSizePixel() { // フォントサイズをピクセル単位で�
     const COL_COUNT= parseInt(document.getElementById('column-count').value);
     //const COL_GAP_EM = parseFloat(Css.Root.get('--column-gap-em'));
     const COL_GAP_EM = parseFloat(Css.Root.get('--column-gap'));
-    const COL_RULE_W = parseFloat(Css.Root.get('--column-rule-width-px'));
+    //const COL_RULE_W = parseFloat(Css.Root.get('--column-rule-width-px'));
+    const COL_RULE_W = parseFloat(Css.Root.get('--column-rule-width'));
 //    const fontSizePx = (LINE_OF_PX / COL_COUNT) / ((lineOfChars * (1 + letterSpacing)) + (COL_GAP_EM / 2));
 //    const fontSizePx = ((LINE_OF_PX / COL_COUNT) - (COL_RULE_W * (COL_COUNT - 1))) / ((lineOfChars * (1 + letterSpacing)) + (COL_GAP_EM / 2));
     const fontSizePx = ((LINE_OF_PX / COL_COUNT) - (COL_RULE_W * (COL_COUNT - 1))) / ((LINE_OF_CHARS * (1 + LETTER_SPACING)) + (COL_GAP_EM * (COL_COUNT - 1)));
