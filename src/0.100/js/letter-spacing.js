@@ -5,8 +5,9 @@ function saveLetterSpacing() {
 function initLetterSpacing() { // UI操作で行間を変更する
     function getLetterSpacingFromCss() { // CSSの変数を取得する
         const root = Html.Root;
-        const value = localStorage.getItem('letter-spacing') || getComputedStyle(root).getPropertyValue('--letter-spacing') || 0.05;
-        return [root, value];
+        //const value = localStorage.getItem('letter-spacing') || getComputedStyle(root).getPropertyValue('--letter-spacing') || 0.05;
+        const value = localStorage.getItem('letter-spacing') || Css.Root.get('--letter-spacing') || 0.05;
+        return [root, parseFloat(value)];
     }
     const letterSpacing = Html.id('letter-spacing');
     const [root, value] = getLetterSpacingFromCss();
@@ -16,7 +17,7 @@ function initLetterSpacing() { // UI操作で行間を変更する
         return Math.round(value * inv) / inv;
     }
     function setLetterSpacingToHtml(value) { // CSSの変数をHTMLにセットする
-        Css.Root.set('--letter-spacing', `${value}`);
+        Css.Root.set('--letter-spacing', `${value}em`);
         Html.id('letter-spacing-label').innerHTML = round(value * 100, 0.5);
         console.debug(`${value}em字間`);
     }

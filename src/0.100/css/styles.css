@@ -175,7 +175,8 @@ body {
     /*font-size: calc(var(--font-size-px) * 1px);*/
     /*line-height: calc(var(--line-height) * 1em);*/ /* 行間 1.5〜2.0 */
     line-height: var(--line-height); /* 行間 1.5〜2.0 */
-    letter-spacing: calc(var(--letter-spacing) * 1em); /* 字間 0.05〜0.1em */
+    letter-spacing: var(--letter-spacing); /* 字間 0.05〜0.1em */
+    /*letter-spacing: calc(var(--letter-spacing) * 1em);*/ /* 字間 0.05〜0.1em */
 
     /* 縦置き／横置きでの自動サイズ調整無効化 */
     -webkit-text-size-adjust: 100%;
