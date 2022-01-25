@@ -33,7 +33,10 @@
     /*--letter-spacing:0.075;*/     /* 現在字間 0.05〜0.1em */
 
 
+    --column-gap:1em;
+    /*
     --column-gap-em:1;
+    */
     --column-rule-width-px:1;
     --p-margin-block-end-em:1;
 
@@ -221,7 +224,8 @@ main {
     height: 100%;
     column-count: var(--column-count);
     column-span: none;
-    column-gap: calc(var(--column-gap-em) * 1em);
+    column-gap: var(--column-gap);
+    /*column-gap: calc(var(--column-gap-em) * 1em);*/
     column-rule-width: calc(var(--column-rule-width-px) * 1px);
     column-rule-style: solid;
     column-rule-color: var(--sub-font-color);
