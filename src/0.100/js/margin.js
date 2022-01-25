@@ -16,10 +16,16 @@ function initMargin() { // UI操作でマージンを変更する
     margin.value = value;
     function setMarginToHtml(value) { // CSSの変数をHTMLにセットする
         Css.Root.set('--margin', `${value}`);
+        /*
         Css.Root.set('--padding-left-em', `${value}`);
         Css.Root.set('--padding-right-em', `${value}`);
         Css.Root.set('--padding-top-em', `${value}`);
         Css.Root.set('--padding-bottom-em', `${value}`);
+        */
+        Css.Root.set('--padding-left', `${value}em`);
+        Css.Root.set('--padding-right', `${value}em`);
+        Css.Root.set('--padding-top', `${value}em`);
+        Css.Root.set('--padding-bottom', `${value}em`);
         Html.id('margin-label').innerHTML = value;
         console.debug(`${value}字 余白`);
     }

@@ -37,11 +37,16 @@
     --column-rule-width-px:1;
     --p-margin-block-end-em:1;
 
+    --padding-left:2.5em;
+    --padding-right:2.5em;
+    --padding-top:2.5em;
+    --padding-bottom:2.5em;
+    /*
     --padding-left-em:2.5;
     --padding-right-em:2.5;
     --padding-top-em:2.5;
     --padding-bottom-em:2.5;
-
+    */
     --line-of-px:1024;
     /* 
        --font-size-px = pixcel / em
@@ -187,12 +192,20 @@ body {
     writing-mode: var(--writing-mode); /* vertical-rl, horizontal-tb */
     text-orientation: var(--text-orientation); /* upright, sideways */
 
+    width: calc(100vw - var(--padding-left) - var(--padding-right));
+    height: calc(100vh - var(--padding-top) - var(--padding-bottom));
+    padding-top: var(--padding-top);
+    padding-bottom: var(--padding-bottom);
+    padding-left: var(--padding-left);
+    padding-right: var(--padding-right);
+    /*
     width: calc(100vw - calc(var(--padding-left-em)*1em) - calc(var(--padding-right-em)*1em));
     height: calc(100vh - calc(var(--padding-top-em)*1em) - calc(var(--padding-bottom-em)*1em));
     padding-top: calc(var(--padding-top-em) * 1em);
     padding-bottom: calc(var(--padding-bottom-em) * 1em);
     padding-left: calc(var(--padding-left-em) * 1em);
     padding-right: calc(var(--padding-right-em) * 1em);
+    */
 
     counter-reset: section;
     background-color: var(--background-color);
