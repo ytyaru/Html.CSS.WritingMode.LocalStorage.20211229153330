@@ -21,7 +21,7 @@ function initMargin() { // UI操作でマージンを変更する
         Css.Root.set('--padding-top-em', `${value}`);
         Css.Root.set('--padding-bottom-em', `${value}`);
         Html.id('margin-label').innerHTML = value;
-        console.log(`${value}字 余白`);
+        console.debug(`${value}字 余白`);
     }
     margin.addEventListener('input', e => {
         setMarginToHtml(e.target.value);

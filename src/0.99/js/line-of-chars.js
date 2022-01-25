@@ -43,7 +43,7 @@ LineOfChars.prototype.addEvent = function() {
         root.style.setProperty('--line-of-chars', `${value}`);
         document.querySelector('#line-of-chars-label').innerHTML = value;
         setFontSizePixel();
-        console.log(`${value}字／行`);
+        console.debug(`${value}字／行`);
     }
     lineOfChars.addEventListener('input', e => {
         // フォントサイズ変更処理
@@ -76,7 +76,7 @@ function initLineOfChars() { // UI操作でフォントサイズを変更する
     function setLineOfCharsToHtml(value) { // CSSの変数をHTMLにセットする
         Css.Root.set('--line-of-chars', `${value}`);
         Html.id('line-of-chars-label').innerHTML = value;
-        console.log(`${value}字／行`);
+        console.debug(`${value}字／行`);
     }
     lineOfChars.addEventListener('input', e => {
         setLineOfCharsToHtml(e.target.value);
@@ -90,9 +90,9 @@ function initLineOfChars() { // UI操作でフォントサイズを変更する
     return lineOfChars;
 }
 function setMaxLineOfChars() {
-    console.log(window.screen.orientation);
-    console.log(`w:${window.screen.availWidth}`);
-    console.log(`h:${window.screen.availHeight}`);
+    console.debug(window.screen.orientation);
+    console.debug(`w:${window.screen.availWidth}`);
+    console.debug(`h:${window.screen.availHeight}`);
     Html.id('line-of-chars').max = calcMaxLineOfChars();
 }
 function calcMaxLineOfChars() { // 解像度と画面の向きから最小フォントサイズ（10px）字の最大字数／行を算出する（但しCSSで指定した最大値より大きくはならない）

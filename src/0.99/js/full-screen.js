@@ -10,17 +10,17 @@ function setFullScreen(is, notDo=false) { // 真ならfull-screen、偽ならwin
     fullScreen.value = (is) ? '1' : '0';
     //fullScreen.innerHTML = (is) ? '全' : '―'; // <img>タグまで削除されてしまいバグる
     document.querySelector(':root').style.setProperty('--is-full-screen', `${fullScreen.value}`);
-    console.log(document.querySelector('#full-screen'));
-    console.log(document.querySelector('#full-screen > img'));
+    console.debug(document.querySelector('#full-screen'));
+    console.debug(document.querySelector('#full-screen > img'));
 
     const MODE_NAME = (is) ? 'windowed' : 'full-screen' ;
     const URL = getAssetsUrl(`images/icons/${MODE_NAME}.svg`);
     const IMG = document.querySelector('#full-screen > img');
     IMG.setAttribute('src', `${URL}`);
     IMG.setAttribute('alt', `${(is) ? '全' : '―'}`);
-    console.log(fullScreen.value);
-    console.log(is);
-    console.log(URL);
+    console.debug(fullScreen.value);
+    console.debug(is);
+    console.debug(URL);
 
     // なぜかダイアログの背景が透過してしまう。クリックしても反応しない。z-index:99999で手前に表示してもダメ。仕方ないので閉じる。
     document.querySelector('#setting').close();
@@ -38,12 +38,12 @@ function initFullScreen() { // UI操作で全画面ON/OFF切替
 
     // ブラウザのF11キーでフルスクリーンにしたイベントはキャッチできずバグる！
     document.addEventListener('fullscreenchange', (event) => {
-        console.log(document.fullscreenElement);
+        console.debug(document.fullscreenElement);
         if (document.fullscreenElement) {
-            console.log('フルスクリーン要素', window.fullscreenElement);
+            console.debug('フルスクリーン要素', window.fullscreenElement);
             setFullScreen(true, true);
         } else {
-            console.log('Leaving full-screen mode.');
+            console.debug('Leaving full-screen mode.');
             setFullScreen(false, true);
         }
     });

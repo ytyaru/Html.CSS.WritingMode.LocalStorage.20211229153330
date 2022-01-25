@@ -18,7 +18,7 @@ function initLetterSpacing() { // UI操作で行間を変更する
     function setLetterSpacingToHtml(value) { // CSSの変数をHTMLにセットする
         Css.Root.set('--letter-spacing', `${value}`);
         Html.id('letter-spacing-label').innerHTML = round(value * 100, 0.5);
-        console.log(`${value}em字間`);
+        console.debug(`${value}em字間`);
     }
     letterSpacing.addEventListener('input', e => {
         setLetterSpacingToHtml(e.target.value);

@@ -14,7 +14,7 @@ function initLineHeight() { // UI操作で行間を変更する
     function setLineHeightToHtml(value) { // CSSの変数をHTMLにセットする
         Css.Root.set('--line-height', `${value}`);
         Html.id('line-height-label').innerHTML = value * 100;
-        console.log(`${value}em行間`);
+        console.debug(`${value}em行間`);
     }
     lineHeight.addEventListener('input', e => {
         setLineHeightToHtml(e.target.value);

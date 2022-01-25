@@ -1,4 +1,5 @@
 window.addEventListener('DOMContentLoaded', (event) => {
+    Debug.off();
     defineConst('Html', defineHtml());
     defineConst('Css', defineCss());
     defineConst('Screen', defineScreen());
@@ -14,11 +15,11 @@ window.addEventListener('DOMContentLoaded', (event) => {
     setPageHeaderPosition();
     setPosPageFooter();
     initClock();
-    console.log("DOMContentLoaded");
-    console.log(`devicePixelRatio = ${window.devicePixelRatio}`);
+    console.debug("DOMContentLoaded");
+    console.debug(`devicePixelRatio = ${window.devicePixelRatio}`);
 });
 window.addEventListener('load', (event) => {
-    console.log("load");
+    console.debug("load");
 
     // なぜかクリックせずキー入力を最初にするとページが真っ白になる！ content-visibilityがautoだとそうなるが、visibleだとOK。
     document.querySelector(':root').style.setProperty('--content-visibility', 'visible'); 
@@ -29,7 +30,7 @@ window.addEventListener('load', (event) => {
     Paging.break();
 });
 window.addEventListener('beforeunload', (event) => {
-    console.log("beforeunload");
+    console.debug("beforeunload");
     saveFullScreen();
     saveColumns();
     saveWritingMode();
@@ -41,14 +42,14 @@ window.addEventListener('beforeunload', (event) => {
     removeClock();
 });
 window.addEventListener("orientationchange", function () { // 画面向きに応じて最大字数／行を変更する
-    console.log("orientationchange");
+    console.debug("orientationchange");
     setMaxColumns(); // columns.js
     setMaxLineOfChars(); // resize.js
     setFontSizePixel(); // resize.js
     Paging.break();
 });
 window.addEventListener("resize", function (e) { // 全画面やリサイズ時に字／行の値を再計算する
-    console.log("resize");
+    console.debug("resize");
     setMaxColumns(); // columns.js
     setMaxLineOfChars(); // resize.js
     setFontSizePixel(); // resize.js
@@ -56,11 +57,11 @@ window.addEventListener("resize", function (e) { // 全画面やリサイズ時�
 });
 // OSのダークモード変更に合わせる
 window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
-    console.log('=============================');
+    console.debug('=============================');
     setColorScheme((event.matches) ? 'dark' : 'light')
 });
 window.addEventListener('touchstart', (event) => { // タッチ
-    console.log('touchstart', event);
+    console.debug('touchstart', event);
     const setting = document.querySelector('#setting');
     if (setting.open) { if(!event.target.closest('#setting > form[method="dialog"]')) {setting.close();} return; }
     Screen.on(event.touches[0].X, event.touches[0].Y);
@@ -79,7 +80,7 @@ window.addEventListener("keydown", event => { // キーボード
     if (event.repeat) { return; } // 押しっぱなしによる連続入力の禁止
     if (document.querySelector('#setting').open) { return; }
     const IS_VERTICAL = ('vertical-rl' === document.querySelector('#writing-mode').value);
-    console.log(`keydown event.key:${event.key}, Shift:${event.shiftKey}`)
+    console.debug(`keydown event.key:${event.key}, Shift:${event.shiftKey}`)
          if (event.key === 'ArrowUp') { event.preventDefault();  }   // menu(index,setting,tools)表示予定
     else if (event.key === 'ArrowDown') { // setting表示切替
         const dialog = document.querySelector('#setting');
@@ -102,7 +103,7 @@ window.addEventListener("keydown", event => { // キーボード
     else {}
 }, {passive: false});
 window.addEventListener("keypress", event => { // キーボード
-    console.log(`keypress event.key:${event.key}`)
+    console.debug(`keypress event.key:${event.key}`)
     if (document.querySelector('#setting').open) { if (event.key === 'Escape') {document.querySelector('#setting').close(); event.preventDefault();} return; }
     const IS_VERTICAL = ('vertical-rl' === document.querySelector('#writing-mode').value);
     if (event.key === 'n') {Paging.Page++;}

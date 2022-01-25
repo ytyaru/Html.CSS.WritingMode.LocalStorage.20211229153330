@@ -196,6 +196,7 @@ body {
     content-visibility: var(--content-visibility);
     contain-intrinsic-size: 1000px;
     contain: strict;
+
 }
 main {
     width: 100%;
@@ -212,6 +213,8 @@ main {
     content-visibility: var(--content-visibility);
     contain-intrinsic-size: 1000px;
     contain: strict;
+
+    /*will-change: scroll-position;*/ /* 効果なかった */
 }
 p {
 /*    text-indent: 1em;*/ /* 字下げは文字でやる仕様にしたい。 */

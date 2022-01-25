@@ -16,7 +16,7 @@ function setSettingSubInfoColor(INPUT) {
     if (INPUT.checked) { color = Css.Root.get('--selected-color'); }
     if (!SUB.checked) { color = Css.Root.get('--disabled-color'); }
     Css.Root.set('color', color, `#${INPUT.id}-label`);
-    console.log(Css.Root.get('--sub-info-transition-duration'));
+    console.debug(Css.Root.get('--sub-info-transition-duration'));
 }
 function setSettingSubInfoAnimation(is=false) {
     Css.Root.set('--sub-info-transition-duration', (is) ? '2s' : '0');

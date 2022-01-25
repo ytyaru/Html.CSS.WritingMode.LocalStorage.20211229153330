@@ -22,7 +22,7 @@ function initWritingMode() { // UI操作でフォントサイズを変更する
         root.style.setProperty('--text-orientation', getTextOrientationValue(value));
         root.style.setProperty('--block-size-base', '100v' + ((isVartical(value)) ? 'w' : 'h'));
         root.style.setProperty('--inline-size-base', '100v' + ((isVartical(value)) ? 'h' : 'w'));
-        console.log(`表記方向:${getButtonText(value)}`);
+        console.debug(`表記方向:${getButtonText(value)}`);
     }
     function loadWritingMode() {
         const loadedValue = localStorage.getItem('WritingMode') || Css.Root.get('--writing-mode');
