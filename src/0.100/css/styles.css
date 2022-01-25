@@ -35,11 +35,12 @@
 
     --column-gap:1em;
     --column-rule-width:1px;
+    --p-margin-block-end:1em;
     /*
     --column-gap-em:1;
     --column-rule-width-px:1;
-    */
     --p-margin-block-end-em:1;
+    */
 
     --padding-left:2.5em;
     --padding-right:2.5em;
@@ -242,7 +243,8 @@ main {
 }
 p {
 /*    text-indent: 1em;*/ /* 字下げは文字でやる仕様にしたい。 */
-    margin-block-end: calc(var(--p-margin-block-end-em) * 1em);
+    /*margin-block-end: calc(var(--p-margin-block-end-em) * 1em);*/
+    margin-block-end: var(--p-margin-block-end);
 }
 a { color: var(--a-color); }
 .upright {
