@@ -1,4 +1,5 @@
 function setColorScheme(value) {
+    console.log(value)
     const IS_LIGHT = ('light' === value);
     const COLOR_SCHEME = document.getElementById('color-scheme');
     const FC = (IS_LIGHT) ? 'black' : 'white';
@@ -12,8 +13,10 @@ function setColorScheme(value) {
     Css.Root.set('--selected-background-color', (IS_LIGHT) ? 'lightcyan' : '#665500');
     Css.Root.set('--selected-color', FC);
     Css.Root.set('--disabled-color', (IS_LIGHT) ? '#AAAAAA' : '#AAAAAA');
-    COLOR_SCHEME.value = (IS_LIGHT) ? 'dark' : 'light';
+    COLOR_SCHEME.value = (IS_LIGHT) ? 'light' : 'dark';
     COLOR_SCHEME.innerText = (IS_LIGHT) ? '🌙' : '☀';
+//    COLOR_SCHEME.value = (IS_LIGHT) ? 'dark' : 'light';
+//    COLOR_SCHEME.innerText = (IS_LIGHT) ? '🌙' : '☀';
     // 補足情報の色切替
     Css.Root.set('--sub-info-transition-duration', '2s');
     for (const INPUT of getSettingSubInfoElements()) { setSettingSubInfoColor(INPUT); }
@@ -22,6 +25,8 @@ function setColorScheme(value) {
 }
 function initColorScheme() {
     document.getElementById('color-scheme').addEventListener("click", function (e) { // ボタン押下時に変更する
-        setColorScheme(e.target.value);
+        console.log(e.target.value)
+        //setColorScheme(e.target.value);
+        setColorScheme(('light' === e.target.value) ? 'dark' : 'light' );
     });
 }
