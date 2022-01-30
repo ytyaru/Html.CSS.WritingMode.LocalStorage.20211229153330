@@ -1,0 +1,24 @@
+@charset "utf-8";
+* {
+    font-size: 1em;
+}
+p {
+    margin: 0 0 1em 0;
+    padding 0;
+    font-size: 1em;
+    background: #FFCCCC;
+}
+rt {
+    font-size: 0.5em;
+}
+#drawer {
+    font-size: 1em;
+}
+/* カクヨムの傍点 */
+/* https://developer.mozilla.org/ja/docs/Web/CSS/text-emphasis */
+#drawer em {
+/*    text-emphasis: filled dot black; */
+    text-emphasis-style: filled dot; 
+    text-emphasis-color: inherit;
+    -webkit-text-emphasis: filled dot black;
+}

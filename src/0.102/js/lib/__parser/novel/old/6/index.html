@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="utf-8">
+    <title>小説の中間テキスト形式をHTMLに変換する。</title>
+    <link rel="stylesheet" type="text/css" href="./css/index.css">
+    <script src="./js/dom/Ruby.js"></script>
+    <script src="./js/parser/parts/rule/RubyParseRule.js"></script>
+    <script src="./js/parser/parts/builder/PlainToAozoraRubyRuleBuilder.js"></script>
+    <script src="./js/parser/parts/builder/PlainToHtmlRubyRuleBuilder.js"></script>
+    <script src="./js/parser/parts/builder/CommonRubyRuleBuilder.js"></script>
+    <script src="./js/parser/parts/builder/NarouRubyRuleBuilder.js"></script>
+    <script src="./js/parser/parts/builder/KakuyomuRubyRuleBuilder.js"></script>
+    <script src="./js/parser/parts/parser/_RubyParser.js"></script>
+    <script src="./js/parser/parts/parser/RubyParser.js"></script>
+    <script src="./js/parser/parts/BreakLine.js"></script>
+    <script src="./js/parser/parts/Paragraph.js"></script>
+    <script src="./js/parser/PlainToAozora.js"></script>
+    <script src="./js/parser/PlainToHtml.js"></script>
+    <script src="./js/parser/Denden.js"></script>
+    <script src="./js/parser/Common.js"></script>
+    <script src="./js/parser/Narou.js"></script>
+    <script src="./js/parser/Kakuyomu.js"></script>
+    <script src="./js/main.js"></script>
+</head>
+<body>
+<h1><a href="https://github.com/ytyaru/JS.Novel.Parser.20210117183645">小説の中間テキスト形式をHTMLに変換する。</a></h1>
+<select id="selector">
+    <option value="Kakuyomu">カクヨム</option>
+    <option value="Narou">小説家になろう</option>
+    <option value="Common">カクヨム、なろう、エブリスタ、アルファポリス共通</option>
+    <option value="Denden">でんでんマークダウン</option>
+    <option value="PlainToHtml">漢字(かんじ)</option>
+    <option value="PlainToAozora">漢字(かんじ)→｜漢字《かんじ》</option>
+</select>
+<div style="display:flex;">
+    <textarea id="editor" cols="40" rows="20">あ｜漢字《かんじ》あ
+あ|漢字《かんじ》あ|半角《はんかく》
+あ漢字《かんじ》あ
+
+あ《《傍点》》あ
+
+あ漢字（かんじ）あ
+あ漢字(かんじ)あ半角(はんかく)
+
+{漢字|かんじ}
+{漢字|かん|じ}
+
+あ｜《そのまま》あ
+あ|《そのまま》あ
+あ|(そのまま)あ
+あ|（そのまま）あ
+あ｜(そのまま)あ
+あ｜（そのまま）あ
+
+あ｜ｅｔｃ《エトセトラ》あ
+あ｜ｅｔｃ《えとせとら》あ
+あ｜ｅｔｃ《等々》あ
+
+　パラグラフ。行頭に全角スペースが１字あり、なおかつ末尾に２つの改行があれば、パラグラフになる。
+
+「発言」
+（内心）
+「発言（内心）」
+（内心「発言」）
+</textarea>
+    <textarea id="viewer" cols="40" rows="20" ></textarea>
+    <div id="drawer"></div>
+</div>
+</body>
+</html>
