@@ -2,21 +2,37 @@ class ParagraphOutput extends ParseOutput {
     constructor(func) { super(func); }
     parse(text) {
         // textの先頭と末尾にある連続した空白文字を削除する
-        text = text.replace(/^[\r\n|\r|\n]{1,}/, '');
-        text = text.replace(/[\r\n|\r|\n]{1,}$/, '');
+        //text = text.replace(/^[\r\n|\r|\n]{1,}/, '');
+        //text = text.replace(/[\r\n|\r|\n]{1,}$/, '');
+        //text = text.replace(/[\r\n|\r]{1,}$/, \n);
+        //text = text.trim('\n');
+        //text = text.trim();
         console.debug(text)
         // 2つの改行単位で区切る
-        const ps = text.split(/\r\n\r\n|\r\r|\n\n/g);
+        let ps = text.split(/\r\n\r\n|\r\r|\n\n/g);
         console.debug(ps)
         let html = [];
         for (let p of ps) {
-            const spans = p.split(/\r\n|\r|\n/g).filter(v => v); // 改行ごとに配列要素化し、空要素を削除する
+            let spans = p.split(/\r\n|\r|\n/g).filter(v => v); // 改行ごとに配列要素化し、空要素を削除する
             if (spans.length < 1) { continue; }
-            console.log(spans)
-            html.push((spans.length < 2) ? `<p>${spans[0]}</p>` : `<p>${spans.map(span=>ElementString.get('span', span)).join('<br>')}</p>`);
+            html.push(this._getTextContents(spans));
         }
+        console.log(html)
         return html.join('');
     }
+    _getTextContents(spans) {
+        if (1 === spans.length) {
+            console.log(spans);
+            // <h1>などの見出しタグなら<p>で囲わずそのまま出力する
+            return (this._isHeading(spans[0])) ? spans[0] : ElementString.get('p', spans[0])
+        } else {
+            console.log(spans);
+            // <p>内に<br>を入れる
+            //return spans.map(span=>ElementString.get('span', span)).join('<br>')
+            return ElementString.get('p', spans.map(span=>ElementString.get('span', span)).join('<br>'));
+        }
+    }
+    _isHeading(span) { return [1,2,3,4,5,6].map(n=>`<h${n}`).some(heading=>span.startsWith(heading)); }
 }
 class ParagraphMultilineOutput extends ParseOutput {
     constructor(func) { super(func); }

@@ -70,6 +70,18 @@ _Paging.prototype.break = function() { // 画面サイズに応じてページ�
     const MAIN = document.querySelector('main:not([hidden])');
     MAIN.scrollTop = 0;
     MAIN.scrollLeft = 0;
+
+    // 既存のページ位置クリア
+    for (const p of document.querySelectorAll('p')) { p.removeAttribute('page'); }
+
+    // 最初のページ位置セット
+    const first_p = document.querySelector('p');
+    first_p.setAttribute('page', `${page}`); // 最初のp
+    console.log(first_p)
+    console.log(first_p.getAttribute('page'))
+    page++;
+
+    // 二ページ目以降の位置セット
     for (const p of document.querySelectorAll('p')) {
         const RECT = p.getBoundingClientRect(); // パフォーマンス改善のためoffsetTopとoffsetLeftに変更
 //        console.debug('RECT:', RECT);
@@ -78,10 +90,10 @@ _Paging.prototype.break = function() { // 画面サイズに応じてページ�
         const P_BLOCK_START = (IS_VERTICAL) ? RECT.top : RECT.left; 
         //const P_BLOCK_START = (IS_VERTICAL) ? p.offsetTop : p.offsetLeft; 
         //const P_BLOCK_START = (IS_VERTICAL) ? p.top : p.left; 
-        console.debug(`RECT.top:${RECT.top}, p.top:${p.top}, p.offsetTop:${p.offsetTop}, padding-top:${Css.Body.get('padding-top')}`);
-        console.debug(`RECT.left:${RECT.left}, p.left:${p.left}, p.offsetTop:${p.offsetLeft}`);
+//        console.debug(`RECT.top:${RECT.top}, p.top:${p.top}, p.offsetTop:${p.offsetTop}, padding-top:${Css.Body.get('padding-top')}`);
+//        console.debug(`RECT.left:${RECT.left}, p.left:${p.left}, p.offsetTop:${p.offsetLeft}`);
         const P_PAGE_POS = P_BLOCK_START;
-        p.removeAttribute('page');
+//        p.removeAttribute('page');
         if (page_pos < P_PAGE_POS) { // 次のページの先頭要素
             col_pos++;
             page_pos = P_PAGE_POS;
@@ -90,14 +102,16 @@ _Paging.prototype.break = function() { // 画面サイズに応じてページ�
                 p.setAttribute('page', `${page}`);
                 col_pos = 1;
                 page++;
-                page_pos = P_PAGE_POS;
-                console.debug(`ページ:${page-1}`, P_BLOCK_START);
+                p
+                age_pos = P_PAGE_POS;
+                console.debug(`ページ:${page-1}`, P_BLOCK_START, p);
 //                console.debug(`ページ:${page-1}`, RECT);
             }
         }
     }
     // 全ページ数セット
     this._count = (page-1);
+    console.debug(`最初のページp要素1：${document.querySelector('p[page="1"]')}`);
 
     // 現在位置を戻す（初回以降）
     if (HEAD_P) {
@@ -121,6 +135,7 @@ _Paging.prototype.break = function() { // 画面サイズに応じてページ�
     }
     this.setPageFooter();
     console.debug(`ページ再計算した後のページ状態：${this.Page}/${this.Count}`);
+    console.debug(`最初のページp要素2：${document.querySelector('p[page="1"]')}`);
 }
 _Paging.prototype.setPageFooter = function(page=1) {
     document.getElementById('page-number').innerHTML = this.Page;

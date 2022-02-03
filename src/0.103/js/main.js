@@ -21,9 +21,10 @@ window.addEventListener('DOMContentLoaded', async(event) => {
     console.log(book);
     console.log(parser);
     console.log(parser.parse);
-    const content = parser.parse(book);
+    const content = parser.parse(`${book}`);
     console.log(content);
     Html.Main.innerHTML = `${content}\n${Html.Main.innerHTML}`;
+    console.debug(Html.Main.innerHTML);
     console.debug("DOMContentLoaded");
     console.debug(`devicePixelRatio = ${window.devicePixelRatio}`);
 
