@@ -65,13 +65,11 @@ function initSettingSubInfo() { // 補足情報（ページヘッダ、フッタ
         for (const INPUT of getSettingSubInfoElements()) {
             ROOT.style.setProperty(`--${INPUT.id}`, getInputValue(e.target.checked, INPUT));
         }
-//        for (const name of ['--margin', '--padding-left-em', '--padding-right-em', '--padding-top-em', '--padding-bottom-em']) {
-//            ROOT.style.setProperty(name, getMarginValue(e.target.checked));
-//        }
         for (const name of ['--margin', '--padding-left', '--padding-right', '--padding-top', '--padding-bottom']) {
             ROOT.style.setProperty(name, `${getMarginValue(e.target.checked)}em`);
         }
         setFontSizePixel();
+        Paging.Page = Paging.Page; // 位置ズレ修正
         // 補足情報のグレーアウト表示切替
         for (const INPUT of getSettingSubInfoElements()) { setSettingSubInfoColor(INPUT); }
         Css.Root.set('color', (e.target.checked) ? Css.Root.get('--color') : Css.Root.get('--disabled-color'), `#margin ~ label`);
@@ -95,9 +93,6 @@ function initSettingSubInfo() { // 補足情報（ページヘッダ、フッタ
     for (const name of ['--margin', '--padding-left', '--padding-right', '--padding-top', '--padding-bottom']) {
         Css.Root.set(name, `${getMarginValue(SUB.checked)}em`);
     }
-//    for (const name of ['--margin', '--padding-left-em', '--padding-right-em', '--padding-top-em', '--padding-bottom-em']) {
-//        Css.Root.set(name, getMarginValue(SUB.checked));
-//    }
 }
 function saveSettingSubInfo() {
     for (const INPUT of getSettingSubInfoElements()) {

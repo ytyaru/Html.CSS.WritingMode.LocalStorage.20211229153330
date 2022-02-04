@@ -16,18 +16,10 @@ window.addEventListener('DOMContentLoaded', async(event) => {
     setPosPageFooter();
     initClock();
     const parser = new Parser();
-//    defineConst('Parser', new Parser());
+    defineConst('NovelParser', parser);
     const book = await FileLoader.text('./book/index.book');
-    console.log(book);
-    console.log(parser);
-    console.log(parser.parse);
     const content = parser.parse(`${book}`);
-    console.log(content);
     Html.Main.innerHTML = `${content}\n${Html.Main.innerHTML}`;
-    console.debug(Html.Main.innerHTML);
-    console.debug("DOMContentLoaded");
-    console.debug(`devicePixelRatio = ${window.devicePixelRatio}`);
-
     window.addEventListener('load', (event) => {
         console.debug("load");
 
