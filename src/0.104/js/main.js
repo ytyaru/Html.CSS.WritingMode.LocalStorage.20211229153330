@@ -20,9 +20,19 @@ window.addEventListener('DOMContentLoaded', async(event) => {
     const book = await FileLoader.text('./book/index.book');
     const content = parser.parse(`${book}`);
     Html.Main.innerHTML = `${content}\n${Html.Main.innerHTML}`;
+
+
+    // なぜかクリックせずキー入力を最初にするとページが真っ白になる！ content-visibilityがautoだとそうなるが、visibleだとOK。
+    document.querySelector(':root').style.setProperty('--content-visibility', 'visible'); 
+    //document.querySelector(':root').style.setProperty('--content-visibility', 'auto');
+
+    // UIとイベントをすべて作成し終えたら最後に一度だけ重い処理を実行する（フォントサイズとページの計算）
+    setFontSizePixel();
+    Paging.break();
+
     window.addEventListener('load', (event) => {
         console.debug("load");
-
+        /*
         // なぜかクリックせずキー入力を最初にするとページが真っ白になる！ content-visibilityがautoだとそうなるが、visibleだとOK。
         document.querySelector(':root').style.setProperty('--content-visibility', 'visible'); 
         //document.querySelector(':root').style.setProperty('--content-visibility', 'auto');
@@ -30,6 +40,7 @@ window.addEventListener('DOMContentLoaded', async(event) => {
         // UIとイベントをすべて作成し終えたら最後に一度だけ重い処理を実行する（フォントサイズとページの計算）
         setFontSizePixel();
         Paging.break();
+        */
     });
     window.addEventListener('beforeunload', (event) => {
         console.debug("beforeunload");
