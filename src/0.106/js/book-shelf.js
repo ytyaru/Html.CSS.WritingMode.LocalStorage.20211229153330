@@ -1,8 +1,11 @@
 async function makeIndexPage() {
     const TSV = await FileLoader.text('./book/index.tsv');
     const LINES = TSV.split(/\r\n|\r|\n/).filter(v => v);
+    const KEYS = LINES[0].split(/\t/);
+    const DATAS = LINES.slice(1);
+    //console.debug(DATAS)
     const list = []
-    for (const line of LINES) {
+    for (const line of DATAS) {
         const [ID, TITLE] = line.split(/\t/);
         const attrs = new Map();
         //attrs['href'] = "javascript:getBook('" + `./book/${ID}/0.txt` + "');"
