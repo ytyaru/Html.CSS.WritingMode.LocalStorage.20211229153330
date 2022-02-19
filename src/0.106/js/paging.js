@@ -74,14 +74,12 @@ _Paging.prototype.break = function() { // 画面サイズに応じてページ�
     // 既存のページ位置クリア
     for (const p of document.querySelectorAll('p')) { p.removeAttribute('page'); }
 
-    /*
     // 最初のページ位置セット
     const first_p = document.querySelector('p');
     first_p.setAttribute('page', `${page}`); // 最初のp
     console.log(first_p)
     console.log(first_p.getAttribute('page'))
     page++;
-    */
 
     // 二ページ目以降の位置セット
     for (const p of document.querySelectorAll('p')) {
