@@ -76,13 +76,19 @@ _Paging.prototype.break = function() { // 画面サイズに応じてページ�
 
     // 最初のページ位置セット
     const first_p = document.querySelector('p');
-    first_p.setAttribute('page', `${page}`); // 最初のp
-    console.log(first_p)
-    console.log(first_p.getAttribute('page'))
-    page++;
+    if (first_p) {
+        first_p.setAttribute('page', `${page}`); // 最初のp
+        console.log(first_p)
+        console.log(first_p.getAttribute('page'))
+        page++;
+        const RECT = first_p.getBoundingClientRect(); // パフォーマンス改善のためoffsetTopとoffsetLeftに変更
+        page_pos = (IS_VERTICAL) ? RECT.top : RECT.left
+    }
 
     // 二ページ目以降の位置セット
-    for (const p of document.querySelectorAll('p')) {
+    //for (const p of document.querySelectorAll('p')) {
+    //for (const p of document.querySelectorAll('p:not(:first-child)')) {
+    for (const p of document.querySelectorAll('p:nth-child(n+2)')) {
         const RECT = p.getBoundingClientRect(); // パフォーマンス改善のためoffsetTopとoffsetLeftに変更
 //        console.debug('RECT:', RECT);
         const P_INLINE_START = RECT.left;
