@@ -6,17 +6,29 @@ async function makeIndexPage() {
     //console.debug(DATAS)
     const list = []
     for (const line of DATAS) {
-        const [ID, TITLE] = line.split(/\t/);
-        const attrs = new Map();
-        //attrs['href'] = "javascript:getBook('" + `./book/${ID}/0.txt` + "');"
-        //attrs['href'] = "javascript:getBook('" + `book-page.html?book=${ID}&page=0` + "');"
-        attrs['href'] = `book-page.html?book=${ID}&page=0`;
-        const a = ElementString.get('a', TITLE, attrs);
-        const li = ElementString.get('li', a);
-        list.push(li);
+        const [ID, TITLE, COMPLETED, FILES, CHARS, CREATED, PUBLISHED, UPDATED, VIEWS, STARS, COMMENTS, GENRE, TAG, RATING] = line.split(/\t/);
+        list.push(makeWorkList(ID, TITLE));
     }
-    return ElementString.get('ul', list.join('\n'));
+    const TITLE = `小説サイト`;
+    const WORKS = DATAS.length;
+    const CHARS = DATAS.map(line=>parseInt(line.split(/\t/)[4])).reduce((sum, v)=>sum+v);
+    return ElementString.get('h1', `${TITLE}`) + 
+           ElementString.get('span', `${WORKS.toLocaleString()}作品`) + 
+           '　' + 
+           ElementString.get('span', `${CHARS.toLocaleString()}字`) + 
+           '<br>' + 
+           ElementString.get('ul', list.join('\n'));
 }
+function makeWorkList(ID, TITLE) {
+    const attrs = new Map();
+    //attrs['href'] = "javascript:getBook('" + `./book/${ID}/0.txt` + "');"
+    //attrs['href'] = "javascript:getBook('" + `book-page.html?book=${ID}&page=0` + "');"
+    attrs['href'] = `book-page.html?book=${ID}&page=0`;
+    const a = ElementString.get('a', TITLE, attrs);
+    const li = ElementString.get('li', a);
+    return li;
+}
+/*
 async function getBook(path) {
     const book = await FileLoader.text(path);
     const parser = new Parser();
@@ -26,3 +38,4 @@ async function getBook(path) {
     setFontSizePixel();
     Paging.break();
 }
+*/
