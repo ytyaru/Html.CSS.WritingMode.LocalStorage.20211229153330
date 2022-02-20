@@ -21,7 +21,7 @@ async function makeIndexPage() {
            //ElementString.get('span', `${fmt.format(CHARS)}字`) + 
            ElementString.get('span', `${formatNumber(CHARS)}字`) + 
            '<br>' + 
-           makeSorter() + 
+           makeSorter() + await makeFilters() +
            ElementString.get('ul', list.join('\n'));
 }
 function formatNumber(num) {
@@ -73,16 +73,17 @@ function makeSorter() {
         {id:'chars-sort', options:[{text:'多', value:'new', title:"字数が多い"}, {text:'少', value:'old', title:"字数が少ない"}]},
         {id:'popular-sort', options:[{text:'密', value:'many', title:"人気"}, {text:'疎', value:'few', title:"過疎"}]},
     ]
-    for (const data of DATAS) { selects.push(makeSomeSorters(data)); }
+    for (const data of DATAS) { selects.push(makeSomeSorter(data)); }
 
     const attrs = new Map();
     attrs['title'] = 'ソート（並び替え）';
     const legend = ElementString.get('legend', '⇅', attrs);
     return ElementString.get('fieldset', legend + selects.join());
 }
-function makeSomeSorters(data) {
+function makeSomeSorter(data) {
     function makeOptions(options) {
         const html = [];
+        console.log(options)
         for (const option of options) {
             const attrs = new Map();
             attrs['value'] = option.value;
@@ -95,7 +96,45 @@ function makeSomeSorters(data) {
     const attrs = new Map();
     attrs['id'] = data.id;
     attrs['name'] = data.id;
+    console.log(data)
     html.push(ElementString.get('select', makeOptions(data.options), attrs));
+    return html.join();
+}
+async function makeFilters() {
+    const selects = [];
+    const DATAS = [];
+    for (const id of ['genre', 'rating', 'tag']) {
+        DATAS.push({id:`${id}-filter`, tsv:`./book/${id}.tsv`})
+    }
+    for (const data of DATAS) { selects.push(await makeSomeFilter(data)); }
+
+    const attrs = new Map();
+    attrs['title'] = 'フィルタ（絞り込み）';
+    const legend = ElementString.get('legend', '▽', attrs);
+    return ElementString.get('fieldset', legend + selects.join());
+
+}
+async function makeSomeFilter(data) {
+    async function makeOptions(tsv) {
+        const TSV = await FileLoader.text(tsv);
+        const LINES = TSV.split(/\r\n|\r|\n/).filter(v => v);
+        const KEYS = LINES[0].split(/\t/);
+        const DATAS = LINES.slice(1);
+        const html = [];
+        for (const data of DATAS) {
+            const [ID, NAME, DESCRIPTION] = data.split(/\t/);
+            const attrs = new Map();
+            attrs['value'] = ID;
+            attrs['title'] = DESCRIPTION;
+            html.push(ElementString.get('option', NAME, attrs));
+        }
+        return html.join();
+    }
+    const html = [];
+    const attrs = new Map();
+    attrs['id'] = data.id;
+    attrs['name'] = data.id;
+    html.push(ElementString.get('select', await makeOptions(data.tsv), attrs));
     return html.join();
 }
 
