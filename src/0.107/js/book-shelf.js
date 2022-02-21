@@ -46,7 +46,7 @@ function formatNumber(num) {
             const [num, notation] = formatter.formatToParts(bigIntNum)
             const numStr = bigIntNum.toString()
             if (notation === undefined) {
-                return [...result, numStr].join("")
+                return [...result, numStr].join('')
             }
             const dig = num.value.length
             const value = numStr.slice(0, dig)
@@ -78,7 +78,7 @@ function makeSorter() {
     const attrs = new Map();
     attrs['title'] = 'ソート（並び替え）';
     const legend = ElementString.get('legend', '⇅', attrs);
-    return ElementString.get('fieldset', legend + selects.join());
+    return ElementString.get('fieldset', legend + selects.join(''));
 }
 function makeSomeSorter(data) {
     function makeOptions(options) {
@@ -90,7 +90,7 @@ function makeSomeSorter(data) {
             attrs['title'] = option.title;
             html.push(ElementString.get('option', option.text, attrs));
         }
-        return html.join();
+        return html.join('');
     }
     const html = [];
     const attrs = new Map();
@@ -98,20 +98,22 @@ function makeSomeSorter(data) {
     attrs['name'] = data.id;
     console.log(data)
     html.push(ElementString.get('select', makeOptions(data.options), attrs));
-    return html.join();
+    return html.join('');
 }
 async function makeFilters() {
     const selects = [];
     const DATAS = [];
-    for (const id of ['genre', 'rating', 'tag']) {
+    for (const id of ['genre', 'rating', 'tag', 'volume']) {
         DATAS.push({id:`${id}-filter`, tsv:`./book/${id}.tsv`})
     }
     for (const data of DATAS) { selects.push(await makeSomeFilter(data)); }
 
+    selects.push(makeSomeSorter({id:'completed-filter', options:[{text:'完', value:'completed', title:'完結済み'}, {text:'続', value:'serialized', title:'連載中'}]}));
+
     const attrs = new Map();
     attrs['title'] = 'フィルタ（絞り込み）';
     const legend = ElementString.get('legend', '▽', attrs);
-    return ElementString.get('fieldset', legend + selects.join());
+    return ElementString.get('fieldset', legend + selects.join(''));
 
 }
 async function makeSomeFilter(data) {
@@ -128,13 +130,13 @@ async function makeSomeFilter(data) {
             attrs['title'] = DESCRIPTION;
             html.push(ElementString.get('option', NAME, attrs));
         }
-        return html.join();
+        return html.join('');
     }
     const html = [];
     const attrs = new Map();
     attrs['id'] = data.id;
     attrs['name'] = data.id;
     html.push(ElementString.get('select', await makeOptions(data.tsv), attrs));
-    return html.join();
+    return html.join('');
 }
 
