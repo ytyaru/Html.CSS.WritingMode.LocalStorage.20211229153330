@@ -1,6 +1,7 @@
 async function makeIndexPage() {
     defineConst('IndexDatas', TsvTable.toObjects(await FileLoader.text('./book/index.tsv')));
     console.debug(IndexDatas);
+    console.debug(sortWorks());
     const TITLE = `小説サイト`;
     const WORKS = IndexDatas.length;
     const CHARS = IndexDatas.map(data=>data.chars).reduce((sum, v)=>sum+v);
@@ -57,9 +58,9 @@ function makeWorkList(ID, TITLE) {
 function makeSorter() {
     const selects = [];
     const DATAS = [
-        {id:'date-sort', options:[{text:'新', value:'new', title:'新しい'}, {text:'古', value:'old', title:'古い'}]},
-        {id:'volume-sort', options:[{text:'多', value:'new', title:"字数が多い"}, {text:'少', value:'old', title:"字数が少ない"}]},
-        {id:'popular-sort', options:[{text:'密', value:'many', title:"人気"}, {text:'疎', value:'few', title:"過疎"}]},
+        {id:'date-sort', title:'日時', options:[{text:'新', value:'new', title:'新しい'}, {text:'古', value:'old', title:'古い'}]},
+        {id:'volume-sort', title:'字数', options:[{text:'長', value:'new', title:"字数が多い"}, {text:'短', value:'old', title:"字数が少ない"}]},
+        {id:'popular-sort', title:'スター数', options:[{text:'密', value:'many', title:"人気"}, {text:'疎', value:'few', title:"過疎"}]},
     ]
     for (const data of DATAS) { selects.push(makeSomeSorter(data)); }
 
@@ -84,6 +85,7 @@ function makeSomeSorter(data) {
     const attrs = new Map();
     attrs['id'] = data.id;
     attrs['name'] = data.id;
+    attrs['title'] = data.title;
     console.log(data)
     html.push(ElementString.get('select', makeOptions(data.options), attrs));
     return html.join('');
@@ -132,11 +134,68 @@ async function makeSomeFilter(data) {
     return html.join('');
 }
 function sortWorks() {
+    /*
     const ids = new Map();
+    for (const id of ['date', 'volume', 'popular'].map(v=>`${v}-sort`)) {
+        const v = document.getElementById(id).value;
+        if (v) { ids[id] = v; }
+    }
+    */
+    const defaultSortFunc = function(a, b, key, direction = 1, nullsFirst = 1) {
+        if (a[key] == undefined && b[key] == undefined) return 0;
+        if (a[key] == undefined) return nullsFirst * 1;
+        if (b[key] == undefined) return nullsFirst * -1;
+        if (a[key] > b[key]) return direction * 1;
+        if (a[key] < b[key]) return direction * -1;
+        return 0;
+    }
+    const sortFunc = function(data, keys, directions) {
+        const _data = data.slice();
+        _data.sort((a, b) => {
+            let order = 0;
+            let i=0;
+            keys.some(key => {
+                order = defaultSortFunc(a, b, key, directions[i]);
+                console.log(key, directions[i], order, !!order)
+                i++;
+                return !!order;
+            });
+            console.debug(order);
+            return order;
+        });
+        return _data;
+    }
+    const data = [
+        {"id":1,"group":1,"name":"tom"},
+        {"id":2,"group":1,"name":"tim"},
+        {"id":3,"group":3,"name":"tomas"},
+        {"id":4,"group":3,"name":"tanaka"},
+        {"id":5,"group":2,"name":"takahashi"},
+        {"id":6,"group":2,"name":"takada"}
+    ];
+    console.log(sortFunc(data, ['group','id'], [-1,-1]));
+    console.log(sortFunc(IndexDatas, ['id'], [-1]));
+    //console.log(sortFunc(IndexDatas, ['created', 'chars', 'star', 'id'], [-1, 1, -1, 1]));
+
+    //return sortFunc(IndexDatas, ['created', 'chars', 'star', 'id'], [-1, 1, -1, 1])
+    //return sortFunc(IndexDatas, ['id'], [-1]);
+    return sortFunc(IndexDatas, ['updated', 'chars', 'star', 'id'], [-1, 1, -1, 1])
+
+    /*
+    IndexDatas.sort((a,b)=>{
+        if (a.created < b.created) return -1;
+    })
     for (const id of ['date-sort', 'volume-sort', 'popular-sort', 'genre-filter', 'rating-filter', 'tag-filter', 'volume-filter', 'completed-filter']) {
         const v = document.getElementById(id).value;
         if (v) { ids[id] = v; }
     }
+    */
     //['date-sort', 'volume-sort', 'popular-sort', 'genre-filter', 'rating-filter', 'tag-filter', 'volume-filter', 'completed-filter'].map(v=>document.getElementById(id).value).filter(v=>v)
-    IndexDatas
+}
+function filterWorks() {
+    const ids = new Map();
+    for (const id of ['genre', 'rating', 'tag', 'volume', 'completed'].map(v=>`${v}-filter`)) {
+        const v = document.getElementById(id).value;
+        if (v) { ids[id] = v; }
+    }
 }
