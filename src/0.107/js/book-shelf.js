@@ -1,28 +1,16 @@
 async function makeIndexPage() {
-    const TSV = await FileLoader.text('./book/index.tsv');
-    const LINES = TSV.split(/\r\n|\r|\n/).filter(v => v);
-    const KEYS = LINES[0].split(/\t/);
-    const DATAS = LINES.slice(1);
-    //console.debug(DATAS)
-    const list = []
-    for (const line of DATAS) {
-        const [ID, TITLE, COMPLETED, FILES, CHARS, CREATED, PUBLISHED, UPDATED, VIEWS, STARS, COMMENTS, GENRE, TAG, RATING] = line.split(/\t/);
-        list.push(makeWorkList(ID, TITLE));
-    }
+    defineConst('IndexDatas', TsvTable.toObjects(await FileLoader.text('./book/index.tsv')));
+    console.debug(IndexDatas);
     const TITLE = `小説サイト`;
-    const WORKS = DATAS.length;
-    const CHARS = DATAS.map(line=>parseInt(line.split(/\t/)[4])).reduce((sum, v)=>sum+v);
+    const WORKS = IndexDatas.length;
+    const CHARS = IndexDatas.map(data=>data.chars).reduce((sum, v)=>sum+v);
     return ElementString.get('h1', `${TITLE}`) + 
-           //ElementString.get('span', `${WORKS.toLocaleString()}作品`) + 
-           //ElementString.get('span', `${fmt.format(WORKS)}作品`) + 
            ElementString.get('span', `${formatNumber(WORKS)}作品`) + 
            '　' + 
-           //ElementString.get('span', `${CHARS.toLocaleString()}作品`) + 
-           //ElementString.get('span', `${fmt.format(CHARS)}字`) + 
            ElementString.get('span', `${formatNumber(CHARS)}字`) + 
            '<br>' + 
            makeSorter() + await makeFilters() +
-           ElementString.get('ul', list.join('\n'));
+           ElementString.get('ul', IndexDatas.map(d=>makeWorkList(d.id, d.title)).join('\n'));
 }
 function formatNumber(num) {
     //return num.toLocaleString(); // nnn,nnn,nnn,nnnのように3桁刻みでカンマを入れる
@@ -69,8 +57,8 @@ function makeWorkList(ID, TITLE) {
 function makeSorter() {
     const selects = [];
     const DATAS = [
-        {id:'data-sort', options:[{text:'新', value:'new', title:'新しい'}, {text:'古', value:'old', title:'古い'}]},
-        {id:'chars-sort', options:[{text:'多', value:'new', title:"字数が多い"}, {text:'少', value:'old', title:"字数が少ない"}]},
+        {id:'date-sort', options:[{text:'新', value:'new', title:'新しい'}, {text:'古', value:'old', title:'古い'}]},
+        {id:'volume-sort', options:[{text:'多', value:'new', title:"字数が多い"}, {text:'少', value:'old', title:"字数が少ない"}]},
         {id:'popular-sort', options:[{text:'密', value:'many', title:"人気"}, {text:'疎', value:'few', title:"過疎"}]},
     ]
     for (const data of DATAS) { selects.push(makeSomeSorter(data)); }
@@ -108,7 +96,7 @@ async function makeFilters() {
     }
     for (const data of DATAS) { selects.push(await makeSomeFilter(data)); }
 
-    selects.push(makeSomeSorter({id:'completed-filter', options:[{text:'完', value:'completed', title:'完結済み'}, {text:'続', value:'serialized', title:'連載中'}]}));
+    selects.push(makeSomeSorter({id:'completed-filter', options:[{text:'全', value:'', title:'すべて'}, {text:'完', value:'completed', title:'完結済み'}, {text:'続', value:'serialized', title:'連載中'}]}));
 
     const attrs = new Map();
     attrs['title'] = 'フィルタ（絞り込み）';
@@ -123,6 +111,10 @@ async function makeSomeFilter(data) {
         const KEYS = LINES[0].split(/\t/);
         const DATAS = LINES.slice(1);
         const html = [];
+
+        attrs['value'] = '';
+        attrs['title'] = 'どれか選んでください';
+        html.push(ElementString.get('option', '（すべて）', attrs));
         for (const data of DATAS) {
             const [ID, NAME, DESCRIPTION] = data.split(/\t/);
             const attrs = new Map();
@@ -139,4 +131,12 @@ async function makeSomeFilter(data) {
     html.push(ElementString.get('select', await makeOptions(data.tsv), attrs));
     return html.join('');
 }
-
+function sortWorks() {
+    const ids = new Map();
+    for (const id of ['date-sort', 'volume-sort', 'popular-sort', 'genre-filter', 'rating-filter', 'tag-filter', 'volume-filter', 'completed-filter']) {
+        const v = document.getElementById(id).value;
+        if (v) { ids[id] = v; }
+    }
+    //['date-sort', 'volume-sort', 'popular-sort', 'genre-filter', 'rating-filter', 'tag-filter', 'volume-filter', 'completed-filter'].map(v=>document.getElementById(id).value).filter(v=>v)
+    IndexDatas
+}
