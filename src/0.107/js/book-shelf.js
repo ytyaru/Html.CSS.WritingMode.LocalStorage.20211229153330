@@ -5,13 +5,32 @@ async function makeIndexPage() {
     const TITLE = `小説サイト`;
     const WORKS = IndexDatas.length;
     const CHARS = IndexDatas.map(data=>data.chars).reduce((sum, v)=>sum+v);
+    document.title = TITLE;
+    document.getElementById('site-heading').innerText = TITLE;
+    document.getElementById('works-count').innerText = `${formatNumber(WORKS)}`;
+    document.getElementById('chars-count').innerText = `${formatNumber(CHARS)}`;
+    document.getElementById('works-search-form').innerHTML = makeSorter() + await makeFilters();
+    document.getElementById('works-list').innerHTML = IndexDatas.map(d=>makeWorkList(d.id, d.title)).join('\n');
+    addSortEventListeners();
+    /*
+    const TITLE = `小説サイト`;
+    const WORKS = IndexDatas.length;
+    const CHARS = IndexDatas.map(data=>data.chars).reduce((sum, v)=>sum+v);
     return ElementString.get('h1', `${TITLE}`) + 
            ElementString.get('span', `${formatNumber(WORKS)}作品`) + 
            '　' + 
            ElementString.get('span', `${formatNumber(CHARS)}字`) + 
            '<br>' + 
            makeSorter() + await makeFilters() +
-           ElementString.get('ul', IndexDatas.map(d=>makeWorkList(d.id, d.title)).join('\n'));
+           ElementString.get('ul', IndexDatas.map(d=>makeWorkList(d.id, d.title)).join('\n'), attrs);
+//           updateIndexList(IndexDatas);
+    */
+}
+function updateIndexList(datas) {
+    //document.querySelectorAll(`#works-list > li`).ForEach(e=>e.remove());
+    const ul = document.getElementById('works-list');
+    while( ul.firstChild ){ ul.removeChild( ul.firstChild ); }
+    ul.innerHTML = datas.map(d=>makeWorkList(d.id, d.title)).join('\n');
 }
 function formatNumber(num) {
     //return num.toLocaleString(); // nnn,nnn,nnn,nnnのように3桁刻みでカンマを入れる
@@ -58,9 +77,9 @@ function makeWorkList(ID, TITLE) {
 function makeSorter() {
     const selects = [];
     const DATAS = [
-        {id:'date-sort', title:'日時', options:[{text:'新', value:'new', title:'新しい'}, {text:'古', value:'old', title:'古い'}]},
-        {id:'volume-sort', title:'字数', options:[{text:'長', value:'new', title:"字数が多い"}, {text:'短', value:'old', title:"字数が少ない"}]},
-        {id:'popular-sort', title:'スター数', options:[{text:'密', value:'many', title:"人気"}, {text:'疎', value:'few', title:"過疎"}]},
+        {id:'date-sort', title:'日時', options:[{text:'新', value:'-1', title:'更新順'}, {text:'古', value:'1', title:'作成順'}]},
+        {id:'volume-sort', title:'字数', options:[{text:'長', value:'-1', title:"字数が多い"}, {text:'短', value:'1', title:"字数が少ない"}]},
+        {id:'popular-sort', title:'スター数', options:[{text:'密', value:'-1', title:"人気"}, {text:'疎', value:'1', title:"過疎"}]},
     ]
     for (const data of DATAS) { selects.push(makeSomeSorter(data)); }
 
@@ -72,7 +91,7 @@ function makeSorter() {
 function makeSomeSorter(data) {
     function makeOptions(options) {
         const html = [];
-        console.log(options)
+        //console.log(options)
         for (const option of options) {
             const attrs = new Map();
             attrs['value'] = option.value;
@@ -86,7 +105,7 @@ function makeSomeSorter(data) {
     attrs['id'] = data.id;
     attrs['name'] = data.id;
     attrs['title'] = data.title;
-    console.log(data)
+    //console.log(data)
     html.push(ElementString.get('select', makeOptions(data.options), attrs));
     return html.join('');
 }
@@ -133,7 +152,40 @@ async function makeSomeFilter(data) {
     html.push(ElementString.get('select', await makeOptions(data.tsv), attrs));
     return html.join('');
 }
+function addSortEventListeners() {
+    for (const id of ['date', 'volume', 'popular'].map(v=>`${v}-sort`)) {
+        document.getElementById(id).addEventListener('change', event=>{
+            console.log(`${event.target.value}`);
+            //console.log(`${event.target.id}: ${event.target.value}`);
+            const value = parseInt(event.target.value);
+            if (value) {
+                const keys = [];
+                const dirs = [];
+                if ('date-sort' === event.target.id) {
+                    keys.push(('-1' === event.target.value) ? 'updated' : 'created')
+                }
+                else if ('volume-sort' === event.target.id) {
+                    keys.push('chars')
+                }
+                else if ('popular-sort' === event.target.id) {
+                    keys.push('stars')
+                }
+                dirs.push(value)
+                keys.push('id'); dirs.push(1);
+                //TsvTable.sort(IndexDatas, keys, dirs);
+                //TsvTable.sort(IndexDatas, ['updated', 'chars', 'star', 'id'], [-1, 1, -1, 1]);
+                const datas = TsvTable.sort(IndexDatas, keys, dirs);
+                //const datas = TsvTable.sort(IndexDatas, ['id'], [1]);
+                console.log(keys, dirs, datas);
+                //console.log(TsvTable.sort(IndexDatas, ['created'], [-1]));
+                //console.log(TsvTable.sort(IndexDatas, ['created'], [1]));
+                updateIndexList(datas);
+            }
+        });
+    }
+}
 function sortWorks() {
+    return TsvTable.sort(IndexDatas, ['updated', 'chars', 'star', 'id'], [-1, 1, -1, 1]);
     /*
     const ids = new Map();
     for (const id of ['date', 'volume', 'popular'].map(v=>`${v}-sort`)) {
@@ -141,6 +193,7 @@ function sortWorks() {
         if (v) { ids[id] = v; }
     }
     */
+    /*
     const defaultSortFunc = function(a, b, key, direction = 1, nullsFirst = 1) {
         if (a[key] == undefined && b[key] == undefined) return 0;
         if (a[key] == undefined) return nullsFirst * 1;
@@ -180,6 +233,7 @@ function sortWorks() {
     //return sortFunc(IndexDatas, ['created', 'chars', 'star', 'id'], [-1, 1, -1, 1])
     //return sortFunc(IndexDatas, ['id'], [-1]);
     return sortFunc(IndexDatas, ['updated', 'chars', 'star', 'id'], [-1, 1, -1, 1])
+    */
 
     /*
     IndexDatas.sort((a,b)=>{

@@ -4,7 +4,8 @@ window.addEventListener('DOMContentLoaded', async(event) => {
     defineConst('Css', defineCss());
     defineConst('Screen', defineScreen());
 
-    Html.Main.innerHTML = await makeIndexPage();
+    await makeIndexPage();
+    //Html.Main.innerHTML = await makeIndexPage();
 
     initFullScreen();
     initWritingMode();
@@ -18,12 +19,14 @@ window.addEventListener('DOMContentLoaded', async(event) => {
     setPageHeaderPosition();
     setPosPageFooter();
     initClock();
+
+    /*
     const parser = new Parser();
     defineConst('NovelParser', parser);
     const book = await FileLoader.text('./book/index.book');
     const content = parser.parse(`${book}`);
     Html.Main.innerHTML += `${content}\n${Html.Main.innerHTML}`;
-
+    */
 
     // なぜかクリックせずキー入力を最初にするとページが真っ白になる！ content-visibilityがautoだとそうなるが、visibleだとOK。
     document.querySelector(':root').style.setProperty('--content-visibility', 'visible'); 

@@ -17,9 +17,9 @@ class TsvTable {
         const TYPES = LINES[1].split(/\t/);
         const DATAS = LINES.slice(2);
         const objs = [];
-        console.log(KEYS)
-        console.log(TYPES)
-        console.log(DATAS)
+        //console.log(KEYS)
+        //console.log(TYPES)
+        //console.log(DATAS)
         for (const line of DATAS) {
             const VALUES = line.split(/\t/);
             const o = {};
@@ -36,5 +36,33 @@ class TsvTable {
         else if ('b' === type) { return ('1' === value); }
         else if ('d' === type) { return new Date(value); }
         else { return value; }
+    }
+    static sort(data, keys, directions) {
+        const defaultSortFunc = function(a, b, key, direction = 1, nullsFirst = 1) {
+            if (a[key] == undefined && b[key] == undefined) return 0;
+            if (a[key] == undefined) return nullsFirst * 1;
+            if (b[key] == undefined) return nullsFirst * -1;
+            if (a[key] > b[key]) return direction * 1;
+            if (a[key] < b[key]) return direction * -1;
+            return 0;
+        }
+        const sortFunc = function(data, keys, directions) {
+            const _data = data.slice();
+            _data.sort((a, b) => {
+                let order = 0;
+                let i=0;
+                keys.some(key => {
+                    order = defaultSortFunc(a, b, key, directions[i]);
+                    //console.log(key, directions[i], order, !!order)
+                    i++;
+                    return !!order;
+                });
+                //console.debug(order);
+                return order;
+            });
+            return _data;
+        }
+        return sortFunc(data, keys, directions)
+        //return sortFunc(IndexDatas, ['updated', 'chars', 'star', 'id'], [-1, 1, -1, 1])
     }
 }
