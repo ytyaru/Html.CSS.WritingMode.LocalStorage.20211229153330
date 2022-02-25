@@ -18,6 +18,8 @@ function updateIndexList(datas) {
     const ul = document.getElementById('works-list');
     while( ul.firstChild ){ ul.removeChild( ul.firstChild ); }
     ul.innerHTML = datas.map(d=>makeWorkList(d.id, d.title)).join('\n');
+    Paging.break('li');
+    Paging.Page = 1;
 }
 function formatNumber(num) {
     //return num.toLocaleString(); // nnn,nnn,nnn,nnnのように3桁刻みでカンマを入れる

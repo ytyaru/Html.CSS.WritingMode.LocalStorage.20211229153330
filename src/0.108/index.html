@@ -87,7 +87,8 @@ window.addEventListener('DOMContentLoaded', async(event) => {
 
     // UIとイベントをすべて作成し終えたら最後に一度だけ重い処理を実行する（フォントサイズとページの計算）
     setFontSizePixel();
-    Paging.break();
+    //Paging.break();
+    Paging.break('li');
 
     window.addEventListener('load', (event) => {
         console.debug("load");
@@ -250,19 +251,19 @@ window.addEventListener('DOMContentLoaded', async(event) => {
         <p><span id="works-count"></span><span>作品</span>　<span id="chars-count"></span><span>字数</span></p>
         <form id="works-search-form"></form>
         <ul id="works-list"></ul>
+
+        <footer>
+            <span>© 2021 ytyaru</span>
+            <a title="CC-BY-SA 4.0" \
+               href="https://creativecommons.org/licenses/by-sa/4.0/deed.ja"
+               style="text-decoration: none;">
+                <img class="icon" src="https://upload.wikimedia.org/wikipedia/commons/a/a3/Cc.logo.circle.svg"></img>
+                <img class="icon" src="https://upload.wikimedia.org/wikipedia/commons/3/3c/Cc-by_new.svg"></img>
+                <img class="icon" src="https://upload.wikimedia.org/wikipedia/commons/2/29/Cc-sa.svg"></img>
+            </a>
+        </footer>
     </main>
 
-    <footer>
-        <span>© 2021 ytyaru</span>
-        <span>© <span class="upright">2021</span>ytyaru</span>
-        <a title="CC-BY-SA 4.0" \
-           href="https://creativecommons.org/licenses/by-sa/4.0/deed.ja"
-           style="text-decoration: none;">
-            <img class="icon" src="https://upload.wikimedia.org/wikipedia/commons/a/a3/Cc.logo.circle.svg"></img>
-            <img class="icon" src="https://upload.wikimedia.org/wikipedia/commons/3/3c/Cc-by_new.svg"></img>
-            <img class="icon" src="https://upload.wikimedia.org/wikipedia/commons/2/29/Cc-sa.svg"></img>
-        </a>
-    </footer>
 </body>
 </html>
 <!-- https://coliss.com/articles/build-websites/operation/work/html-template-for-web-apps-or-sites.html -->
