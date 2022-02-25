@@ -35,6 +35,8 @@ class TsvTable {
         else if ('I' === type) { return BigInt(value); }
         else if ('b' === type) { return ('1' === value); }
         else if ('d' === type) { return new Date(value); }
+        else if ('as' === type) { return value.split(','); }
+        else if ('an' === type) { return value.split(',').map(v=>Number(v)); }
         else { return value; }
     }
     static sort(data, keys, directions) {

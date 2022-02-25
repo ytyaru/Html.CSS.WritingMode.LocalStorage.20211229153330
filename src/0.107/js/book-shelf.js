@@ -12,6 +12,7 @@ async function makeIndexPage() {
     document.getElementById('works-search-form').innerHTML = makeSorter() + await makeFilters();
     document.getElementById('works-list').innerHTML = IndexDatas.map(d=>makeWorkList(d.id, d.title)).join('\n');
     addSortEventListeners();
+    addFilterEventListeners();
     /*
     const TITLE = `小説サイト`;
     const WORKS = IndexDatas.length;
@@ -251,5 +252,62 @@ function filterWorks() {
     for (const id of ['genre', 'rating', 'tag', 'volume', 'completed'].map(v=>`${v}-filter`)) {
         const v = document.getElementById(id).value;
         if (v) { ids[id] = v; }
+    }
+}
+function addFilterEventListeners() {
+    for (const id of ['genre', 'rating', 'tag', 'volume', 'completed'].map(v=>`${v}-filter`)) {
+    //for (const id of ['date', 'volume', 'popular'].map(v=>`${v}-sort`)) {
+        document.getElementById(id).addEventListener('change', event=>{
+            console.log(`${event.target.value}`);
+            //console.log(`${event.target.id}: ${event.target.value}`);
+            const value = parseInt(event.target.value);
+            console.log(`${value}`);
+            //console.log(`${event.target.id}: ${event.target.value}`);
+            if (isNaN(value)) { updateIndexList(IndexDatas); }
+            else {
+                //const key = ('volume-filter' === event.target.id) ? 'chars' : id.replace('-filter', '');
+                //updateIndexList(IndexDatas.filter(d=>d[key]===parseInt(event.target.value)));
+
+                let datas = null;
+                if ('volume-filter' === event.target.id) {
+                    let [max, min] = [0, 0];
+                    if (0 === value)      { min = 1; max = 800; }
+                    else if (1 === value) { min = 801; max = 8000; }
+                    else if (2 === value) { min = 8001; max = 40000; }
+                    else if (3 === value) { min = 40001; max = 120000; }
+                    else                  { min = 120001; max = Number.MAX_SAFE_INTEGER; } // 9007兆1992億5474万0991
+                    datas = IndexDatas.filter(d=> min <= d['chars'] && d['chars'] <= max)
+                }
+                else if ('tag-filter' === event.target.id) {
+                    datas = IndexDatas.filter(d=>d['tag'].includes(value));
+                }
+                else if ('rating-filter' === event.target.id) {
+                    console.log('rating:', value)
+                    datas = IndexDatas.filter(d=>d['rating'][value] < 1);
+                }
+                else { datas = IndexDatas.filter(d=>d[key]===value); }
+                updateIndexList(datas);
+                /*
+                const keys = [];
+                const dirs = [];
+                if ('volume-filter' === event.target.id) {
+                    keys.push('chars')
+                }
+                else {
+                    keys.push(id.replace('-filter', ''))
+                }
+                dirs.push(value)
+                keys.push('id'); dirs.push(1);
+                //TsvTable.sort(IndexDatas, keys, dirs);
+                //TsvTable.sort(IndexDatas, ['updated', 'chars', 'star', 'id'], [-1, 1, -1, 1]);
+                const datas = TsvTable.sort(IndexDatas, keys, dirs);
+                //const datas = TsvTable.sort(IndexDatas, ['id'], [1]);
+                console.log(keys, dirs, datas);
+                //console.log(TsvTable.sort(IndexDatas, ['created'], [-1]));
+                //console.log(TsvTable.sort(IndexDatas, ['created'], [1]));
+                updateIndexList(datas);
+                */
+            }
+        });
     }
 }
