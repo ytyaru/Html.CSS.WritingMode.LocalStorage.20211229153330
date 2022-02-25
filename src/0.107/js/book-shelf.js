@@ -118,7 +118,8 @@ async function makeFilters() {
     }
     for (const data of DATAS) { selects.push(await makeSomeFilter(data)); }
 
-    selects.push(makeSomeSorter({id:'completed-filter', options:[{text:'全', value:'', title:'すべて'}, {text:'完', value:'completed', title:'完結済み'}, {text:'続', value:'serialized', title:'連載中'}]}));
+    // completed,serialized
+    selects.push(makeSomeSorter({id:'completed-filter', options:[{text:'全', value:'', title:'すべて'}, {text:'完', value:'1', title:'完結済み'}, {text:'続', value:'0', title:'連載中'}]}));
 
     const attrs = new Map();
     attrs['title'] = 'フィルタ（絞り込み）';
@@ -277,6 +278,9 @@ function addFilterEventListeners() {
                     else if (3 === value) { min = 40001; max = 120000; }
                     else                  { min = 120001; max = Number.MAX_SAFE_INTEGER; } // 9007兆1992億5474万0991
                     datas = IndexDatas.filter(d=> min <= d['chars'] && d['chars'] <= max)
+                }
+                else if ('completed-filter' === event.target.id) {
+                    datas = IndexDatas.filter(d=>(1 === value) ? d['completed'] : !d['completed']);
                 }
                 else if ('tag-filter' === event.target.id) {
                     datas = IndexDatas.filter(d=>d['tag'].includes(value));
