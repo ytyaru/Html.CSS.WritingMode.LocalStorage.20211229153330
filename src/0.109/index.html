@@ -152,17 +152,17 @@ window.addEventListener('DOMContentLoaded', async(event) => {
             document.body.style.cursor = 'auto';
             event.preventDefault();
         }
-        else if (event.key === 'ArrowLeft') {(IS_VERTICAL) ? nextPage() : prevPage(); event.preventDefault();  }
-        else if (event.key === 'ArrowRight') {(IS_VERTICAL) ? prevPage() : nextPage(); event.preventDefault();  }
-        else if (event.key === 'PageUp') {prevPage();event.preventDefault();}
-        else if (event.key === 'PageDown') {nextPage();event.preventDefault();}
+        else if (event.key === 'ArrowLeft') {(IS_VERTICAL) ? Paging.Page++ : Paging.Page--; event.preventDefault();  }
+        else if (event.key === 'ArrowRight') {(IS_VERTICAL) ? Paging.Page-- : Paging.Page++; event.preventDefault();  }
+        else if (event.key === 'PageUp') {Paging.Page--;event.preventDefault();}
+        else if (event.key === 'PageDown') {Paging.Page++;event.preventDefault();}
         else if (event.key === 'Home') {firstPage();event.preventDefault();}
         else if (event.key === 'End') {lastPage();event.preventDefault();}
-        else if (!event.shiftKey && event.key === ' ') {nextPage();event.preventDefault();}
-        else if (event.shiftKey && event.key === ' ') {prevPage();event.preventDefault();}
-        else if (!event.shiftKey && event.key === 'Enter') {nextPage();event.preventDefault();}
-        else if (event.shiftKey && event.key === 'Enter') {prevPage();event.preventDefault();}
-        else if (event.key === 'Backspace') {prevPage();event.preventDefault();}
+        else if (!event.shiftKey && event.key === ' ') {Paging.Page++;event.preventDefault();}
+        else if (event.shiftKey && event.key === ' ') {Paging.Page--;event.preventDefault();}
+        else if (!event.shiftKey && event.key === 'Enter') {Paging.Page++;event.preventDefault();}
+        else if (event.shiftKey && event.key === 'Enter') {Paging.Page--;event.preventDefault();}
+        else if (event.key === 'Backspace') {Paging.Page--;event.preventDefault();}
         else if (event.key === 'Escape') {;event.preventDefault();} // 本を閉じる予定（本棚に戻る）
         else {}
     }, {passive: false});
@@ -248,7 +248,7 @@ window.addEventListener('DOMContentLoaded', async(event) => {
  
     <main>
         <h1 id="site-heading"></h1>
-        <p><span id="works-count"></span><span>作品</span>　<span id="chars-count"></span><span>字数</span></p>
+        <p><span id="works-count"></span><span>作品</span>　<span id="chars-count"></span><span>字</span></p>
         <form id="works-search-form"></form>
         <ul id="works-list"></ul>
 
