@@ -13,7 +13,14 @@ async function makeIndexPage() {
     addFilterEventListeners();
     updateIndexList(sortIndexList())
 }
+function updateSummary(datas) {
+    const WORKS = datas.length;
+    const CHARS = datas.map(data=>data.chars).reduce((sum, v)=>sum+v);
+    document.getElementById('works-count').innerText = `${formatNumber(WORKS)}`;
+    document.getElementById('chars-count').innerText = `${formatNumber(CHARS)}`;
+}
 function updateIndexList(datas) {
+    updateSummary(datas)
     const ul = document.getElementById('works-list');
     while( ul.firstChild ){ ul.removeChild( ul.firstChild ); }
     ul.innerHTML = datas.map(d=>makeWorkList(d.id, d.title)).join('\n');
