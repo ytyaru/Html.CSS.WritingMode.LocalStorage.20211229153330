@@ -2,12 +2,12 @@ async function makeIndexPage() {
     defineConst('IndexDatas', TsvTable.toObjects(await FileLoader.text('./book/index.tsv')));
     console.debug(IndexDatas);
     const TITLE = `小説サイト`;
-    const WORKS = IndexDatas.length;
-    const CHARS = IndexDatas.map(data=>data.chars).reduce((sum, v)=>sum+v);
+//    const WORKS = IndexDatas.length;
+//    const CHARS = IndexDatas.map(data=>data.chars).reduce((sum, v)=>sum+v);
     document.title = TITLE;
     document.getElementById('site-heading').innerText = TITLE;
-    document.getElementById('works-count').innerText = `${formatNumber(WORKS)}`;
-    document.getElementById('chars-count').innerText = `${formatNumber(CHARS)}`;
+//    document.getElementById('works-count').innerText = `${formatNumber(WORKS)}`;
+//    document.getElementById('chars-count').innerText = `${formatNumber(CHARS)}`;
     document.getElementById('works-search-form').innerHTML = makeSorter() + await makeFilters();
     addSortEventListeners();
     addFilterEventListeners();
