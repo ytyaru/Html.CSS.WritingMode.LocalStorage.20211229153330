@@ -71,6 +71,8 @@ class AutoSpanUpRightOutput extends SpanUpRightOutput {
     }
     parse(text) {
         console.log(this._min, this._max)
+        //const regexp = new RegExp(`([${this._chars}}]{${this._min},${this._max}})(?!¥d)`, '');
+        //const regexp = new RegExp(`([${this._chars}}]{${this._min},${this._max}})(?!¥d)`, 'mg');
         const regexp = new RegExp(`([${this._chars}}]{${this._min},${this._max}})`, 'g');
         return text.replace(regexp, (match, content, offset, string, groups)=>{
             return this._func(content);
