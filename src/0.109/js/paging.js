@@ -165,7 +165,7 @@ _Paging.prototype.setNowSectionHeading = function() { // 柱（ページヘッ�
     const self = Paging;
     function getTarget() { // 監視対象要素（現在ページの先頭からみて最初にみつかったh1）を返す
         //const HEAD_P = document.querySelector(`p[page="${self.Page}"]`);
-        const HEAD_P = document.querySelector(`${this._query}[page="${self.Page}"]`);
+        const HEAD_P = document.querySelector(`${self._query}[page="${self.Page}"]`);
         if (!HEAD_P) { return; }
         // 現在ページ先頭p要素の直前にh1がある場合
         if ('h1' === HEAD_P.previousElementSibling.tagName.toLowerCase()) { return HEAD_P.previousElementSibling; }
