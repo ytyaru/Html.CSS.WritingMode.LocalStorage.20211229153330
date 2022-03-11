@@ -21,7 +21,38 @@ Object.defineProperties(_Paging.prototype, {
     ReadRate: { get: function() { return this._page / this._count; } }, // 読了率
     RemainingPages: { get: function() { return this._count - this._page; } }, // 残りページ数
 });
+
+_Paging.prototype.moveFileRelative = async function(isPrev=false) { // 前後ファイルをロードする
+    console.debug('moveFileRelative', isPrev)
+    const url = new URL(location.href);
+    const nowFile = parseInt(url.searchParams.get('file'));
+    console.debug(nowFile)
+    const maxFile = 1000; // 最終ファイル値は別ファイルから取得する。とりあえず仮で。
+    const diff = (isPrev) ? ((0 < nowFile) ? -1 : 0) : ((nowFile < maxFile) ? 1 : 0);
+    console.debug(diff)
+    if (0 === diff) { return; }
+    const nextFile = nowFile + diff;
+    //const bookUrl = `./book/${url.searchParams.get('book')}/${nextFile}.txt`
+    const bookUrl = `book-page.html?book=${url.searchParams.get('book')}&file=${nextFile}`
+    console.debug(bookUrl)
+    location.href = location.origin + '/' + bookUrl;
+    /*
+    const book = await FileLoader.text(bookUrl);
+    const content = NovelParser.parse(`${book}`);
+    Html.Main.innerHTML = `${content}`;
+    //Html.Main.innerHTML = `${content}\n${Html.Main.innerHTML}`;
+    this.break();
+    this._page = 1;
+    this.setNowSectionHeading();
+    this.setPageFooter(); 
+    */
+}
+_Paging.prototype.moveNextFile = function() { this.moveFileRelative(); }
+_Paging.prototype.movePrevFile = function() { this.moveFileRelative(true); }
+
 _Paging.prototype.movePageRelative = function(increment=1) { // 正数:進む, 負数:戻る, 0:何もしない。
+         if ((this.Page === this.Count) && (0 < increment)) { this.moveNextFile(); return; }
+    else if ((this.Page === 1) && (increment < 0)) { this.movePrevFile(); return; }
     function minmax(v, min, max) {
         if (v < min) { return min; }
         if (v > max) { return max; }
@@ -39,7 +70,11 @@ _Paging.prototype.movePageRelative = function(increment=1) { // 正数:進む, �
     }
 }
 _Paging.prototype.movePageAbsolute = function(page=1) { // 1:最初の頁。負数:最後のページから数えた値。0:目次表示？
-    const self = _Paging;
+    console.debug(this.Page, this.Count)
+         if ((this.Page === this.Count) && (this.Count < page)) { this.moveNextFile(); return; }
+    else if ((this.Page === 1) && (page < 1)) { this.movePrevFile(); return; }
+//         if (this.Count < page) { this.moveNextFile(); return; }
+//    else if (page < 1) { this.movePrevFile(); return; }
     function minmax(v, min, max) {
         if (v < min) { return min; }
         if (v > max) { return max; }
@@ -168,6 +203,7 @@ _Paging.prototype.setNowSectionHeading = function() { // 柱（ページヘッ�
         const HEAD_P = document.querySelector(`${self._query}[page="${self.Page}"]`);
         if (!HEAD_P) { return; }
         // 現在ページ先頭p要素の直前にh1がある場合
+        if (!HEAD_P.previousElementSibling) { return; }
         if ('h1' === HEAD_P.previousElementSibling.tagName.toLowerCase()) { return HEAD_P.previousElementSibling; }
         else {
             function searchH1(propName='nextElementSibling') { // h1を探す（兄弟のうち兄方向nextまたは弟方向prev）
