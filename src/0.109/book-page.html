@@ -69,14 +69,14 @@ window.addEventListener('DOMContentLoaded', async(event) => {
     initClock();
 
     // https://domain.co.jp/books/0/0
-    // https://domain.co.jp/book-page?book=0&page=0
+    // https://domain.co.jp/book-page?book=0&file=0
     console.debug(location.href)
     const url = new URL(location.href);
     console.debug(url)
-    for (const key of ['book', 'page']) {
-        if (!url.searchParams.has(key)) { throw 'URL引数エラー。bookとpageが必要です。'; }
+    for (const key of ['book', 'file']) {
+        if (!url.searchParams.has(key)) { throw 'URL引数エラー。bookとfileが必要です。'; }
     }
-    const bookUrl = `./book/${url.searchParams.get('book')}/${url.searchParams.get('page')}.txt`
+    const bookUrl = `./book/${url.searchParams.get('book')}/${url.searchParams.get('file')}.txt`
     const parser = new Parser();
     defineConst('NovelParser', parser);
     const book = await FileLoader.text(bookUrl);

@@ -54,7 +54,7 @@ function formatNumber(num) {
 }
 function makeWorkList(ID, TITLE) {
     const attrs = new Map();
-    attrs['href'] = `book-page.html?book=${ID}&page=0`;
+    attrs['href'] = `book-page.html?book=${ID}&file=0`;
     const a = ElementString.get('a', TITLE, attrs);
     const li = ElementString.get('li', a);
     return li;
