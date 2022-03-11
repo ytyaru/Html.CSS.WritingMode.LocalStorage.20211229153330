@@ -25,9 +25,17 @@ Object.defineProperties(_Paging.prototype, {
 _Paging.prototype.moveFileRelative = async function(isPrev=false) { // 前後ファイルをロードする
     console.debug('moveFileRelative', isPrev)
     const url = new URL(location.href);
+    const nowBook = parseInt(url.searchParams.get('book'));
     const nowFile = parseInt(url.searchParams.get('file'));
     console.debug(nowFile)
-    const maxFile = 1000; // 最終ファイル値は別ファイルから取得する。とりあえず仮で。
+    //const maxFile = 1000; // 最終ファイル値は別ファイルから取得する。とりあえず仮で。
+    //defineConst('IndexDatas', TsvTable.toObjects(await FileLoader.text('./book/index.tsv')));
+    //const IndexDatas = TsvTable.toObjects(await FileLoader.text('./book/index.tsv'));
+    const maxFile = IndexDatas.filter(d=>d.id === nowBook)[0].files - 1;
+    //console.debug(parseInt(url.searchParams.get('book')))
+    //console.debug(IndexDatas)
+    //console.debug(IndexDatas.filter(d=>d.id === nowBook))
+    console.debug(`maxFile: ${maxFile}`)
     const diff = (isPrev) ? ((0 < nowFile) ? -1 : 0) : ((nowFile < maxFile) ? 1 : 0);
     console.debug(diff)
     if (0 === diff) { return; }

@@ -46,6 +46,7 @@
 <script src="./js/lib/parser/parse-set-factory.js"></script>
 <script src="./js/lib/parser/parser.js"></script>
 
+<script src="js/tsv-table.js"></script>
 <script src="js/book-shelf.js"></script>
 <!--<script src="js/main.js"></script>-->
 <script>
@@ -98,6 +99,9 @@ window.addEventListener('DOMContentLoaded', async(event) => {
         Paging.Page = page;
         console.log(Paging.Page)
     }
+
+    // ファイル間遷移するとき最大ファイル数が必要なので保持しておく。
+    defineConst('IndexDatas', TsvTable.toObjects(await FileLoader.text('./book/index.tsv')));
 
     window.addEventListener('load', (event) => {
         console.debug("load");
