@@ -33,7 +33,8 @@ _Paging.prototype.moveFileRelative = async function(isPrev=false) { // 前後フ
     if (0 === diff) { return; }
     const nextFile = nowFile + diff;
     //const bookUrl = `./book/${url.searchParams.get('book')}/${nextFile}.txt`
-    const bookUrl = `book-page.html?book=${url.searchParams.get('book')}&file=${nextFile}`
+    //const bookUrl = `book-page.html?book=${url.searchParams.get('book')}&file=${nextFile}`
+    const bookUrl = `book-page.html?book=${url.searchParams.get('book')}&file=${nextFile}&page=${(0 < diff) ? 1 : -1}`
     console.debug(bookUrl)
     location.href = location.origin + '/' + bookUrl;
     /*
@@ -72,7 +73,8 @@ _Paging.prototype.movePageRelative = function(increment=1) { // 正数:進む, �
 _Paging.prototype.movePageAbsolute = function(page=1) { // 1:最初の頁。負数:最後のページから数えた値。0:目次表示？
     console.debug(this.Page, this.Count)
          if ((this.Page === this.Count) && (this.Count < page)) { this.moveNextFile(); return; }
-    else if ((this.Page === 1) && (page < 1)) { this.movePrevFile(); return; }
+    else if ((this.Page === 1) && (page === 0)) { this.movePrevFile(); return; }
+    //else if ((this.Page === 1) && (page < 1)) { this.movePrevFile(); return; }
 //         if (this.Count < page) { this.moveNextFile(); return; }
 //    else if (page < 1) { this.movePrevFile(); return; }
     function minmax(v, min, max) {
@@ -80,7 +82,8 @@ _Paging.prototype.movePageAbsolute = function(page=1) { // 1:最初の頁。負�
         if (v > max) { return max; }
         return v;    
     }
-    const TARGET_PAGE = minmax(((0 <= page) ? page : this.Count + page + 1), 1, this.Count);
+    //const TARGET_PAGE = minmax(((0 <= page) ? page : this.Count + page + 1), 1, this.Count);
+    const TARGET_PAGE = (-1 === page) ? this.Count : minmax(((0 <= page) ? page : this.Count + page + 1), 1, this.Count);
     //const TARGET = document.querySelector(`p[page='${TARGET_PAGE}']`);
     const TARGET = document.querySelector(`${this._query}[page='${TARGET_PAGE}']`);
     console.debug(TARGET_PAGE, TARGET, this.Count);

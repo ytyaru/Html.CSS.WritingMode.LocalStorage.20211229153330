@@ -70,6 +70,7 @@ window.addEventListener('DOMContentLoaded', async(event) => {
 
     // https://domain.co.jp/books/0/0
     // https://domain.co.jp/book-page?book=0&file=0
+    // https://domain.co.jp/book-page?book=0&file=0&page=-1
     console.debug(location.href)
     const url = new URL(location.href);
     console.debug(url)
@@ -89,6 +90,14 @@ window.addEventListener('DOMContentLoaded', async(event) => {
     // UIとイベントをすべて作成し終えたら最後に一度だけ重い処理を実行する（フォントサイズとページの計算）
     setFontSizePixel();
     Paging.break();
+
+    console.log(url.searchParams.has('page'))
+    if (url.searchParams.has('page')) {
+        const page = parseInt(url.searchParams.get('page'));
+        console.log(page)
+        Paging.Page = page;
+        console.log(Paging.Page)
+    }
 
     window.addEventListener('load', (event) => {
         console.debug("load");
