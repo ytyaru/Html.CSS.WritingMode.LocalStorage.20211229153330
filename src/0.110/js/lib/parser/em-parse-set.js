@@ -15,7 +15,7 @@ class EmTextEmphasisStyleOutput extends RegExpParseOutput {
     _makeCss(style) {
         return `
 @supports not ( text-emphasis-style: ${style} ) and not ( -webkit-text-emphasis-style: ${style} ) and not ( -moz-text-emphasis-style: ${style} ) and not ( -ms-text-emphasis-style: ${style} ) and not ( -o-text-emphasis-style: ${style} )   {
-em { font-weight: bold; }
+em { font-weight: bold; font-style:normal; }
 }
 @supports ( text-emphasis-style: ${style} ) or ( -webkit-text-emphasis-style: ${style} ) or ( -moz-text-emphasis-style: ${style} ) or ( -ms-text-emphasis-style: ${style} ) or ( -o-text-emphasis-style: ${style} )   {
 em {
@@ -24,6 +24,7 @@ em {
     -ms-text-emphasis-style: ${style};
     -o-text-emphasis-style: ${style};
     text-emphasis-style: ${style};
+    font-style: normal;
 }
 }`;
     }
@@ -42,6 +43,7 @@ class EmTextDecorationOutput extends RegExpParseOutput {
     text-decoration-style: ${style};
     text-decoration-color: ${color};
     text-decoration-thickness: ${thickness};
+    font-style: normal;
 }`;
     /*
         none,underline,overline,line-through,,,,,,,,,,

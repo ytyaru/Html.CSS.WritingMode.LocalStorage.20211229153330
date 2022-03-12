@@ -2,6 +2,7 @@ const _Paging = function() { // ページ計算。ページ移動。
     this._count = 1; // 全ページ数（旧--page-length）
     this._page = 1; // 現在ページ（旧--page-index）
     this._query = 'p'; // ページ区切単位
+    this._file = -1; // ファイル番号（0.txt, 1.txt, ...）
 }
 Object.defineProperties(_Paging.prototype, {
     Count: { get: function() { return this._count; } },
@@ -20,14 +21,27 @@ Object.defineProperties(_Paging.prototype, {
     },
     ReadRate: { get: function() { return this._page / this._count; } }, // 読了率
     RemainingPages: { get: function() { return this._count - this._page; } }, // 残りページ数
+    Book: { get: function() { const url = new URL(location.href); return parseInt(url.searchParams.get('book')); } },
+    Files: {
+//        const self = this,
+//        get: function() { return IndexDatas.filter(d=>d.id === self.BookId)[0].files; }
+        get: function() { console.debug(this.BookId); return IndexDatas.filter(d=>d.id === this.BookId)[0].files; }
+    },
+    File: {
+//        const self = this,
+        get: function() { return this._file; },
+        set: function(v) { this.moveFileRelative((v < this._file)); }
+    },
+    /*
+    */
 });
-
 _Paging.prototype.moveFileRelative = async function(isPrev=false) { // 前後ファイルをロードする
     console.debug('moveFileRelative', isPrev)
     const url = new URL(location.href);
     const nowBook = parseInt(url.searchParams.get('book'));
-    const nowFile = parseInt(url.searchParams.get('file'));
-    console.debug(nowFile)
+    //const nowFile = (-1 === this.File) ? parseInt(url.searchParams.get('file')) : this.File;
+    this._file = (-1 === this.File) ? parseInt(url.searchParams.get('file')) : this.File;
+    console.debug(this.File)
     //const maxFile = 1000; // 最終ファイル値は別ファイルから取得する。とりあえず仮で。
     //defineConst('IndexDatas', TsvTable.toObjects(await FileLoader.text('./book/index.tsv')));
     //const IndexDatas = TsvTable.toObjects(await FileLoader.text('./book/index.tsv'));
@@ -36,28 +50,59 @@ _Paging.prototype.moveFileRelative = async function(isPrev=false) { // 前後フ
     //console.debug(IndexDatas)
     //console.debug(IndexDatas.filter(d=>d.id === nowBook))
     console.debug(`maxFile: ${maxFile}`)
-    const diff = (isPrev) ? ((0 < nowFile) ? -1 : 0) : ((nowFile < maxFile) ? 1 : 0);
+    const diff = (isPrev) ? ((0 < this.File) ? -1 : 0) : ((this.File < maxFile) ? 1 : 0);
     console.debug(diff)
     if (0 === diff) { return; }
-    const nextFile = nowFile + diff;
+
+
+    //const nextFile = nowFile + diff;
+    this._file += diff;
+    console.debug(this._file)
     //const bookUrl = `./book/${url.searchParams.get('book')}/${nextFile}.txt`
     //const bookUrl = `book-page.html?book=${url.searchParams.get('book')}&file=${nextFile}`
+    /*
     const bookUrl = `book-page.html?book=${url.searchParams.get('book')}&file=${nextFile}&page=${(0 < diff) ? 1 : -1}`
     console.debug(bookUrl)
     location.href = location.origin + '/' + bookUrl;
-    /*
+    */
+
+    // 
+    //const bookUrl = `./book/${url.searchParams.get('book')}/${nextFile}.txt`
+    const bookUrl = `./book/${url.searchParams.get('book')}/${this.File}.txt`
     const book = await FileLoader.text(bookUrl);
     const content = NovelParser.parse(`${book}`);
     Html.Main.innerHTML = `${content}`;
     //Html.Main.innerHTML = `${content}\n${Html.Main.innerHTML}`;
     this.break();
-    this._page = 1;
+//    this._page = 1;
+//    this.setNowSectionHeading();
+//    this.setPageFooter(); 
+    console.log(isPrev)
+    if (isPrev) { this.Page = -1; }
+    else { this.Page = 1; }
     this.setNowSectionHeading();
     this.setPageFooter(); 
+    /*
+    if (url.searchParams.has('page')) {
+        const page = parseInt(url.searchParams.get('page'));
+        console.log(page)
+        Paging.Page = page;
+        console.log(Paging.Page)
+    }
     */
 }
 _Paging.prototype.moveNextFile = function() { this.moveFileRelative(); }
 _Paging.prototype.movePrevFile = function() { this.moveFileRelative(true); }
+/*
+Object.defineProperties(_Paging.prototype, {
+    File: {
+//        const self = this,
+        get: function() { return this._file; },
+        set: function(v) { _Paging.prototype.moveFileRelative((v < this._file)); }
+        //set: function(v) { this.moveFileRelative((v < this._file)); }
+    },
+});
+*/
 
 _Paging.prototype.movePageRelative = function(increment=1) { // 正数:進む, 負数:戻る, 0:何もしない。
          if ((this.Page === this.Count) && (0 < increment)) { this.moveNextFile(); return; }
