@@ -1,0 +1,270 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title></title>
+<meta name="description" content="">
+<meta name="author" content="ytyaru">
+<link rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/deed.ja">
+<!--<link rel="icon" href="assets/image/avator.png">-->
+<link rel="icon" href="https://ytyaru.github.io/Html.CSS.WritingMode.LocalStorage.20211229153330/assets/images/avator.png">
+<!--<link rel="stylesheet" href="css/styles.css">-->
+<link rel="stylesheet" href="css/index.css">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=0">
+<script src="js/inherits.js"></script>
+<script src="js/debug.js"></script>
+<script src="js/define-class.js"></script>
+<script src="js/assets.js"></script>
+<script src="js/html.js"></script>
+<script src="js/css.js"></script>
+<script src="js/define-const.js"></script>
+<script src="js/page-header.js"></script>
+<script src="js/page-footer.js"></script>
+<script src="js/full-screen.js"></script>
+<script src="js/color-scheme.js"></script>
+<script src="js/column-count.js"></script>
+<script src="js/writing-mode.js"></script>
+<script src="js/resize.js"></script>
+<script src="js/line-of-chars.js"></script>
+<script src="js/line-height.js"></script>
+<script src="js/letter-spacing.js"></script>
+<script src="js/margin.js"></script>
+<script src="js/setting-sub-info.js"></script>
+<script src="js/screen-area.js"></script>
+<script src="js/paging.js"></script>
+<script src="js/clock.js"></script>
+
+<script src="./js/lib/common/file-loader.js"></script>
+<script src="./js/lib/common/style.js"></script>
+<script src="./js/lib/common/element-string.js"></script>
+<script src="./js/lib/common/regexp-chars.js"></script>
+<script src="./js/lib/parser/parse-set.js"></script>
+<script src="./js/lib/parser/heading-parse-set.js"></script>
+<script src="./js/lib/parser/paragraph-parse-set.js"></script>
+<script src="./js/lib/parser/ruby-parse-set.js"></script>
+<script src="./js/lib/parser/em-parse-set.js"></script>
+<script src="./js/lib/parser/span-upright-parse-set.js"></script>
+<script src="./js/lib/parser/parse-set-factory.js"></script>
+<script src="./js/lib/parser/parser.js"></script>
+
+<script src="js/tsv-table.js"></script>
+<script src="js/book-shelf.js"></script>
+<!--<script src="js/main.js"></script>-->
+<script>
+window.addEventListener('DOMContentLoaded', async(event) => {
+    Debug.on();
+    defineConst('Html', defineHtml());
+    defineConst('Css', defineCss());
+    defineConst('Screen', defineScreen());
+    //Html.Main.innerHTML = await makeIndexPage();
+    await makeIndexPage();
+    document.querySelector(':root').style.setProperty('--content-visibility', 'visible'); 
+
+    initFullScreen();
+    initWritingMode();
+    initColorScheme();
+    initColumns();
+    initLineOfChars();
+    initLineHeight();
+    initLetterSpacing();
+    initMargin();
+    initSettingSubInfo();
+    setPageHeaderPosition();
+    setPosPageFooter();
+    initClock();
+
+    /*
+    const parser = new Parser();
+    defineConst('NovelParser', parser);
+    const book = await FileLoader.text('./book/index.book');
+    const content = parser.parse(`${book}`);
+    Html.Main.innerHTML += `${content}\n${Html.Main.innerHTML}`;
+
+    // なぜかクリックせずキー入力を最初にするとページが真っ白になる！ content-visibilityがautoだとそうなるが、visibleだとOK。
+    document.querySelector(':root').style.setProperty('--content-visibility', 'visible'); 
+    //document.querySelector(':root').style.setProperty('--content-visibility', 'auto');
+    */
+
+    // UIとイベントをすべて作成し終えたら最後に一度だけ重い処理を実行する（フォントサイズとページの計算）
+    setFontSizePixel();
+    //Paging.break();
+    Paging.break('li');
+
+    window.addEventListener('load', (event) => {
+        console.debug("load");
+    });
+    window.addEventListener('beforeunload', (event) => {
+        console.debug("beforeunload");
+        saveFullScreen();
+        saveColumns();
+        saveWritingMode();
+        saveLineOfChars();
+        saveLineHeight();
+        saveSettingSubInfo();
+        saveMargin();
+        saveLetterSpacing();
+        removeClock();
+    });
+    window.addEventListener("orientationchange", function () { // 画面向きに応じて最大字数／行を変更する
+        console.debug("orientationchange");
+        setMaxColumns(); // columns.js
+        setMaxLineOfChars(); // resize.js
+        setFontSizePixel(); // resize.js
+        Paging.break();
+    });
+    window.addEventListener("resize", function (e) { // 全画面やリサイズ時に字／行の値を再計算する
+        console.debug("resize");
+        setMaxColumns(); // columns.js
+        setMaxLineOfChars(); // resize.js
+        setFontSizePixel(); // resize.js
+        Paging.break();
+    });
+    // OSのダークモード変更に合わせる
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
+        console.debug('=============================');
+        setColorScheme((event.matches) ? 'dark' : 'light')
+    });
+    window.addEventListener('touchstart', (event) => { // タッチ
+        console.debug('touchstart', event);
+        const setting = document.querySelector('#setting');
+        if (setting.open) { if(!event.target.closest('#setting > form[method="dialog"]')) {setting.close();} return; }
+        Screen.on(event.touches[0].X, event.touches[0].Y);
+    });
+    window.addEventListener('click', (event) => { // マウス（クリック）
+        const setting = document.querySelector('#setting');
+        if (setting.open) { if(!event.target.closest('#setting > form[method="dialog"]')) {setting.close();} return; }
+        Screen.on(event.clientX, event.clientY);
+    });
+    window.addEventListener('mousemove', (event) => { // マウス（移動）
+        if (document.querySelector('#setting').open) { return; }
+        // body内に要素がない領域は反応しない！　末尾ページは下端までない箇所では反応しない！
+        document.body.style.cursor = Screen.cursor(event.clientX, event.clientY);
+    });
+    window.addEventListener("keydown", event => { // キーボード
+        if (event.repeat) { return; } // 押しっぱなしによる連続入力の禁止
+        if (document.querySelector('#setting').open) { return; }
+        const IS_VERTICAL = ('vertical-rl' === document.querySelector('#writing-mode').value);
+        console.debug(`keydown event.key:${event.key}, Shift:${event.shiftKey}`)
+             if (event.key === 'ArrowUp') { event.preventDefault();  }   // menu(index,setting,tools)表示予定
+        else if (event.key === 'ArrowDown') { // setting表示切替
+            const dialog = document.querySelector('#setting');
+            (dialog.open) ? dialog.close() : dialog.showModal();
+            document.body.style.cursor = 'auto';
+            event.preventDefault();
+        }
+        else if (event.key === 'ArrowLeft') {(IS_VERTICAL) ? Paging.Page++ : Paging.Page--; event.preventDefault();  }
+        else if (event.key === 'ArrowRight') {(IS_VERTICAL) ? Paging.Page-- : Paging.Page++; event.preventDefault();  }
+        else if (event.key === 'PageUp') {Paging.Page--;event.preventDefault();}
+        else if (event.key === 'PageDown') {Paging.Page++;event.preventDefault();}
+        else if (event.key === 'Home') {firstPage();event.preventDefault();}
+        else if (event.key === 'End') {lastPage();event.preventDefault();}
+        else if (!event.shiftKey && event.key === ' ') {Paging.Page++;event.preventDefault();}
+        else if (event.shiftKey && event.key === ' ') {Paging.Page--;event.preventDefault();}
+        else if (!event.shiftKey && event.key === 'Enter') {Paging.Page++;event.preventDefault();}
+        else if (event.shiftKey && event.key === 'Enter') {Paging.Page--;event.preventDefault();}
+        else if (event.key === 'Backspace') {Paging.Page--;event.preventDefault();}
+        else if (event.key === 'Escape') {;event.preventDefault();} // 本を閉じる予定（本棚に戻る）
+        else {}
+    }, {passive: false});
+    window.addEventListener("keypress", event => { // キーボード
+        console.debug(`keypress event.key:${event.key}`)
+        if (document.querySelector('#setting').open) { if (event.key === 'Escape') {document.querySelector('#setting').close(); event.preventDefault();} return; }
+        const IS_VERTICAL = ('vertical-rl' === document.querySelector('#writing-mode').value);
+        if (event.key === 'n') {Paging.Page++;}
+        else if (event.key === 'p') {Paging.Page--;}
+        else if (event.key === 'f') {Paging.Page=1;}
+        else if (event.key === 'l') {Paging.Page=-1;}
+
+        // 'u' undo 前の移動を取り消す
+        // 'm' move 移動するページを絶対値で指定する
+        else if (event.key === 'm') {
+            const page = window.prompt('何ページ目に移動しますか？', `${Paging.Page}`);
+            Paging.Page = parseInt(page);
+        }
+        // 'h' here 現在ここは何ページ目かを表示する
+        // 't' time 現在時刻。経過時刻。指定時間、指定時刻までの残り時間を表示する
+        // 'i' index 作品名,目次,編,章,ページ数,著者名(著者他作品リンクへ)
+        // 's' setting
+        else if (event.key === 's') {
+            const dialog = document.querySelector('#setting');
+            (dialog.open) ? dialog.close() : dialog.showModal();
+            document.body.style.cursor = 'auto';
+        }
+        else if (event.key === 'S') { // 余白（補足情報）の表示／非表示切替
+            const SUB = document.querySelector('#sub-info-disabled');
+            SUB.checked = !SUB.checked;
+            SUB.dispatchEvent(new Event('change'));
+        }
+        else if (event.key === 'c') {
+            const COLOR_SCHEME = document.getElementById('color-scheme');
+            setColorScheme(COLOR_SCHEME.value);
+        }
+        else if (event.key === 'F') {
+            setFullScreen(!(document.fullscreenElement));
+        }
+        else if (event.key === 'w') {
+            document.getElementById('writing-mode').dispatchEvent(new Event('click'));
+        }
+        else {}
+    }, {passive: false});
+});
+</script>
+</head>
+
+<body>
+    <header>
+    <dialog id="setting">
+    <form id="setting-form" method="dialog">
+        <button type="button" id="full-screen" name="full-screen" value="0" title="フルスクリーンON/OFF"><img src="https://ytyaru.github.io/Html.CSS.WritingMode.LocalStorage.20211229153330/assets/images/icons/full-screen.svg"></img></button>
+        <button type="button" id="writing-mode" name="writing-mode" value="vertical-rl" title="縦書き／横書き"><img src=""></img></button>
+        <button type="button" id="color-scheme" name="color-scheme" value="light" title="light/dark">🌙</button>
+        <input type="range" id="column-count" name="column-count" min="1" max="3"><label for="column-count"><span id="column-count-label" class="upright"></span><span class="upright">段</span></label>
+        <br>
+        <input type="range" id="line-of-chars" name="line-of-chars" min="10" max="50"><label for="line-of-chars"><span id="line-of-chars-label" class="upright"></span><span class="upright">字／行</span></label>
+        <input type="range" id="line-height" name="line-height" min="1.5" max="2.0" step="0.05"><label for="line-height"><span id="line-height-label" class="upright"></span><span class="upright">％字</span><span class="upright">行間</span></label>
+        <input type="range" id="letter-spacing" name="letter-spacing" min="0.05" max="0.1" step="0.005"><label for="letter-spacing"><span id="letter-spacing-label" class="upright"></span><span class="upright">％字</span><span class="upright">字間</span></label>
+        <fieldset id="sub-info-fieldset" name="sub-info-fieldset">
+            <legend><label><input type="checkbox" id="sub-info-disabled" name="sub-info-disabled">補足情報</label></legend>
+            <input type="range" id="margin" name="margin" min="1.5" max="4" step="0.5"><label for="margin"><span id="margin-label" class="upright"></span><span class="upright">字</span><span class="upright">余白</span></label>
+            <div id="page-header-visibility">
+            <label id="clock-visibility-label"><input type="checkbox" id="clock-visibility">現在時刻</label>
+            <label id="elapsed-time-visibility-label"><input type="checkbox" id="elapsed-time-visibility">経過時間</label>
+            <label id="now-section-heading-visibility-label"><input type="checkbox" id="now-section-heading-visibility">柱</label>
+            </div>
+            <!--<input type="checkbox" id="is-"><label for="is-">つめかけ</label>-->
+            <div id="page-footer-visibility">
+            <label id="read-rate-visibility-label"><input type="checkbox" id="read-rate-visibility">読了率</label>
+            <label id="page-number-visibility-label"><input type="checkbox" id="page-number-visibility">ページ</label>
+            <label id="remaining-pages-visibility-label"><input type="checkbox" id="remaining-pages-visibility">残りページ数</label>
+            </div>
+            <div id="sub-info-visibility">
+            </div>
+        </fieldset>
+    </form>
+    </dialog>
+    </header>
+    <div id="page-header"><div id="clock">現在時刻</div><div id="elapsed-time">経過時間</div><div id="now-section-heading" heading="現在閲覧中の見出し"></div></div>
+    <div id="page-footer"><div id="remaining-pages"></div><div id="page-number"></div><div id="read-rate"></div></div>
+ 
+    <main>
+        <h1 id="site-heading"></h1>
+        <p><span id="works-count"></span><span>作品</span>　<span id="chars-count"></span><span>字</span></p>
+        <form id="works-search-form"></form>
+        <ul id="works-list"></ul>
+
+        <footer>
+            <span>© 2021 ytyaru</span>
+            <a title="CC-BY-SA 4.0" \
+               href="https://creativecommons.org/licenses/by-sa/4.0/deed.ja"
+               style="text-decoration: none;">
+                <img class="icon" src="https://upload.wikimedia.org/wikipedia/commons/a/a3/Cc.logo.circle.svg"></img>
+                <img class="icon" src="https://upload.wikimedia.org/wikipedia/commons/3/3c/Cc-by_new.svg"></img>
+                <img class="icon" src="https://upload.wikimedia.org/wikipedia/commons/2/29/Cc-sa.svg"></img>
+            </a>
+        </footer>
+    </main>
+
+</body>
+</html>
+<!-- https://coliss.com/articles/build-websites/operation/work/html-template-for-web-apps-or-sites.html -->
+<!-- https://coliss.com/articles/build-websites/operation/work/html5-template-for-2018.html -->
