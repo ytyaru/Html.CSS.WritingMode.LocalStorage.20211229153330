@@ -90,6 +90,10 @@ _Paging.prototype.moveFileRelative = async function(isPrev=false) { // 前後フ
         console.log(Paging.Page)
     }
     */
+
+    // URLを変更する（履歴を残さず）
+    // http://0.0.0.0:8000/book-page.html?book=0&file=0&page=3
+    window.history.replaceState(null, null, `${url.origin}${url.pathname}?book=${nowBook}&file=${this.File}&page=${this.Page}`); // 履歴を残さない
 }
 _Paging.prototype.moveNextFile = function() { this.moveFileRelative(); }
 _Paging.prototype.movePrevFile = function() { this.moveFileRelative(true); }
@@ -121,6 +125,9 @@ _Paging.prototype.movePageRelative = function(increment=1) { // 正数:進む, �
         this._page = TARGET_PAGE;
         this.setNowSectionHeading();
         this.setPageFooter(); 
+        // URLを変更する（履歴を残さず）
+        const url = new URL(location.href); // http://0.0.0.0:8000/book-page.html?book=0&file=0&page=3
+        window.history.replaceState(null, null, `${url.origin}${url.pathname}?book=${url.searchParams.get('book')}&file=${url.searchParams.get('file')}&page=${this._page}`);
     }
 }
 _Paging.prototype.movePageAbsolute = function(page=1) { // 1:最初の頁。負数:最後のページから数えた値。0:目次表示？
@@ -145,6 +152,9 @@ _Paging.prototype.movePageAbsolute = function(page=1) { // 1:最初の頁。負�
         this._page = TARGET_PAGE;
         this.setNowSectionHeading();
         this.setPageFooter(); 
+        // URLを変更する（履歴を残さず）
+        const url = new URL(location.href); // http://0.0.0.0:8000/book-page.html?book=0&file=0&page=3
+        window.history.replaceState(null, null, `${url.origin}${url.pathname}?book=${url.searchParams.get('book')}&file=${url.searchParams.get('file')}&page=${this._page}`);
     }
 }
 _Paging.prototype.break = function(query='p') { // 画面サイズに応じてページを区切る
