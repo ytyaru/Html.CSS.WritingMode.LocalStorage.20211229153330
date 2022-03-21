@@ -1,0 +1,17 @@
+<OpenSearchDescription xmlns="http://a9.com/-/spec/opensearch/1.1/"
+                       xmlns:moz="http://www.mozilla.org/2006/browser/search/">
+  <ShortName>{{name}}</ShortName><!--16字以下テキスト-->
+  <Description>{{description}}</Description><!--1024字以下テキスト-->
+  <InputEncoding>UTF-8</InputEncoding>
+  <OutputEncoding>UTF-8</OutputEncoding>
+  <Image width="16" height="16" type="image/x-icon">{{favicon-url}}</Image><!-- favicon.ico 16x16 PNG-->
+  <Image width="16" height="16" type="image/png">{{favicon-url}}</Image><!-- 64x64 PNG-->
+  <Url type="text/html" template="{{search-url}}"><!-- http://example.com/search?q={searchTerms} -->
+    <Param name="q" value="{searchTerms}"/>
+    <Param name="junre" value="{{junre}}"/>
+  </Url>
+  <Url type="application/x-suggestions+json" template="{{suggestion-url}"/>
+  <Url type="application/x-moz-keywordsearch" template="{{suggestion-url}"/>
+type=
+  <moz:SearchForm>https://example.com/search</moz:SearchForm>
+</OpenSearchDescription>
