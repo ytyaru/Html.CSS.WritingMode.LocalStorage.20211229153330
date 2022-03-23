@@ -1,0 +1,30 @@
+<dialog id="setting">
+<form id="setting-form" method="dialog">
+    <button type="button" id="full-screen" name="full-screen" value="0" title="フルスクリーンON/OFF"><img src="https://ytyaru.github.io/Html.CSS.WritingMode.LocalStorage.20211229153330/assets/images/icons/full-screen.svg"></img></button>
+    <button type="button" id="writing-mode" name="writing-mode" value="vertical-rl" title="縦書き／横書き"><img src=""></img></button>
+    <button type="button" id="color-scheme" name="color-scheme" value="light" title="light/dark">🌙</button>
+    <input type="range" id="column-count" name="column-count" min="1" max="3"><label for="column-count"><span id="column-count-label" class="upright"></span><span class="upright">段</span></label>
+    <br>
+    <input type="range" id="line-of-chars" name="line-of-chars" min="10" max="50"><label for="line-of-chars"><span id="line-of-chars-label" class="upright"></span><span class="upright">字／行</span></label>
+    <input type="range" id="line-height" name="line-height" min="1.5" max="2.0" step="0.05"><label for="line-height"><span id="line-height-label" class="upright"></span><span class="upright">％字</span><span class="upright">行間</span></label>
+    <input type="range" id="letter-spacing" name="letter-spacing" min="0.05" max="0.1" step="0.005"><label for="letter-spacing"><span id="letter-spacing-label" class="upright"></span><span class="upright">％字</span><span class="upright">字間</span></label>
+    <fieldset id="sub-info-fieldset" name="sub-info-fieldset">
+        <legend><label><input type="checkbox" id="sub-info-disabled" name="sub-info-disabled">補足情報</label></legend>
+        <input type="range" id="margin" name="margin" min="1.5" max="4" step="0.5"><label for="margin"><span id="margin-label" class="upright"></span><span class="upright">字</span><span class="upright">余白</span></label>
+        <div id="page-header-visibility">
+        <label id="clock-visibility-label"><input type="checkbox" id="clock-visibility">現在時刻</label>
+        <label id="elapsed-time-visibility-label"><input type="checkbox" id="elapsed-time-visibility">経過時間</label>
+        <label id="now-section-heading-visibility-label"><input type="checkbox" id="now-section-heading-visibility">柱</label>
+        </div>
+        <!--<input type="checkbox" id="is-"><label for="is-">つめかけ</label>-->
+        <div id="page-footer-visibility">
+        <label id="read-rate-visibility-label"><input type="checkbox" id="read-rate-visibility">読了率</label>
+        <label id="page-number-visibility-label"><input type="checkbox" id="page-number-visibility">ページ</label>
+        <label id="remaining-pages-visibility-label"><input type="checkbox" id="remaining-pages-visibility">残りページ数</label>
+        </div>
+        <div id="sub-info-visibility">
+        </div>
+    </fieldset>
+</form>
+</dialog>
+
