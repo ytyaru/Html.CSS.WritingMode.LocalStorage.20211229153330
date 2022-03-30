@@ -103,12 +103,24 @@ window.addEventListener('DOMContentLoaded', async(event) => {
 </script>
 
 <style>
+* {
+    padding: 0;
+    margin: 0;
+    light-height: 0;
+}
 :root {
-    --chars-of-line:40;
-    --letter-spacing:0.075;
+    --chars-of-line:40;     /* 本 40〜50字／行 */
+    --letter-spacing:0.075; /* 字間 0.05〜0.1em */
+    --light-height:1.75em;  /* 行間 1.5〜2.0em */
+}
+body {
     font-size: calc(100vw / (var(--chars-of-line) * (1 + var(--letter-spacing))));
-    /*font-size: calc(100vw / var(--chars-of-line));*/
-    letter-spacing: calc(1em * var(--letter-spacing)); /* 字間 0.05〜0.1em */
+    letter-spacing: calc(1em * var(--letter-spacing));
+    light-height: var(--light-height);
+}
+h1.site-name {
+    display: inline;
+    font-size: 1em;
 }
 summary { list-style: none; }
 details::open {
@@ -143,7 +155,7 @@ summary:focus {
 
 <body>
 
-<header><!--<img href=""></img>--><a href="guide.html">😺<h1 style="display:inline;">{{site-name}}</h1></a><a href="search.html">🔎</a><a href="login.html">🚪</a></header>
+<header><!--<img href=""></img>--><a href="guide.html">😺<h1 class="site-name">{{site-name}}</h1></a><a href="search.html">🔎</a><a href="login.html">🚪</a></header>
 
 <main>
 <header>
