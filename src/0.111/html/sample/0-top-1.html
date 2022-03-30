@@ -173,11 +173,16 @@ li a:focus {
     block-size: 80vh;
 }
 .work-list {
-    /*overflow: scroll;*/
-    /*white-space: nowrap;*/
-    /*display: flex;*/
+    white-space: nowrap; /* 折り返さない */
     overflow-x: hidden;
     overflow-y: scroll;
+    /* 未実装。
+    overflow-inline: hidden;
+    overflow-block: scroll;
+    */
+
+    /*display: flex;*/
+    /*overflow: scroll;*/
     /*overflow-y: auto;*/
     /*scroll-behavior: smooth;*/
     /*

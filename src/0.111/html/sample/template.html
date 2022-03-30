@@ -96,7 +96,6 @@
       }// Thing
 }
 </script>
-
 <style>
 * {
     padding: 0;
@@ -132,116 +131,18 @@ p { margin-block-end: 1em; }
 a {
     text-decoration: underline; /* 横:underline, 縦:overline */
 }
-fieldset {
-    display: inline;
-    width:fit-content;
-}
 </style>
-
 </head>
 
 <body>
 
-<header><!--<img href=""></img>--><a href="guide.html">😺<h1 class="site-name">{{site-name}}</h1></a><a href="search.html">🔎</a><a href="login.html">🚪</a></header>
+<header>{{header}}</header>
 <main>
-
-<form>
-<input type="search" name="q" placeholder="全文検索">
-
-<!-- fieldsetを横並びに出来ない。バグか？ https://stackoverflow.com/questions/28078681/why-cant-fieldset-be-flex-containers -->
-<header style="block:inline-flex;">
-
-<fieldset>
-<legend title="並べ替え">⇅</legend>
-<select name="sort-date" title="日時順">
-<option value="">-</option>
-<option value="1">新</option>
-<option value="-1">古</option>
-</select>
-<select name="sort-volume" title="字数順">
-<option value="">-</option>
-<option value="1">長</option>
-<option value="-1">短</option>
-</select>
-</fieldset>
-
-<fieldset>
-<legend title="絞り込み">▽</legend>
-<select name="filter-finished" title="完結／連載中">
-<option value="">-</option>
-<option value="1">完</option>
-<option value="-1">続</option>
-</select>
-<select name="filter-read-status" title="読書状態">
-<option value="">-</option>
-<optgroup label="読書中">
-  <option value="reading">読書中</option>
-  <option value="waiting">最新話待ち</option>
-</optgroup>
-<option value="1">未読</option>
-<optgroup label="切捨" title="「読まない」とマークした作品">
-  <option value="mark_summary" title="あらすじで「読まない」とマークした作品">あらすじ切</option>
-  <option value="mark_body" title="本文の途中で「読まない」とマークした作品">本文途中切</option>
-</optgroup>
-<option value="readed" title="最後まで本文を読み終えた作品">読了</option>
-<optgroup label="書いた">
-  <option value="introduced">紹介した</option>
-  <option value="wrote-impression">感想を書いた</option>
-  <option value="reviewed">レビューを書いた</option>
-  <option value="derivative-work">二次創作した</option>
-</optgroup>
-</select>
-</fieldset>
-
-
-<fieldset>
-<legend title="作品の傾向">作品の傾向</legend>
-<label><input type="checkbox" name="">傾向A</label><label><input type="checkbox" name="">傾向B</label><label><input type="checkbox" name="">傾向C</label>
-</fieldset>
-<fieldset>
-<legend title="舞台">舞台</legend>
-<label><input type="checkbox" name="">舞台A</label><label><input type="checkbox" name="">舞台B</label><label><input type="checkbox" name="">舞台C</label>
-</fieldset>
-<fieldset>
-<legend title="シチュ">シチュ</legend>
-<label><input type="checkbox" name="">シチュA</label><label><input type="checkbox" name="">シチュB</label><label><input type="checkbox" name="">シチュC</label>
-</fieldset>
-<fieldset>
-<legend title="キャラ">キャラ</legend>
-<label><input type="checkbox" name="">キャラA</label><label><input type="checkbox" name="">キャラB</label><label><input type="checkbox" name="">キャラC</label>
-</fieldset>
-
-<fieldset>
-<legend title="セルフ・レーティング">セルフ・レーティング</legend>
-<label><input type="checkbox" name="">性</label><label><input type="checkbox" name="">暴力</label><label><input type="checkbox" name="">残酷</label>
-</fieldset>
-
-<fieldset>
-<legend title="日時">日時</legend>
-<input type="date" name="">〜<input type="date" name="">
-</fieldset>
-
-<fieldset>
-<legend title="★">★</legend>
-<input type="number" name="starMin">〜<input type="number" name="starMax">
-</fieldset>
-</form>
-</header>
-
-<section id="search-result">
-<header>
-<span title="読了率">nnnn％</span>　<span title="作品数">nnnn万nnnn作</span>　<span title="文字数">nnnn万nnnn字</span>
-</header>
-<section id="search-result-list">
-<ul>
-<li><a href=""><span>作品タイトル1</span></a>
-<li><a href=""><span>作品タイトル2</span></a>
-<li><a href=""><span>作品タイトル3</span></a>
-</ul>
-</section>
-</section>
-
+<header>{{main-header}}</header>
+{{main-content}}
+<footer>{{main-footer}}</footer>
 </main>
+<footer>{{footer}}</footer>
 
 </body>
 </html>
