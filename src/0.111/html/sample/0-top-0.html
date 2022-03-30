@@ -109,19 +109,31 @@ window.addEventListener('DOMContentLoaded', async(event) => {
     light-height: 0;
 }
 :root {
-    --chars-of-line:40;     /* 本 40〜50字／行 */
-    --letter-spacing:0.075; /* 字間 0.05〜0.1em */
-    --light-height:1.75em;  /* 行間 1.5〜2.0em */
+    --chars-of-line:40;           /* 本 40〜50字／行 */
+    --letter-spacing:0.075;       /* 字間 0.05〜0.1em */
+    --light-height:1.75em;        /* 行間 1.5〜2.0em */
+    --writing-mode:horizontal-tb; /* 書字方向 horizontal-tb, vertical-rl */
+    --ms-writing-mode: lr;        /* 書字方向 lr, tb-rl */
 }
 body {
     font-size: calc(100vw / (var(--chars-of-line) * (1 + var(--letter-spacing))));
     letter-spacing: calc(1em * var(--letter-spacing));
     light-height: var(--light-height);
+
+    writing-mode: var(--writing-mode);
+    -ms-writing-mode: var(--ms-writing-mode);
+    text-orientation: upright; /* 字の向き */
+}
+.upright { /* 縦中横 */
+    text-combine-upright: all;
+    -webkit-text-combine: horizontal;
+    -ms-text-combine-horizontal: all;
 }
 h1.site-name {
     display: inline;
     font-size: 1em;
 }
+p { margin-block-end: 1em; }
 summary { list-style: none; }
 details::open {
     background-color: #FFFF44;
