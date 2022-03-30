@@ -135,17 +135,93 @@ input, textarea, select, button, form, legend, label {
     font-size: 1em;
 }
 </style>
+
+
+<script>
+// どこから読むか。以下3パターンをボタンで表示する。URL引数によって出現するボタンがある。
+// 1. はじめから
+// 2. つづきから
+// 3. ここから
+// 
+// 「1. はじめから」は常にあり１話から読む。
+// 「2. つづきから」は読書中なら最後に読んだところに飛ぶ（URL引数。file=ファイルID, p=p要素位置）
+// 「3. ここから」はツイッターなど外部紹介用URLで指定箇所に飛ぶ（URL引数。file=ファイルID, p=p要素位置, text=指定テキスト, start=開始文字位置, end=終了文字位置）
+</script>
+
 </head>
 
 <body>
 
-<header>{{header}}</header>
+<header><!--<img href=""></img>--><a href="guide.html">😺<h1 class="site-name">{{site-name}}</h1></a><a href="search.html">🔎</a><a href="login.html">🚪</a></header>
+
 <main>
-<header>{{main-header}}</header>
-{{main-content}}
-<footer>{{main-footer}}</footer>
+<article>
+<h1 id="title">作品タイトル</h1>
+<span id="pitch">ピッチ</span><br>
+<span id="logline">ログライン</span><br>
+<span id="isComplated">完結／連載中</span>　<span id="isComplated">nnnn万nnnn字</span>　<span id="title">YYYY.MM.DD</span>〜<span id="title">YYYY.MM.DD</span><br>
+
+<button>はじめから読む<br>1話</button><button>つづきから読む<br>7話</button><button>ここから読む<br>24話</button>
+
+<br><a href="">外部サイト1</a>　<a href="">外部サイト2</a>　<a href="">外部サイト3</a>
+
+<details><summary>属性</summary>
+<span>属性1</span>　<span>属性2</span>　<span>属性3</span>　<span>属性4</span>
+</details>
+<span id="title">あらすじ</span><br>
+<div>
+<section id="toc">
+<h1>目次</h1>
+<section id="toc-1">
+<h1>第一部</h1>
+<section id="toc-1">
+<h1>第一章</h1>
+<ul>
+<li><a href="">1話 サブタイ</a>
+<li><a href="">2話 サブタイ</a>
+<li><a href="">3話 サブタイ</a>
+</ul>
+</section>
+<section id="toc-1">
+<h1>第二章</h1>
+<ul>
+<li><a href="">4話 サブタイ</a>
+<li><a href="">5話 サブタイ</a>
+<li><a href="">6話 サブタイ</a>
+</ul>
+</section>
+</section>
+</section>
+</div>
+</article>
+
+<!-- 派生コンテンツ -->
+<!-- WEB小説：シリーズ、スピンオフ -->
+<!-- 電子本化: epub -->
+<!-- 音読化: mp3 -->
+<!-- イラスト化: png -->
+<!-- ボイス化: mp3 -->
+<!-- キャラソン化: mp3 -->
+<!-- 書籍化 -->
+<!-- 漫画化 -->
+<!-- アニメ化 -->
+<!-- ゲーム化 -->
+<!-- グッズ化 -->
+<!-- 映画化 -->
+<!-- ドラマ化 -->
+<!-- スタンプ化 -->
+
+<!-- ユーザ自身が作成したコンテンツ -->
+<!-- 紹介文（ツイート） -->
+<!-- 感想文 -->
+<!-- レビュー -->
+<!-- 二次創作 -->
+<!-- ユーザ自身が与した行為 -->
+<!-- 寄付 -->
+<!-- 購入 -->
+<!-- クラウドファウンディング -->
+
 </main>
-<footer>{{footer}}</footer>
 
 </body>
 </html>
