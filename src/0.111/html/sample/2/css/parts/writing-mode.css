@@ -1,0 +1,19 @@
+@charset "utf-8";
+:root {
+    --writing-mode: horizontal-tb;  /* 書字方向 horizontal-tb, vertical-rl */
+    --ms-writing-mode: lr;          /* 書字方向 lr, tb-rl */
+    --text-orientation: upright;    /* 字の向き */
+    --a-text-decoration: underline; /* 文字装飾 横:underline, 縦:overline */
+}
+body {
+    writing-mode: var(--writing-mode);
+    -ms-writing-mode: var(--ms-writing-mode);
+    text-orientation: var(--text-orientation); /* upright, sideways */
+}
+.upright { /* 縦中横 */
+    text-combine-upright: all;
+    -webkit-text-combine: horizontal;
+    -ms-text-combine-horizontal: all;
+}
+a { text-decoration: var(--a-text-decoration); } 
+

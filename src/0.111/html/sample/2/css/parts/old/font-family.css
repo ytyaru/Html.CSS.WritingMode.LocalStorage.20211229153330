@@ -1,0 +1,64 @@
+@charset "utf-8";
+/* fc-list | grep 'IPAex明朝' */
+@font-face {
+    font-family: IPAex明朝;
+    src: local('IPAex明朝'), 
+         local('ipaexm.ttf') format('opentype'),
+         local('fonts-japanese-mincho.ttf') format('truetype'),
+         url('https://cdn.leafscape.be/IPAexfont/ipaexm_web.woff2') format("woff2");
+}
+@font-face {
+    font-family: IPAexゴシック;
+    src: local('IPAexゴシック'), 
+         local('IPAexGothic'), 
+         local('ipaexg.ttf') format('truetype'),
+         local('fonts-japanese-gothic.ttf') format('truetype'),
+         local('fonts-japanese-mincho.ttf') format('truetype'),
+         url('https://cdn.leafscape.be/IPAexfont/ipaexg_web.woff2') format("woff2");
+}
+* {
+    padding: 0;
+    margin: 0;
+}
+body {
+    font-family: 'Noto Serif JP', 'IPAex明朝', serif; 
+    font-size: var(--font-size);
+    line-height: var(--line-height); /* 行間 1.5〜2.0 */
+    letter-spacing: var(--letter-spacing); /* 字間 0.05〜0.1em */
+
+    /* 縦置き／横置きでの自動サイズ調整無効化 */
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+button, input, select, textarea, label {
+    font-family: 'Noto Sans JP', 'IPAexゴシック', sans-serif; 
+    font-size   : 100%;
+}
+h1,h2,h3,h4,h5,h6 {
+    font-family: 'Noto Sans JP', 'IPAexゴシック', sans-serif; 
+    font-feature-settings: "palt"; /* カーニング */
+    letter-spacing: 0px;
+}
+h1 {
+    font-size: 2em;
+    border-style: inset; /* none,hidden,dotted,dashed,solid,double,groove,ridge,inset,outset */
+    border-width: 0.5em;
+    padding: 0.5em;
+    margin-block-end: 1em;
+}
+#page-header, #page-footer { 
+    display:grid;
+    grid-template-columns: repeat(3, 1fr);
+
+    font-family: 'Noto Sans JP', 'IPAexゴシック', sans-serif; 
+    font-size: 0.7em;
+    font-feature-settings: "palt"; /* カーニング */
+    color: var(--sub-font-color);
+
+    writing-mode: horizontal-tb;
+    position: fixed;
+    width: 100%;
+    left:0;
+}

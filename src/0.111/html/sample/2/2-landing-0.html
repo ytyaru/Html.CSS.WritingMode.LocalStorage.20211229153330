@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="ja" prefix="og: https://ogp.me/ns#">
+
+<head>
+
+<meta charset="UTF-8">
+<base href="{{base-url}}">
+<title>{{title}}</title><!-- {{site-name}} - {{catch-copy}} -->
+<meta name="description" content="{{description}}">
+<meta name="keywords" content="{{keywords}}">
+<meta name="author" content="{{author}}">
+<meta name="creator" content="{{creator}}">
+<meta name="publisher" content="{{publisher}}">
+<meta name="application-name" content="{{application-name}}">
+<meta name="robots" content="{{robots}}">
+<meta name="theme-color" content="{{theme-color}}">
+<meta name="color-scheme" content="{{color-scheme}}">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=0">
+
+<!-- Open Graph https://ogp.me/ -->
+<meta property="og:url" content="{{url}}" />
+<meta property="og:type" content="{{type}}" />
+<meta property="og:title" content="{{title}}" />
+<meta property="og:description" content="{{description}}" />
+<meta property="og:site_name" content="{{site-name}}" />
+<meta property="og:image" content="{{image-url}}" />
+<meta property="og:locale" content="ja_JP" />
+<!-- https://developer.twitter.com/ja/docs/tweets/optimize-with-cards/guides/getting-started -->
+<meta name="twitter:card" content="summary_large_image" /> <!-- summary, summary_large_image, app, player(audio,video) -->
+<meta name="twitter:site.id" content="{{twitter.user.id}}" /><!--ユーザID-->
+<!-- schema.org -->
+<script type="application/ld+json">
+{
+    "@context": "http://schema.org",
+     "@type": "WebSite",
+     "name": "{{site-name}}",  // Thing
+     "url": "{{url}}", // Thing
+     "description":"{{description}}", // Thing
+     "image": ["{{image-url}}"],
+     "mainEntityOfPage": {
+         "@type": "WebPage",
+         "@id": "http://example.com/"
+     }, // Thing
+     "headline": "見出し", // CreativeWork
+     "alternativeHeadline": "副見出し", // CreativeWork
+     "thumbnailUrl": "http://thumbnail.jpg", // CreativeWork
+     "author": {
+        "@type": "Person",
+        "name": "著者名"
+     }, // CreativeWork
+     "publisher": {
+           "@type": "Person",
+           "name": "人・組織の名前"
+     }, // CreativeWork
+     "datePublished": "2017-10-08",
+     "dateModified": "2017-10-09",
+     "keywords": ["keyword1", "keyword2"],
+     "about": {
+        "@type": "Event",
+        "name": "イベント名"
+      }, // 何かのイベントについてであれば // CreativeWork
+      "citation": ["http://cite1", "http://cite2"], // CreativeWork
+      "fileFormat": "text/html",
+      "encoding": {
+        "@type": "MediaObject"
+        "encodingFormat": "utf-8"
+       }, // CreativeWork
+       "inLanguage": ["ja", "eng"],
+       "genre": ["Web", "Technology"],
+       "exampleOfWork": {
+        "@type": "CreativeWork",
+        "name": "派生元の名前"
+       }, // 派生元などがあれば // CreativeWork
+       "workExample": {
+           "@type": "CreativeWork",
+           "name": "派生先の名前"
+       }, // paperback版，電子版などの派生先があれば // CreativeWork
+       "hasPart": {
+           "@type": "CreativeWork",
+           "name": "分割先の名前"
+       }, // このworkが分割しているなら分割先を指定 // CreativeWork
+       "isPartOf": {
+           "@type": "CreativeWork",
+           "name": "分割元の名前"
+       }, // このworkが分割しているなら，分割元を指定 // CreativeWork
+       "isAccessibleForFree": true,
+       "copyrightHolder": {
+           "@type": "Person",
+           "name": "著作権者名"
+       }, // CreativeWork
+       "copyrightYear": 2014, // CreativeWork
+       "potentialAction": {
+            "@type": "SearchAction",
+            "target": "https://query.example.com/search?q={search_term_string}",
+            "query-input": "required name=search_term_string" // google特有のプロパティ
+      }// Thing
+}
+</script>
+
+<link rel="stylesheet" type="text/css" href="css/2-landing-0.css">
+
+<style>
+#title { margin-block-end: 0; }
+</style>
+
+
+<script>
+// どこから読むか。以下3パターンをボタンで表示する。URL引数によって出現するボタンがある。
+// 1. はじめから
+// 2. つづきから
+// 3. ここから
+// 
+// 「1. はじめから」は常にあり１話から読む。
+// 「2. つづきから」は読書中なら最後に読んだところに飛ぶ（URL引数。file=ファイルID, p=p要素位置）
+// 「3. ここから」はツイッターなど外部紹介用URLで指定箇所に飛ぶ（URL引数。file=ファイルID, p=p要素位置, text=指定テキスト, start=開始文字位置, end=終了文字位置）
+</script>
+
+</head>
+
+<body>
+
+<header class="suns-0"><!--<img href=""></img>--><a href="guide.html">😺<h1 class="site-name">{{site-name}}</h1></a><a href="search.html">🔎</a><a href="login.html">🚪</a></header>
+
+<main>
+<article>
+<h1 id="title">作品タイトル</h1>
+<span id="pitch">ピッチ</span><br>
+<span id="logline">ログライン</span><br>
+<span id="isComplated">完結／連載中</span>　<span id="isComplated">nnnn万nnnn字</span>　<span id="title">YYYY.MM.DD</span>〜<span id="title">YYYY.MM.DD</span><br>
+
+<button>はじめから読む<br>1話</button><button>つづきから読む<br>7話</button><button>ここから読む<br>24話</button>
+
+<br><a href="">外部サイト1</a>　<a href="">外部サイト2</a>　<a href="">外部サイト3</a>
+
+<details><summary>属性</summary>
+<span>属性1</span>　<span>属性2</span>　<span>属性3</span>　<span>属性4</span>
+</details>
+<span id="title">あらすじ</span><br>
+<div>
+<section id="toc">
+<h1>目次</h1>
+<section id="toc-1">
+<h1>第一部</h1>
+<section id="toc-1">
+<h1>第一章</h1>
+<ul>
+<li><a href="">1話 サブタイ</a>
+<li><a href="">2話 サブタイ</a>
+<li><a href="">3話 サブタイ</a>
+</ul>
+</section>
+<section id="toc-1">
+<h1>第二章</h1>
+<ul>
+<li><a href="">4話 サブタイ</a>
+<li><a href="">5話 サブタイ</a>
+<li><a href="">6話 サブタイ</a>
+</ul>
+</section>
+</section>
+</section>
+</div>
+</article>
+
+<!-- 派生コンテンツ -->
+<!-- WEB小説：シリーズ、スピンオフ -->
+<!-- 電子本化: epub -->
+<!-- 音読化: mp3 -->
+<!-- イラスト化: png -->
+<!-- ボイス化: mp3 -->
+<!-- キャラソン化: mp3 -->
+<!-- 書籍化 -->
+<!-- 漫画化 -->
+<!-- アニメ化 -->
+<!-- ゲーム化 -->
+<!-- グッズ化 -->
+<!-- 映画化 -->
+<!-- ドラマ化 -->
+<!-- スタンプ化 -->
+
+<!-- ユーザ自身が作成したコンテンツ -->
+<!-- 紹介文（ツイート） -->
+<!-- 感想文 -->
+<!-- レビュー -->
+<!-- 二次創作 -->
+<!-- ユーザ自身が与した行為 -->
+<!-- 寄付 -->
+<!-- 購入 -->
+<!-- クラウドファウンディング -->
+
+<!-- 他のユーザが作成したコンテンツ -->
+<!-- レビュー -->
+<!-- 二次創作 -->
+
+</main>
+
+</body>
+</html>
+

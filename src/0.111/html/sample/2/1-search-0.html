@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="ja" prefix="og: https://ogp.me/ns#">
+
+<head>
+
+<meta charset="UTF-8">
+<base href="{{base-url}}">
+<title>{{title}}</title><!-- {{site-name}} - {{catch-copy}} -->
+<meta name="description" content="{{description}}">
+<meta name="keywords" content="{{keywords}}">
+<meta name="author" content="{{author}}">
+<meta name="creator" content="{{creator}}">
+<meta name="publisher" content="{{publisher}}">
+<meta name="application-name" content="{{application-name}}">
+<meta name="robots" content="{{robots}}">
+<meta name="theme-color" content="{{theme-color}}">
+<meta name="color-scheme" content="{{color-scheme}}">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=0">
+
+<!-- Open Graph https://ogp.me/ -->
+<meta property="og:url" content="{{url}}" />
+<meta property="og:type" content="{{type}}" />
+<meta property="og:title" content="{{title}}" />
+<meta property="og:description" content="{{description}}" />
+<meta property="og:site_name" content="{{site-name}}" />
+<meta property="og:image" content="{{image-url}}" />
+<meta property="og:locale" content="ja_JP" />
+<!-- https://developer.twitter.com/ja/docs/tweets/optimize-with-cards/guides/getting-started -->
+<meta name="twitter:card" content="summary_large_image" /> <!-- summary, summary_large_image, app, player(audio,video) -->
+<meta name="twitter:site.id" content="{{twitter.user.id}}" /><!--ユーザID-->
+<!-- schema.org -->
+<script type="application/ld+json">
+{
+    "@context": "http://schema.org",
+     "@type": "WebSite",
+     "name": "{{site-name}}",  // Thing
+     "url": "{{url}}", // Thing
+     "description":"{{description}}", // Thing
+     "image": ["{{image-url}}"],
+     "mainEntityOfPage": {
+         "@type": "WebPage",
+         "@id": "http://example.com/"
+     }, // Thing
+     "headline": "見出し", // CreativeWork
+     "alternativeHeadline": "副見出し", // CreativeWork
+     "thumbnailUrl": "http://thumbnail.jpg", // CreativeWork
+     "author": {
+        "@type": "Person",
+        "name": "著者名"
+     }, // CreativeWork
+     "publisher": {
+           "@type": "Person",
+           "name": "人・組織の名前"
+     }, // CreativeWork
+     "datePublished": "2017-10-08",
+     "dateModified": "2017-10-09",
+     "keywords": ["keyword1", "keyword2"],
+     "about": {
+        "@type": "Event",
+        "name": "イベント名"
+      }, // 何かのイベントについてであれば // CreativeWork
+      "citation": ["http://cite1", "http://cite2"], // CreativeWork
+      "fileFormat": "text/html",
+      "encoding": {
+        "@type": "MediaObject"
+        "encodingFormat": "utf-8"
+       }, // CreativeWork
+       "inLanguage": ["ja", "eng"],
+       "genre": ["Web", "Technology"],
+       "exampleOfWork": {
+        "@type": "CreativeWork",
+        "name": "派生元の名前"
+       }, // 派生元などがあれば // CreativeWork
+       "workExample": {
+           "@type": "CreativeWork",
+           "name": "派生先の名前"
+       }, // paperback版，電子版などの派生先があれば // CreativeWork
+       "hasPart": {
+           "@type": "CreativeWork",
+           "name": "分割先の名前"
+       }, // このworkが分割しているなら分割先を指定 // CreativeWork
+       "isPartOf": {
+           "@type": "CreativeWork",
+           "name": "分割元の名前"
+       }, // このworkが分割しているなら，分割元を指定 // CreativeWork
+       "isAccessibleForFree": true,
+       "copyrightHolder": {
+           "@type": "Person",
+           "name": "著作権者名"
+       }, // CreativeWork
+       "copyrightYear": 2014, // CreativeWork
+       "potentialAction": {
+            "@type": "SearchAction",
+            "target": "https://query.example.com/search?q={search_term_string}",
+            "query-input": "required name=search_term_string" // google特有のプロパティ
+      }// Thing
+}
+</script>
+
+<link rel="stylesheet" type="text/css" href="css/1-search-0.css">
+
+<style>
+fieldset {
+    display: inline;
+    width:fit-content;
+}
+</style>
+
+</head>
+
+<body>
+
+<header class="suns-0"><!--<img href=""></img>--><a href="guide.html">😺<h1 class="site-name">{{site-name}}</h1></a><a href="search.html">🔎</a><a href="login.html">🚪</a></header>
+<main>
+
+<form class="suns">
+<input type="search" name="q" placeholder="全文検索">
+
+<!-- fieldsetを横並びに出来ない。バグか？ https://stackoverflow.com/questions/28078681/why-cant-fieldset-be-flex-containers -->
+<header style="block:inline-flex;">
+
+<fieldset>
+<legend title="並べ替え">⇅</legend>
+<select name="sort-date" title="日時順">
+<option value="">-</option>
+<option value="1">新</option>
+<option value="-1">古</option>
+</select>
+<select name="sort-volume" title="字数順">
+<option value="">-</option>
+<option value="1">長</option>
+<option value="-1">短</option>
+</select>
+</fieldset>
+
+<fieldset>
+<legend title="絞り込み">▽</legend>
+<select name="filter-finished" title="完結／連載中">
+<option value="">-</option>
+<option value="1">完</option>
+<option value="-1">続</option>
+</select>
+<select name="filter-read-status" title="読書状態">
+<option value="">-</option>
+<optgroup label="読書中">
+  <option value="reading">読書中</option>
+  <option value="waiting">最新話待ち</option>
+</optgroup>
+<option value="1">未読</option>
+<optgroup label="切捨" title="「読まない」とマークした作品">
+  <option value="mark_summary" title="あらすじで「読まない」とマークした作品">あらすじ切</option>
+  <option value="mark_body" title="本文の途中で「読まない」とマークした作品">本文途中切</option>
+</optgroup>
+<option value="readed" title="最後まで本文を読み終えた作品">読了</option>
+<optgroup label="書いた">
+  <option value="introduced">紹介した</option>
+  <option value="wrote-impression">感想を書いた</option>
+  <option value="reviewed">レビューを書いた</option>
+  <option value="derivative-work">二次創作した</option>
+</optgroup>
+</select>
+</fieldset>
+
+
+<fieldset>
+<legend title="作品の傾向">作品の傾向</legend>
+<label><input type="checkbox" name="">傾向A</label><label><input type="checkbox" name="">傾向B</label><label><input type="checkbox" name="">傾向C</label>
+</fieldset>
+<fieldset>
+<legend title="舞台">舞台</legend>
+<label><input type="checkbox" name="">舞台A</label><label><input type="checkbox" name="">舞台B</label><label><input type="checkbox" name="">舞台C</label>
+</fieldset>
+<fieldset>
+<legend title="シチュ">シチュ</legend>
+<label><input type="checkbox" name="">シチュA</label><label><input type="checkbox" name="">シチュB</label><label><input type="checkbox" name="">シチュC</label>
+</fieldset>
+<fieldset>
+<legend title="キャラ">キャラ</legend>
+<label><input type="checkbox" name="">キャラA</label><label><input type="checkbox" name="">キャラB</label><label><input type="checkbox" name="">キャラC</label>
+</fieldset>
+
+<fieldset>
+<legend title="セルフ・レーティング">セルフ・レーティング</legend>
+<label><input type="checkbox" name="">性</label><label><input type="checkbox" name="">暴力</label><label><input type="checkbox" name="">残酷</label>
+</fieldset>
+
+<fieldset>
+<legend title="日時">日時</legend>
+<input type="date" name="">〜<input type="date" name="">
+</fieldset>
+
+<fieldset>
+<legend title="★">★</legend>
+<input type="number" name="starMin">〜<input type="number" name="starMax">
+</fieldset>
+</form>
+</header>
+
+<section id="search-result">
+<header class="suns-0">
+<span title="読了率">nnnn％</span>　<span title="作品数">nnnn万nnnn作</span>　<span title="文字数">nnnn万nnnn字</span>
+</header>
+<section id="search-result-list">
+<ul>
+<li><a href=""><span>作品タイトル1</span></a>
+<li><a href=""><span>作品タイトル2</span></a>
+<li><a href=""><span>作品タイトル3</span></a>
+</ul>
+</section>
+</section>
+
+</main>
+
+</body>
+</html>
+

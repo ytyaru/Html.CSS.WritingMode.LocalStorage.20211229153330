@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="ja" prefix="og: https://ogp.me/ns#">
+
+<head>
+
+<meta charset="UTF-8">
+<base href="{{base-url}}">
+<title>{{title}}</title><!-- {{site-name}} - {{catch-copy}} -->
+<meta name="description" content="{{description}}">
+<meta name="keywords" content="{{keywords}}">
+<meta name="author" content="{{author}}">
+<meta name="creator" content="{{creator}}">
+<meta name="publisher" content="{{publisher}}">
+<meta name="application-name" content="{{application-name}}">
+<meta name="robots" content="{{robots}}">
+<meta name="theme-color" content="{{theme-color}}">
+<meta name="color-scheme" content="{{color-scheme}}">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=0">
+
+<!-- Open Graph https://ogp.me/ -->
+<meta property="og:url" content="{{url}}" />
+<meta property="og:type" content="{{type}}" />
+<meta property="og:title" content="{{title}}" />
+<meta property="og:description" content="{{description}}" />
+<meta property="og:site_name" content="{{site-name}}" />
+<meta property="og:image" content="{{image-url}}" />
+<meta property="og:locale" content="ja_JP" />
+<!-- https://developer.twitter.com/ja/docs/tweets/optimize-with-cards/guides/getting-started -->
+<meta name="twitter:card" content="summary_large_image" /> <!-- summary, summary_large_image, app, player(audio,video) -->
+<meta name="twitter:site.id" content="{{twitter.user.id}}" /><!--ユーザID-->
+<!-- schema.org -->
+<script type="application/ld+json">{
+"@context": "http://schema.org",
+"@type": "WebSite",
+"name": "{{site-name}}",  // Thing
+"url": "{{url}}", // Thing
+"description":"{{description}}", // Thing
+"image": ["{{image-url}}"],
+"headline": "{{title}}", // CreativeWork
+"alternativeHeadline": "{{sub-title}}", // CreativeWork
+"thumbnailUrl": "{{image-url}}", // CreativeWork
+"author": {
+    "@type": "Person",
+    "name": "{{author}}",
+    "description":"{{author-description}}", // Thing
+    "image": "{{author-image-url}}",
+    "url": "{{author-url}}",
+}, // CreativeWork
+"publisher": {
+    "@type": "Person",
+    "name": "{{author}}",
+}, // CreativeWork
+"dateCreated": "{{created}}",
+"datePublished": "{{published}}",
+"dateModified": "{{updated}}",
+"keywords": "{{keywords}}",
+"fileFormat": "text/html",
+"encoding": {
+    "@type": "MediaObject"
+    "encodingFormat": "utf-8"
+}, // CreativeWork
+"inLanguage": "ja",
+"genre": "Novel",
+"isAccessibleForFree": true,
+"copyrightHolder": {
+    "@type": "Person",
+    "name": "{{author}}"
+}, // CreativeWork
+"copyrightYear": 2022, // CreativeWork
+"potentialAction": {
+    "@type": "SearchAction",
+    "target": "https://query.example.com/search?q={search_term_string}",
+    "query-input": "required name=search_term_string" // google特有のプロパティ
+}, // Thing
+}</script>
+
+<link rel="stylesheet" type="text/css" href="css/0-top-2-sp-2.css">
+
+<script>
+window.addEventListener('DOMContentLoaded', async(event) => {
+    // 作品タイトル一覧
+    //   ボタンをタップすると次／前の作品を表示する。
+    //   スマホを振ると順序がランダムになる。もう一度振るとデフォルト（最終更新日時順）になる。
+    document.querySelector(':root').style.setProperty('--chars-of-line', 20);
+});
+</script>
+
+<style>
+main > header {
+    block-size: 10vh;
+}
+main > div.works {
+    block-size: 70vh;
+}
+main > footer {
+    /*inline-size: 100vw;*/
+    block-size: 20vh;
+}
+.buttons {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+</style>
+
+</head>
+
+<body>
+
+<header class="suns-0"><!--<img href=""></img>--><a href="guide.html">😺<h1 class="site-name">{{site-name}}</h1></a><a href="search.html">🔎</a><a href="login.html">🚪</a></header>
+
+<main>
+<header class="suns-0">
+<span title="読了率">nnnn％</span>　<span title="作品数">nnnn万nnnn作</span>　<span title="文字数">nnnn万nnnn字</span>
+</header>
+
+<!-- 作品一覧 -->
+
+<div class="works">
+<a href="">
+<div class="work-summary">
+<span>１２３４５６７８９０１２３４５６７８９０</span><br>
+<span>作品タイトル全文（100字まで）</span><br>
+<span>完結是非</span>　<span>nnnnnn字</span>　<span>yyyy-mm-dd</span>　<span>★nnnn</span><br>
+<span>ピッチ全文（35字まで）</span><br>
+<span>ログライン全文（200字まで）</span><br>
+<span>あらすじ全文（800字まで）</span><br>
+</div>
+</a>
+
+<footer class="buttons">
+<button class="prev">◀</button>
+<button class="next">▶</button>
+</footer>
+
+<!--
+<div class="buttons">
+<button class="prev">◀</button>
+<button class="next">▶</button>
+</div>
+-->
+
+<!--<footer></footer>-->
+</main>
+<!--
+<footer><a href="">© 2022 ytyaru</a></footer>
+-->
+
+</body>
+</html>
+
