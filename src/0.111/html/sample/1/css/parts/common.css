@@ -1,0 +1,236 @@
+@charset "utf-8";
+* {
+    padding: 0;
+    margin: 0;
+}
+body {
+    transition: background-color 2s linear;
+
+    font-family: 'Noto Serif JP', 'IPAex明朝', serif; 
+    font-size: var(--font-size);
+    line-height: var(--line-height); /* 行間 1.5〜2.0 */
+    letter-spacing: var(--letter-spacing); /* 字間 0.05〜0.1em */
+
+    /* 縦置き／横置きでの自動サイズ調整無効化 */
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+
+    writing-mode: var(--writing-mode); /* vertical-rl, horizontal-tb */
+    text-orientation: var(--text-orientation); /* upright, sideways */
+
+    width: calc(100vw - var(--padding-left) - var(--padding-right));
+    height: calc(100vh - var(--padding-top) - var(--padding-bottom));
+    padding-top: var(--padding-top);
+    padding-bottom: var(--padding-bottom);
+    padding-left: var(--padding-left);
+    padding-right: var(--padding-right);
+
+    counter-reset: section;
+    background-color: var(--background-color);
+    color: var(--color);
+
+    content-visibility: var(--content-visibility);
+    contain-intrinsic-size: 1000px;
+    contain: strict;
+}
+main {
+    width: 100%;
+    height: 100%;
+    column-count: var(--column-count);
+    column-span: none;
+    column-gap: var(--column-gap);
+    column-rule-width: var(--column-rule-width);
+    column-rule-style: solid;
+    column-rule-color: var(--sub-font-color);
+    overflow-x:hidden;
+    overflow-y:hidden;
+
+    content-visibility: var(--content-visibility);
+    contain-intrinsic-size: 1000px;
+    contain: strict;
+
+    /*will-change: scroll-position;*/ /* 効果なかった */
+}
+p {
+/*    text-indent: 1em;*/ /* 字下げは文字でやる仕様にしたい。 */
+    margin-block-end: var(--p-margin-block-end);
+}
+a { color: var(--a-color); }
+.upright {
+    text-combine-upright: all; /* 縦中横 */
+    letter-spacing: 0; /* 字間 */
+    text-transform: full-width; /* 全字全角 */
+}
+img.icon {
+    width: 1em;
+    height: 1em;
+}
+button, input, select, textarea, label {
+    transition: background-color 2s linear;
+
+    font-family: 'Noto Sans JP', 'IPAexゴシック', sans-serif; 
+    font-size   : 100%;
+    background-color: inherit;
+    color: inherit;
+
+    background-color: var(--background-color);
+    color: var(--color);
+    border-color: var(--sub-font-color)
+}
+input[type="range"] {
+    vertical-align: middle;
+}
+input[type='ranger'] > label > span:first-of-type { content: attr(value); }
+h1,h2,h3,h4,h5,h6 {
+    font-family: 'Noto Sans JP', 'IPAexゴシック', sans-serif; 
+    font-feature-settings: "palt"; /* カーニング */
+    letter-spacing: 0px;
+}
+h1:not(:first-child) {
+    break-before: column; /* ページ、段組  always, all, page, column */
+}
+h1 {
+    font-size: 2em;
+    border-style: inset; /* none,hidden,dotted,dashed,solid,double,groove,ridge,inset,outset */
+    border-width: 0.5em;
+    padding: 0.5em;
+    margin-block-end: 1em;
+}
+h1::before {
+    counter-increment: section;
+    content: '第' counter(section) '章 ';
+}
+dialog {
+    writing-mode: horizontal-tb;
+
+    background-color: var(--background-color);
+    color: var(--color);
+
+    /*transition: background-color 2s linear;*/
+    transition-property: background-color;
+    transition-duration: var(--sub-info-transition-duration);
+    transition-timing-function: linear
+
+    font-family: 'Noto Sans JP', 'IPAexゴシック', sans-serif; 
+    font-size: 1em;
+    font-feature-settings: "palt"; /* カーニング */
+
+    padding: 1em;
+}
+/* #page-footer, #page-side-left, #page-side-right */
+#page-header, #page-footer { 
+    display:grid;
+    grid-template-columns: repeat(3, 1fr);
+
+    font-family: 'Noto Sans JP', 'IPAexゴシック', sans-serif; 
+    font-size: 0.7em;
+    font-feature-settings: "palt"; /* カーニング */
+    color: var(--sub-font-color);
+
+    writing-mode: horizontal-tb;
+    position: fixed;
+    width: 100%;
+    left:0;
+}
+#page-header-visibility, #page-footer-visibility {
+    display:grid;
+    grid-template-columns: repeat(3, 1fr);
+}
+#page-header, #clock, #elapsed-time, #now-section-heading,
+#page-header-visibility, #clock-visibility, #elapsed-time-visibility, #now-section-heading-visibility  { /* 柱 */
+    text-align: start; /* start,end,center,justify */
+    top:0;
+}
+#page-footer, #read-rate, #page-number, #remaining-pages, 
+#page-footer-visibility, #read-rate-visibility, #page-number-visibility, #remaining-pages-visibility {
+    bottom:0;
+    left:0;
+    right:0;
+}
+#clock-visibility-label, #elapsed-time-visibility-label, #now-section-heading-visibility-label,#read-rate-visibility-label, #page-number-visibility-label, #remaining-pages-visibility-label {
+    border-color: var(--color);
+    border-style: solid;
+    border-width: 1px;
+    /*transition: background-color 2s linear;*/
+    transition-property: background-color;
+    transition-duration: var(--sub-info-transition-duration);
+    transition-timing-function: linear
+    
+}
+:is(#clock-visibility-label, #elapsed-time-visibility-label, #now-section-heading-visibility-label,#read-rate-visibility-label, #page-number-visibility-label, #remaining-pages-visibility-label):hover {
+    background-color: var(--color);
+    color: var(--background-color);
+}
+/* CSS4　未実装。
+:has(> input[type="checkbod", checked]) {
+    background-color: var(--color);
+    color: red;
+}
+:has(> #clock-visibility, #elapsed-time-visibility, #now-section-heading-visibility, #read-rate-visibility, #page-number-visibility, #remaining-pages-visibility):checked {
+    background-color: var(--color);
+    color: red;
+}
+*/
+/*
+:is(#clock-visibility, #elapsed-time-visibility, #now-section-heading-visibility,#read-rate-visibility, #page-number-visibility, #remaining-pages-visibility):hover {
+    background-color: red;
+    color: blue;
+}
+*/
+/*
+*/
+#clock, #clock-visibility-label { /* 現在時刻 */
+    text-align: var(--clock-text-align);
+    order: var(--clock-order);
+    /*background-color:#FFAAAA;*/
+}
+#clock {
+    visibility: var(--clock-visibility);
+}
+#elapsed-time, #elapsed-time-visibility-label { /* 経過時間 */
+    text-align: center;
+    order: 2;
+    /*background-color:#AAFFAA;*/
+}
+#elapsed-time {
+    visibility: var(--elapsed-time-visibility);
+}
+#now-section-heading, #now-section-heading-visibility-label { /* 柱 */
+    text-align: var(--now-section-heading-text-align);
+    order: var(--now-section-heading-order);
+    /*background-color:#CCCCFF;*/
+}
+#now-section-heading {
+    visibility: var(--now-section-heading-visibility);
+}
+#read-rate, #read-rate-visibility-label { /* 読了率 */
+    order: var(--read-rate-order);
+    text-align: var(--read-rate-text-align);
+    /*background-color:#FFFFAA;*/
+}
+#read-rate {
+    visibility: var(--read-rate-visibility);
+}
+#page-number, #page-number-visibility-label { /* ノンブル */
+    order: 2;
+    text-align: center;
+    /*background-color:#FFAAFF;*/
+}
+#page-number {
+    visibility: var(--page-number-visibility);
+}
+#remaining-pages, #remaining-pages-visibility-label { /* 残りページ数 */
+    order: var(--remaining-pages-order);
+    text-align: var(--remaining-pages-text-align);
+    /*background-color:#AAFFFF;*/
+}
+#remaining-pages {
+    visibility: var(--remaining-pages-visibility);
+}
+#full-screen > img, #writing-mode > img {
+    width: 1em;
+    height: 1em;
+    filter: invert(var(--svg-invert));
+}

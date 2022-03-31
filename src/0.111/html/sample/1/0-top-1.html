@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="ja" prefix="og: https://ogp.me/ns#">
+
+<head>
+
+<meta charset="UTF-8">
+<base href="{{base-url}}">
+<title>{{title}}</title><!-- {{site-name}} - {{catch-copy}} -->
+<meta name="description" content="{{description}}">
+<meta name="keywords" content="{{keywords}}">
+<meta name="author" content="{{author}}">
+<meta name="creator" content="{{creator}}">
+<meta name="publisher" content="{{publisher}}">
+<meta name="application-name" content="{{application-name}}">
+<meta name="robots" content="{{robots}}">
+<meta name="theme-color" content="{{theme-color}}">
+<meta name="color-scheme" content="{{color-scheme}}">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=0">
+
+<!-- Open Graph https://ogp.me/ -->
+<meta property="og:url" content="{{url}}" />
+<meta property="og:type" content="{{type}}" />
+<meta property="og:title" content="{{title}}" />
+<meta property="og:description" content="{{description}}" />
+<meta property="og:site_name" content="{{site-name}}" />
+<meta property="og:image" content="{{image-url}}" />
+<meta property="og:locale" content="ja_JP" />
+<!-- https://developer.twitter.com/ja/docs/tweets/optimize-with-cards/guides/getting-started -->
+<meta name="twitter:card" content="summary_large_image" /> <!-- summary, summary_large_image, app, player(audio,video) -->
+<meta name="twitter:site.id" content="{{twitter.user.id}}" /><!--ユーザID-->
+<!-- schema.org -->
+<script type="application/ld+json">{
+"@context": "http://schema.org",
+"@type": "WebSite",
+"name": "{{site-name}}",  // Thing
+"url": "{{url}}", // Thing
+"description":"{{description}}", // Thing
+"image": ["{{image-url}}"],
+"headline": "{{title}}", // CreativeWork
+"alternativeHeadline": "{{sub-title}}", // CreativeWork
+"thumbnailUrl": "{{image-url}}", // CreativeWork
+"author": {
+    "@type": "Person",
+    "name": "{{author}}",
+    "description":"{{author-description}}", // Thing
+    "image": "{{author-image-url}}",
+    "url": "{{author-url}}",
+}, // CreativeWork
+"publisher": {
+    "@type": "Person",
+    "name": "{{author}}",
+}, // CreativeWork
+"dateCreated": "{{created}}",
+"datePublished": "{{published}}",
+"dateModified": "{{updated}}",
+"keywords": "{{keywords}}",
+"fileFormat": "text/html",
+"encoding": {
+    "@type": "MediaObject"
+    "encodingFormat": "utf-8"
+}, // CreativeWork
+"inLanguage": "ja",
+"genre": "Novel",
+"isAccessibleForFree": true,
+"copyrightHolder": {
+    "@type": "Person",
+    "name": "{{author}}"
+}, // CreativeWork
+"copyrightYear": 2022, // CreativeWork
+"potentialAction": {
+    "@type": "SearchAction",
+    "target": "https://query.example.com/search?q={search_term_string}",
+    "query-input": "required name=search_term_string" // google特有のプロパティ
+}, // Thing
+}</script>
+
+<script>
+window.addEventListener('DOMContentLoaded', async(event) => {
+    // 作品タイトル一覧
+    //   スクロールした時フォーカスも一緒に移動させたい。
+    //   マウスホイールで１件ずつ。
+    //   タッチだと小さすぎる。スマホ用に別のUIを用意すべき。
+
+    // フォーカスした作品の詳細を表示する
+    for (const el of document.querySelectorAll(`.work`)) {
+        // focus/blur（バブリング無）, focusin/focusout（バブリング有）
+        el.addEventListener('focusin', (event) => {
+            event.target.parentNode.open = true;
+        });
+        el.addEventListener('focusout', (event) => {
+            event.target.parentNode.open = false;
+        });
+    }
+    // 最初の作品にフォーカスを当ててハイライト＋展開したかったが、ハイライトされないしフォーカスもされない。
+    //   tabindexを当てたらフォーカスだけは成功したが、順序がめちゃくちゃになる。ハイライトもされない。
+    //   https://developer.mozilla.org/ja/docs/Web/HTML/Global_attributes/tabindex
+    const firstWork = document.querySelector(`.work-list a`);
+    firstWork.setAttribute('tabindex', '0')
+    firstWork.focus();
+    firstWork.dispatchEvent(new Event('focusin'))
+    //firstWork.open = true
+    console.log(firstWork);
+    console.log(document.activeElement);
+    document.activeElement = firstWork;
+    console.log(document.activeElement);
+});
+</script>
+
+<link rel="stylesheet" type="text/css" href="css/0-top-1.css">
+
+<style>
+.works {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+}
+summary { list-style: none; }
+details::open {
+    background-color: #FFFF44;
+}
+summary:focus {
+    background-color: #FFFF00;
+}
+ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+li a{
+    display: block;
+    height: 100%;
+    width: 100%
+}
+li a:focus {
+    background-color: #FFFF00;
+}
+.works {
+    /*block-size: 10%;*/
+    block-size: 80vh;
+}
+.work-list {
+    white-space: nowrap; /* 折り返さない */
+    overflow-x: hidden;
+    overflow-y: scroll;
+    /* 未実装。
+    overflow-inline: hidden;
+    overflow-block: scroll;
+    */
+
+    /*display: flex;*/
+    /*overflow: scroll;*/
+    /*overflow-y: auto;*/
+    /*scroll-behavior: smooth;*/
+    /*
+    block-size: 50%;
+    inline-size: 50%
+    */
+}
+.work-list ul {
+    scroll-snap-type: y mandatory;
+}
+.work-list ul li a {
+    scroll-snap-align: start;
+}
+.work-details {
+    background-color: #FFFFCC;
+    color: #666666;
+}
+</style>
+
+</head>
+
+<body>
+
+<header><!--<img href=""></img>--><a href="guide.html">😺<h1 class="site-name">{{site-name}}</h1></a><a href="search.html">🔎</a><a href="login.html">🚪</a></header>
+
+<main>
+<header>
+<details><summary><span title="読了率">ｎｎ％</span>　　　　　　　<span title="作品数">ｎｎｎｎ万ｎｎｎｎ作</span>　　　　　　　　<span title="文字数">ｎｎｎｎ万ｎｎｎｎ字</span></summary>
+<span title="未読比">未ｎｎ％　切ｎｎ％</span>　<span title="作品比">異ｎｎ％　現ｎｎ％　SFｎｎ％　……</span>　<span title="文字比">異ｎｎ％　現ｎｎ％　SFｎｎ％　……</span>
+</details>
+
+</header>
+
+<!-- 作品一覧 -->
+
+<div class="works">
+<div class="work-list sans-0">
+<ul>
+<li><a href="">１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０</a>
+<li><a href="">作品名２</a>
+<li><a href="">作品名３</a>
+<li><a href="">作品名４</a>
+<li><a href="">作品名５</a>
+<li><a href="">作品名６</a>
+<li><a href="">作品名７</a>
+<li><a href="">作品名８</a>
+<li><a href="">作品名９</a>
+<li><a href="">作品名10</a>
+<li><a href="">作品名11</a>
+<li><a href="">作品名12</a>
+<li><a href="">作品名13</a>
+<li><a href="">作品名14</a>
+<li><a href="">作品名15</a>
+<li><a href="">作品名16</a>
+<li><a href="">作品名17</a>
+<li><a href="">作品名18</a>
+<li><a href="">作品名19</a>
+<li><a href="">作品名20</a>
+<li><a href="">作品名21</a>
+<li><a href="">作品名22</a>
+<li><a href="">作品名23</a>
+<li><a href="">作品名24</a>
+<li><a href="">作品名25</a>
+<li><a href="">作品名26</a>
+<li><a href="">作品名27</a>
+<li><a href="">作品名28</a>
+<li><a href="">作品名29</a>
+<li><a href="">作品名30</a>
+<li><a href="">作品名31</a>
+<li><a href="">作品名32</a>
+<li><a href="">作品名33</a>
+<li><a href="">作品名34</a>
+<li><a href="">作品名35</a>
+<li><a href="">作品名36</a>
+<li><a href="">作品名37</a>
+<li><a href="">作品名38</a>
+<li><a href="">作品名39</a>
+<li><a href="">作品名40</a>
+<li><a href="">作品名41</a>
+<li><a href="">作品名42</a>
+<li><a href="">作品名43</a>
+<li><a href="">作品名44</a>
+<li><a href="">作品名45</a>
+<li><a href="">作品名46</a>
+<li><a href="">作品名47</a>
+<li><a href="">作品名48</a>
+<li><a href="">作品名49</a>
+<li><a href="">作品名50</a> 
+</ul>
+</div>
+
+<div class="work-summary">
+<span>作品タイトル全文（100字まで）</span><br>
+<span>完結是非</span>　<span>nnnnnn字</span>　<span>yyyy-mm-dd</span>　<span>★nnnn</span><br>
+<span>ピッチ全文（35字まで）</span><br>
+<span>ログライン全文（200字まで）</span><br>
+<span>あらすじ全文（800字まで）</span><br>
+</div>
+</div>
+
+<footer></footer>
+</main>
+<footer><a href="">© 2022 ytyaru</a></footer>
+
+</body>
+</html>
+

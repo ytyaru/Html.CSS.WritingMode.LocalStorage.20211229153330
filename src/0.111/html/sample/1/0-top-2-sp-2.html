@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="ja" prefix="og: https://ogp.me/ns#">
+
+<head>
+
+<meta charset="UTF-8">
+<base href="{{base-url}}">
+<title>{{title}}</title><!-- {{site-name}} - {{catch-copy}} -->
+<meta name="description" content="{{description}}">
+<meta name="keywords" content="{{keywords}}">
+<meta name="author" content="{{author}}">
+<meta name="creator" content="{{creator}}">
+<meta name="publisher" content="{{publisher}}">
+<meta name="application-name" content="{{application-name}}">
+<meta name="robots" content="{{robots}}">
+<meta name="theme-color" content="{{theme-color}}">
+<meta name="color-scheme" content="{{color-scheme}}">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=0">
+
+<!-- Open Graph https://ogp.me/ -->
+<meta property="og:url" content="{{url}}" />
+<meta property="og:type" content="{{type}}" />
+<meta property="og:title" content="{{title}}" />
+<meta property="og:description" content="{{description}}" />
+<meta property="og:site_name" content="{{site-name}}" />
+<meta property="og:image" content="{{image-url}}" />
+<meta property="og:locale" content="ja_JP" />
+<!-- https://developer.twitter.com/ja/docs/tweets/optimize-with-cards/guides/getting-started -->
+<meta name="twitter:card" content="summary_large_image" /> <!-- summary, summary_large_image, app, player(audio,video) -->
+<meta name="twitter:site.id" content="{{twitter.user.id}}" /><!--ユーザID-->
+<!-- schema.org -->
+<script type="application/ld+json">{
+"@context": "http://schema.org",
+"@type": "WebSite",
+"name": "{{site-name}}",  // Thing
+"url": "{{url}}", // Thing
+"description":"{{description}}", // Thing
+"image": ["{{image-url}}"],
+"headline": "{{title}}", // CreativeWork
+"alternativeHeadline": "{{sub-title}}", // CreativeWork
+"thumbnailUrl": "{{image-url}}", // CreativeWork
+"author": {
+    "@type": "Person",
+    "name": "{{author}}",
+    "description":"{{author-description}}", // Thing
+    "image": "{{author-image-url}}",
+    "url": "{{author-url}}",
+}, // CreativeWork
+"publisher": {
+    "@type": "Person",
+    "name": "{{author}}",
+}, // CreativeWork
+"dateCreated": "{{created}}",
+"datePublished": "{{published}}",
+"dateModified": "{{updated}}",
+"keywords": "{{keywords}}",
+"fileFormat": "text/html",
+"encoding": {
+    "@type": "MediaObject"
+    "encodingFormat": "utf-8"
+}, // CreativeWork
+"inLanguage": "ja",
+"genre": "Novel",
+"isAccessibleForFree": true,
+"copyrightHolder": {
+    "@type": "Person",
+    "name": "{{author}}"
+}, // CreativeWork
+"copyrightYear": 2022, // CreativeWork
+"potentialAction": {
+    "@type": "SearchAction",
+    "target": "https://query.example.com/search?q={search_term_string}",
+    "query-input": "required name=search_term_string" // google特有のプロパティ
+}, // Thing
+}</script>
+
+<script>
+window.addEventListener('DOMContentLoaded', async(event) => {
+    // 作品タイトル一覧
+    //   ボタンをタップすると次／前の作品を表示する。
+    //   スマホを振ると順序がランダムになる。もう一度振るとデフォルト（最終更新日時順）になる。
+
+    // フォーカスした作品の詳細を表示する
+    for (const el of document.querySelectorAll(`.work`)) {
+        // focus/blur（バブリング無）, focusin/focusout（バブリング有）
+        el.addEventListener('focusin', (event) => {
+            event.target.parentNode.open = true;
+        });
+        el.addEventListener('focusout', (event) => {
+            event.target.parentNode.open = false;
+        });
+    }
+    // 最初の作品にフォーカスを当ててハイライト＋展開したかったが、ハイライトされないしフォーカスもされない。
+    //   tabindexを当てたらフォーカスだけは成功したが、順序がめちゃくちゃになる。ハイライトもされない。
+    //   https://developer.mozilla.org/ja/docs/Web/HTML/Global_attributes/tabindex
+    const firstWork = document.querySelector(`.work-list a`);
+    firstWork.setAttribute('tabindex', '0')
+    firstWork.focus();
+    firstWork.dispatchEvent(new Event('focusin'))
+    //firstWork.open = true
+    console.log(firstWork);
+    console.log(document.activeElement);
+    document.activeElement = firstWork;
+    console.log(document.activeElement);
+});
+</script>
+
+<style>
+* {
+    padding: 0;
+    margin: 0;
+    light-height: 0;
+}
+:root {
+    --chars-of-line:20; /* 本 40〜50字／行 */
+    --letter-spacing:0.075; /* 字間 0.05〜0.1em */
+    --light-height:1.75em; /* 行間 1.5〜2.0em */
+    --writing-mode:horizontal-tb; /* 書字方向 horizontal-tb, vertical-rl */
+    --ms-writing-mode: lr;        /* 書字方向 lr, tb-rl */
+}
+body {
+    font-size: calc(100vw / (var(--chars-of-line) * (1 + var(--letter-spacing))));
+    letter-spacing: calc(1em * var(--letter-spacing));
+    light-height: var(--light-height);
+
+    writing-mode: var(--writing-mode);
+    -ms-writing-mode: var(--ms-writing-mode);
+    text-orientation: upright; /* 字の向き */
+}
+.upright { /* 縦中横 */
+    text-combine-upright: all;
+    -webkit-text-combine: horizontal;
+    -ms-text-combine-horizontal: all;
+}
+h1.site-name {
+    display: inline;
+    font-size: 1em;
+}
+p { margin-block-end: 1em; }
+a {
+    text-decoration: underline; /* 横:underline, 縦:overline */
+}
+input, textarea, select, button, form, legend, label {
+    font-size: 1em;
+}
+/* 16:9以上で1280px以上なら作品概要を横に表示する */
+/* @media screen ... */
+.works {
+    /*block-size: 10%;*/
+    /*block-size: 85vh;*/
+    /*
+    display: grid;
+    grid-template-rows: 9fr 1fr;
+    */
+}
+main > header {
+    block-size: 10vh;
+}
+main > div.works {
+    block-size: 70vh;
+}
+main > footer {
+    /*inline-size: 100vw;*/
+    block-size: 20vh;
+}
+.buttons {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+</style>
+
+</head>
+
+<body>
+
+<header><!--<img href=""></img>--><a href="guide.html">😺<h1 class="site-name">{{site-name}}</h1></a><a href="search.html">🔎</a><a href="login.html">🚪</a></header>
+
+<main>
+<header>
+<span title="読了率">nnnn％</span>　<span title="作品数">nnnn万nnnn作</span>　<span title="文字数">nnnn万nnnn字</span>
+</header>
+
+<!-- 作品一覧 -->
+
+<div class="works">
+<a href="">
+<div class="work-summary">
+<span>１２３４５６７８９０１２３４５６７８９０</span><br>
+<span>作品タイトル全文（100字まで）</span><br>
+<span>完結是非</span>　<span>nnnnnn字</span>　<span>yyyy-mm-dd</span>　<span>★nnnn</span><br>
+<span>ピッチ全文（35字まで）</span><br>
+<span>ログライン全文（200字まで）</span><br>
+<span>あらすじ全文（800字まで）</span><br>
+</div>
+</a>
+
+<footer class="buttons">
+<button class="prev">◀</button>
+<button class="next">▶</button>
+</footer>
+
+<!--
+<div class="buttons">
+<button class="prev">◀</button>
+<button class="next">▶</button>
+</div>
+-->
+
+<!--<footer></footer>-->
+</main>
+<!--
+<footer><a href="">© 2022 ytyaru</a></footer>
+-->
+
+</body>
+</html>
+

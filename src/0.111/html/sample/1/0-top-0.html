@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="ja" prefix="og: https://ogp.me/ns#">
+
+<head>
+
+<meta charset="UTF-8">
+<base href="{{base-url}}">
+<title>{{title}}</title><!-- {{site-name}} - {{catch-copy}} -->
+<meta name="description" content="{{description}}">
+<meta name="keywords" content="{{keywords}}">
+<meta name="author" content="{{author}}">
+<meta name="creator" content="{{creator}}">
+<meta name="publisher" content="{{publisher}}">
+<meta name="application-name" content="{{application-name}}">
+<meta name="robots" content="{{robots}}">
+<meta name="theme-color" content="{{theme-color}}">
+<meta name="color-scheme" content="{{color-scheme}}">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=0">
+
+<!-- Open Graph https://ogp.me/ -->
+<meta property="og:url" content="{{url}}" />
+<meta property="og:type" content="{{type}}" />
+<meta property="og:title" content="{{title}}" />
+<meta property="og:description" content="{{description}}" />
+<meta property="og:site_name" content="{{site-name}}" />
+<meta property="og:image" content="{{image-url}}" />
+<meta property="og:locale" content="ja_JP" />
+<!-- https://developer.twitter.com/ja/docs/tweets/optimize-with-cards/guides/getting-started -->
+<meta name="twitter:card" content="summary_large_image" /> <!-- summary, summary_large_image, app, player(audio,video) -->
+<meta name="twitter:site.id" content="{{twitter.user.id}}" /><!--ユーザID-->
+<!-- schema.org -->
+<script type="application/ld+json">{
+"@context": "http://schema.org",
+"@type": "WebSite",
+"name": "{{site-name}}",  // Thing
+"url": "{{url}}", // Thing
+"description":"{{description}}", // Thing
+"image": ["{{image-url}}"],
+"headline": "{{title}}", // CreativeWork
+"alternativeHeadline": "{{sub-title}}", // CreativeWork
+"thumbnailUrl": "{{image-url}}", // CreativeWork
+"author": {
+    "@type": "Person",
+    "name": "{{author}}",
+    "description":"{{author-description}}", // Thing
+    "image": "{{author-image-url}}",
+    "url": "{{author-url}}",
+}, // CreativeWork
+"publisher": {
+    "@type": "Person",
+    "name": "{{author}}",
+}, // CreativeWork
+"dateCreated": "{{created}}",
+"datePublished": "{{published}}",
+"dateModified": "{{updated}}",
+"keywords": "{{keywords}}",
+"fileFormat": "text/html",
+"encoding": {
+    "@type": "MediaObject"
+    "encodingFormat": "utf-8"
+}, // CreativeWork
+"inLanguage": "ja",
+"genre": "Novel",
+"isAccessibleForFree": true,
+"copyrightHolder": {
+    "@type": "Person",
+    "name": "{{author}}"
+}, // CreativeWork
+"copyrightYear": 2022, // CreativeWork
+"potentialAction": {
+    "@type": "SearchAction",
+    "target": "https://query.example.com/search?q={search_term_string}",
+    "query-input": "required name=search_term_string" // google特有のプロパティ
+}, // Thing
+}</script>
+
+<script>
+window.addEventListener('DOMContentLoaded', async(event) => {
+    // 作品の詳細を表示する（アコーディオンUI）
+    for (const el of document.querySelectorAll(`.work`)) {
+        // focus/blur（バブリング無）, focusin/focusout（バブリング有）
+        // <details><summary>を展開する。フォーカスはdetailsでなくsummaryに当たる。展開属性optionはdetails要素が持っている。
+        el.addEventListener('focusin', (event) => {
+            event.target.parentNode.open = true;
+        });
+        el.addEventListener('focusout', (event) => {
+            event.target.parentNode.open = false;
+        });
+    }
+    // 最初の作品にフォーカスを当ててハイライト＋展開したかったが、ハイライトされないしフォーカスもされない。
+    //   tabindexを当てたらフォーカスだけは成功したが、順序がめちゃくちゃになる。ハイライトもされない。
+    //   https://developer.mozilla.org/ja/docs/Web/HTML/Global_attributes/tabindex
+    const firstWork = document.querySelector(`.work`);
+    firstWork.setAttribute('tabindex', '0')
+    firstWork.focus();
+    firstWork.dispatchEvent(new Event('focusin'))
+    //firstWork.open = true
+    console.log(firstWork);
+    console.log(document.activeElement);
+    document.activeElement = firstWork;
+    console.log(document.activeElement);
+});
+</script>
+
+<style>
+* {
+    padding: 0;
+    margin: 0;
+    light-height: 0;
+}
+:root {
+    --chars-of-line:40;           /* 本 40〜50字／行 */
+    --letter-spacing:0.075;       /* 字間 0.05〜0.1em */
+    --light-height:1.75em;        /* 行間 1.5〜2.0em */
+    --writing-mode:horizontal-tb; /* 書字方向 horizontal-tb, vertical-rl */
+    --ms-writing-mode: lr;        /* 書字方向 lr, tb-rl */
+}
+body {
+    font-size: calc(100vw / (var(--chars-of-line) * (1 + var(--letter-spacing))));
+    letter-spacing: calc(1em * var(--letter-spacing));
+    light-height: var(--light-height);
+
+    writing-mode: var(--writing-mode);
+    -ms-writing-mode: var(--ms-writing-mode);
+    text-orientation: upright; /* 字の向き */
+}
+.upright { /* 縦中横 */
+    text-combine-upright: all;
+    -webkit-text-combine: horizontal;
+    -ms-text-combine-horizontal: all;
+}
+h1.site-name {
+    display: inline;
+    font-size: 1em;
+}
+p { margin-block-end: 1em; }
+a {
+    text-decoration: underline; /* 横:underline, 縦:overline */
+}
+input, textarea, select, button, form, legend, label {
+    font-size: 1em;
+}
+summary { list-style: none; }
+details::open {
+    background-color: #FFFF44;
+}
+/*
+details, summary のフォーカス枠線を変更したかったが、できなかった。
+details.work:focus {
+    outline: none:
+    background-color: #FFFF88;
+}
+details.work > summary {
+    outline: none:
+    background-color: #FFFF88;
+}
+summary {
+    outline: none:
+    background-color: #FFFF88;
+
+}
+*/
+summary:focus {
+    background-color: #FFFF00;
+}
+.work-details {
+    background-color: #FFFFCC;
+    color: #666666;
+}
+</style>
+
+</head>
+
+<body>
+
+<header><!--<img href=""></img>--><a href="guide.html">😺<h1 class="site-name">{{site-name}}</h1></a><a href="search.html">🔎</a><a href="login.html">🚪</a></header>
+
+<main>
+<header>
+<details><summary><span title="読了率">ｎｎ％</span>　　　　　　　<span title="作品数">ｎｎｎｎ万ｎｎｎｎ作</span>　　　　　　　　<span title="文字数">ｎｎｎｎ万ｎｎｎｎ字</span></summary>
+<span title="未読比">未ｎｎ％　切ｎｎ％</span>　<span title="作品比">異ｎｎ％　現ｎｎ％　SFｎｎ％　……</span>　<span title="文字比">異ｎｎ％　現ｎｎ％　SFｎｎ％　……</span>
+</details>
+
+<!--
+<details title="読了率" style="display:inline;"><summary>ｎｎ％</summary>未ｎｎ％　切ｎｎ％</details>　
+<details title="作品数" style="display:inline;"><summary>ｎｎｎｎ万ｎｎｎｎ作</summary>異ｎｎ％　現ｎｎ％　SFｎｎ％　……</details>　
+<details title="文字数" style="display:inline;"><summary>ｎｎｎｎ万ｎｎｎｎ字</summary>異ｎｎ％　現ｎｎ％　SFｎｎ％　……</details>　
+-->
+
+</header>
+
+<!-- 作品一覧 -->
+
+<!--
+リンク要素にもフォーカスが当たってしまい、２回タブキーを押下しないと次の要素に遷移しない。<a tabindex="-1">とすればフォーカスしなくなる。
+<a href="{{url}}" class="work">
+<details><summary>{{name}}</summary>
+<span>{{pitch}}</span><br>
+<span>{{log-line}}</span><br>
+<span>{{summary}}</span><br>
+<span>{{volume}}</span>　<span>{{updated}}</span><br>
+</details>
+</a>
+
+<a href="{{url}}" class="work">
+<details><summary>作品名１</summary>
+<span>ピッチ</span><br>
+<span>ログライン</span><br>
+<span>あらすじ</span><br>
+<span>ｎｎｎ字</span>　<span>yyyy-mm-dd</span><br>
+</details>
+</a>
+
+<details class="work"><summary><a href="{{url}}">作品名２</a></summary>
+<span>ピッチ</span><br>
+<span>ログライン</span><br>
+<span>あらすじ</span><br>
+<span>ｎｎｎ字</span>　<span>yyyy-mm-dd</span><br>
+</details>
+-->
+
+<details class="work"><summary>１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０</summary>
+<div class="work-details">
+<span>ピッチ</span><br>
+<span>ログライン</span><br>
+<span>あらすじ</span><br>
+<span>ｎｎｎ字</span>　<span>yyyy-mm-dd</span><br>
+</div>
+</details>
+
+<details class="work"><summary>作品名２</summary>
+<div class="work-details">
+<span>ピッチ</span><br>
+<span>ログライン</span><br>
+<span>あらすじ</span><br>
+<span>ｎｎｎ字</span>　<span>yyyy-mm-dd</span><br>
+</div>
+</details>
+
+<details class="work"><summary>作品名３</summary>
+<div class="work-details">
+<span>ピッチ</span><br>
+<span>ログライン</span><br>
+<span>あらすじ</span><br>
+<span>ｎｎｎ字</span>　<span>yyyy-mm-dd</span><br>
+</div>
+</details>
+
+<details class="work"><summary>作品名４</summary>
+<div class="work-details">
+<span>ピッチ</span><br>
+<span>ログライン</span><br>
+<span>あらすじ</span><br>
+<span>ｎｎｎ字</span>　<span>yyyy-mm-dd</span><br>
+</div>
+</details>
+
+<details class="work"><summary>作品名５</summary>
+<div class="work-details">
+<span>ピッチ</span><br>
+<span>ログライン</span><br>
+<span>あらすじ</span><br>
+<span>ｎｎｎ字</span>　<span>yyyy-mm-dd</span><br>
+</div>
+</details>
+
+<details class="work"><summary>作品名６</summary>
+<div class="work-details">
+<span>ピッチ</span><br>
+<span>ログライン</span><br>
+<span>あらすじ</span><br>
+<span>ｎｎｎ字</span>　<span>yyyy-mm-dd</span><br>
+</div>
+</details>
+
+<details class="work"><summary>作品名７</summary>
+<div class="work-details">
+<span>ピッチ</span><br>
+<span>ログライン</span><br>
+<span>あらすじ</span><br>
+<span>ｎｎｎ字</span>　<span>yyyy-mm-dd</span><br>
+</div>
+</details>
+
+<details class="work"><summary>作品名８</summary>
+<div class="work-details">
+<span>ピッチ</span><br>
+<span>ログライン</span><br>
+<span>あらすじ</span><br>
+<span>ｎｎｎ字</span>　<span>yyyy-mm-dd</span><br>
+</div>
+</details>
+
+<details class="work"><summary>作品名９</summary>
+<div class="work-details">
+<span>ピッチ</span><br>
+<span>ログライン</span><br>
+<span>あらすじ</span><br>
+<span>ｎｎｎ字</span>　<span>yyyy-mm-dd</span><br>
+</div>
+</details>
+
+<details class="work"><summary>作品名10</summary>
+<div class="work-details">
+<span>ピッチ</span><br>
+<span>ログライン</span><br>
+<span>あらすじ</span><br>
+<span>ｎｎｎ字</span>　<span>yyyy-mm-dd</span><br>
+</div>
+</details>
+
+<details class="work"><summary>作品名11</summary>
+<div class="work-details">
+<span>ピッチ</span><br>
+<span>ログライン</span><br>
+<span>あらすじ</span><br>
+<span>ｎｎｎ字</span>　<span>yyyy-mm-dd</span><br>
+</div>
+</details>
+
+<details class="work"><summary>作品名12</summary>
+<div class="work-details">
+<span>ピッチ</span><br>
+<span>ログライン</span><br>
+<span>あらすじ</span><br>
+<span>ｎｎｎ字</span>　<span>yyyy-mm-dd</span><br>
+</div>
+</details>
+
+<details class="work"><summary>作品名13</summary>
+<div class="work-details">
+<span>ピッチ</span><br>
+<span>ログライン</span><br>
+<span>あらすじ</span><br>
+<span>ｎｎｎ字</span>　<span>yyyy-mm-dd</span><br>
+</div>
+</details>
+
+<details class="work"><summary>作品名14</summary>
+<div class="work-details">
+<span>ピッチ</span><br>
+<span>ログライン</span><br>
+<span>あらすじ</span><br>
+<span>ｎｎｎ字</span>　<span>yyyy-mm-dd</span><br>
+</div>
+</details>
+
+<details class="work"><summary>作品名15</summary>
+<div class="work-details">
+<span>ピッチ</span><br>
+<span>ログライン</span><br>
+<span>あらすじ</span><br>
+<span>ｎｎｎ字</span>　<span>yyyy-mm-dd</span><br>
+</div>
+</details>
+
+<details class="work"><summary>作品名16</summary>
+<div class="work-details">
+<span>ピッチ</span><br>
+<span>ログライン</span><br>
+<span>あらすじ</span><br>
+<span>ｎｎｎ字</span>　<span>yyyy-mm-dd</span><br>
+</div>
+</details>
+
+<details class="work"><summary>作品名17</summary>
+<div class="work-details">
+<span>ピッチ</span><br>
+<span>ログライン</span><br>
+<span>あらすじ</span><br>
+<span>ｎｎｎ字</span>　<span>yyyy-mm-dd</span><br>
+</div>
+</details>
+
+<details class="work"><summary>作品名18</summary>
+<div class="work-details">
+<span>ピッチ</span><br>
+<span>ログライン</span><br>
+<span>あらすじ</span><br>
+<span>ｎｎｎ字</span>　<span>yyyy-mm-dd</span><br>
+</div>
+</details>
+
+<details class="work"><summary>作品名19</summary>
+<div class="work-details">
+<span>ピッチ</span><br>
+<span>ログライン</span><br>
+<span>あらすじ</span><br>
+<span>ｎｎｎ字</span>　<span>yyyy-mm-dd</span><br>
+</div>
+</details>
+
+<details class="work"><summary>作品名20</summary>
+<div class="work-details">
+<span>ピッチ</span><br>
+<span>ログライン</span><br>
+<span>あらすじ</span><br>
+<span>ｎｎｎ字</span>　<span>yyyy-mm-dd</span><br>
+</div>
+</details>
+
+<details class="work"><summary>作品名21</summary>
+<div class="work-details">
+<span>ピッチ</span><br>
+<span>ログライン</span><br>
+<span>あらすじ</span><br>
+<span>ｎｎｎ字</span>　<span>yyyy-mm-dd</span><br>
+</div>
+</details>
+
+<details class="work"><summary>作品名22</summary>
+<div class="work-details">
+<span>ピッチ</span><br>
+<span>ログライン</span><br>
+<span>あらすじ</span><br>
+<span>ｎｎｎ字</span>　<span>yyyy-mm-dd</span><br>
+</div>
+</details>
+
+<details class="work"><summary>作品名23</summary>
+<div class="work-details">
+<span>ピッチ</span><br>
+<span>ログライン</span><br>
+<span>あらすじ</span><br>
+<span>ｎｎｎ字</span>　<span>yyyy-mm-dd</span><br>
+</div>
+</details>
+
+<details class="work"><summary>作品名24</summary>
+<div class="work-details">
+<span>ピッチ</span><br>
+<span>ログライン</span><br>
+<span>あらすじ</span><br>
+<span>ｎｎｎ字</span>　<span>yyyy-mm-dd</span><br>
+</div>
+</details>
+
+<details class="work"><summary>作品名25</summary>
+<div class="work-details">
+<span>ピッチ</span><br>
+<span>ログライン</span><br>
+<span>あらすじ</span><br>
+<span>ｎｎｎ字</span>　<span>yyyy-mm-dd</span><br>
+</div>
+</details>
+
+<details class="work"><summary>作品名26</summary>
+<div class="work-details">
+<span>ピッチ</span><br>
+<span>ログライン</span><br>
+<span>あらすじ</span><br>
+<span>ｎｎｎ字</span>　<span>yyyy-mm-dd</span><br>
+</div>
+</details>
+
+<details class="work"><summary>作品名27</summary>
+<div class="work-details">
+<span>ピッチ</span><br>
+<span>ログライン</span><br>
+<span>あらすじ</span><br>
+<span>ｎｎｎ字</span>　<span>yyyy-mm-dd</span><br>
+</div>
+</details>
+
+<details class="work"><summary>作品名28</summary>
+<div class="work-details">
+<span>ピッチ</span><br>
+<span>ログライン</span><br>
+<span>あらすじ</span><br>
+<span>ｎｎｎ字</span>　<span>yyyy-mm-dd</span><br>
+</div>
+</details>
+
+<details class="work"><summary>作品名29</summary>
+<div class="work-details">
+<span>ピッチ</span><br>
+<span>ログライン</span><br>
+<span>あらすじ</span><br>
+<span>ｎｎｎ字</span>　<span>yyyy-mm-dd</span><br>
+</div>
+</details>
+
+<details class="work"><summary>作品名30</summary>
+<div class="work-details">
+<span>ピッチ</span><br>
+<span>ログライン</span><br>
+<span>あらすじ</span><br>
+<span>ｎｎｎ字</span>　<span>yyyy-mm-dd</span><br>
+</div>
+</details>
+
+<details class="work"><summary>作品名31</summary>
+<div class="work-details">
+<span>ピッチ</span><br>
+<span>ログライン</span><br>
+<span>あらすじ</span><br>
+<span>ｎｎｎ字</span>　<span>yyyy-mm-dd</span><br>
+</div>
+</details>
+
+<details class="work"><summary>作品名32</summary>
+<div class="work-details">
+<span>ピッチ</span><br>
+<span>ログライン</span><br>
+<span>あらすじ</span><br>
+<span>ｎｎｎ字</span>　<span>yyyy-mm-dd</span><br>
+</div>
+</details>
+
+<details class="work"><summary>作品名33</summary>
+<div class="work-details">
+<span>ピッチ</span><br>
+<span>ログライン</span><br>
+<span>あらすじ</span><br>
+<span>ｎｎｎ字</span>　<span>yyyy-mm-dd</span><br>
+</div>
+</details>
+
+<details class="work"><summary>作品名34</summary>
+<div class="work-details">
+<span>ピッチ</span><br>
+<span>ログライン</span><br>
+<span>あらすじ</span><br>
+<span>ｎｎｎ字</span>　<span>yyyy-mm-dd</span><br>
+</div>
+</details>
+
+<details class="work"><summary>作品名35</summary>
+<div class="work-details">
+<span>ピッチ</span><br>
+<span>ログライン</span><br>
+<span>あらすじ</span><br>
+<span>ｎｎｎ字</span>　<span>yyyy-mm-dd</span><br>
+</div>
+</details>
+
+<details class="work"><summary>作品名36</summary>
+<div class="work-details">
+<span>ピッチ</span><br>
+<span>ログライン</span><br>
+<span>あらすじ</span><br>
+<span>ｎｎｎ字</span>　<span>yyyy-mm-dd</span><br>
+</div>
+</details>
+
+<details class="work"><summary>作品名37</summary>
+<div class="work-details">
+<span>ピッチ</span><br>
+<span>ログライン</span><br>
+<span>あらすじ</span><br>
+<span>ｎｎｎ字</span>　<span>yyyy-mm-dd</span><br>
+</div>
+</details>
+
+<details class="work"><summary>作品名38</summary>
+<div class="work-details">
+<span>ピッチ</span><br>
+<span>ログライン</span><br>
+<span>あらすじ</span><br>
+<span>ｎｎｎ字</span>　<span>yyyy-mm-dd</span><br>
+</div>
+</details>
+
+<details class="work"><summary>作品名39</summary>
+<div class="work-details">
+<span>ピッチ</span><br>
+<span>ログライン</span><br>
+<span>あらすじ</span><br>
+<span>ｎｎｎ字</span>　<span>yyyy-mm-dd</span><br>
+</div>
+</details>
+
+<details class="work"><summary>作品名40</summary>
+<div class="work-details">
+<span>ピッチ</span><br>
+<span>ログライン</span><br>
+<span>あらすじ</span><br>
+<span>ｎｎｎ字</span>　<span>yyyy-mm-dd</span><br>
+</div>
+</details>
+
+<details class="work"><summary>作品名41</summary>
+<div class="work-details">
+<span>ピッチ</span><br>
+<span>ログライン</span><br>
+<span>あらすじ</span><br>
+<span>ｎｎｎ字</span>　<span>yyyy-mm-dd</span><br>
+</div>
+</details>
+
+<details class="work"><summary>作品名42</summary>
+<div class="work-details">
+<span>ピッチ</span><br>
+<span>ログライン</span><br>
+<span>あらすじ</span><br>
+<span>ｎｎｎ字</span>　<span>yyyy-mm-dd</span><br>
+</div>
+</details>
+
+<details class="work"><summary>作品名43</summary>
+<div class="work-details">
+<span>ピッチ</span><br>
+<span>ログライン</span><br>
+<span>あらすじ</span><br>
+<span>ｎｎｎ字</span>　<span>yyyy-mm-dd</span><br>
+</div>
+</details>
+
+<details class="work"><summary>作品名44</summary>
+<div class="work-details">
+<span>ピッチ</span><br>
+<span>ログライン</span><br>
+<span>あらすじ</span><br>
+<span>ｎｎｎ字</span>　<span>yyyy-mm-dd</span><br>
+</div>
+</details>
+
+<footer></footer>
+</main>
+<footer><a href="">© 2022 ytyaru</a></footer>
+
+</body>
+</html>
+
